@@ -9,6 +9,7 @@ import {
   HomePage,
   DetailTransaction,
   TransactionHistory,
+  SearchReceiver,
 } from '../screens';
 import HeaderHome from '../components/HeaderHome';
 
@@ -29,14 +30,14 @@ const Router = () => {
       <Stack.Screen name="CreatePin" component={CreatePin} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="ResetPassword" component={ResetPassword} />
-      <Stack.Screen name="SignUp" component={SignUp} />
+      <Stack.Screen name="SignUp" component={SignUp} /> */}
       <Stack.Screen
         name="HomePage"
         component={HomePage}
         options={{
           header: props => <HeaderHome {...props} />,
         }}
-      /> */}
+      />
       <Stack.Screen
         name="DetailTransaction"
         component={DetailTransaction}
@@ -49,6 +50,13 @@ const Router = () => {
         component={TransactionHistory}
         options={{
           title: 'History',
+        }}
+      />
+      <Stack.Screen
+        name="SearchReceiver"
+        component={SearchReceiver}
+        options={{
+          title: 'Find Receiver',
         }}
       />
     </Stack.Navigator>

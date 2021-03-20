@@ -5,7 +5,7 @@ import CardDetailTrans from '../../components/CardDetailTrans';
 
 const ButtonTrans = props => {
   return (
-    <TouchableOpacity style={styles.btn}>
+    <TouchableOpacity style={styles.btn} {...props}>
       <Icon name={props.icon} size={28} color="#6379F4" />
       <Text style={styles.descBtn}>{props.title}</Text>
     </TouchableOpacity>
@@ -13,21 +13,26 @@ const ButtonTrans = props => {
 };
 
 export class HomePage extends Component {
-  gotoDetail() {
+  gotoDetail = () => {
     this.props.navigation.navigate('DetailTransaction');
-  }
+  };
+  gotoReceiver = () => {
+    this.props.navigation.navigate('SearchReceiver');
+  };
   render() {
     return (
       <View style={styles.container}>
-        <TouchableOpacity
-          style={styles.cardBalance}
-          onPress={() => this.gotoDetail()}>
+        <TouchableOpacity style={styles.cardBalance} onPress={this.gotoDetail}>
           <Text style={styles.desc}>Balance</Text>
           <Text style={styles.balance}>Rp120.000</Text>
           <Text style={styles.desc}>+62 813-9387-7946</Text>
         </TouchableOpacity>
         <View style={styles.rowBtn}>
-          <ButtonTrans icon="arrow-up" title="Transfer" />
+          <ButtonTrans
+            icon="arrow-up"
+            title="Transfer"
+            onPress={this.gotoReceiver}
+          />
           <ButtonTrans icon="plus" title="Top Up" />
         </View>
         <View style={styles.wrapCard}>
