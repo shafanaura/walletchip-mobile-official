@@ -6,3 +6,4 @@ export {default as ForgotPassword} from './ForgotPassword';
 export {default as ResetPassword} from './ResetPassword';
 export {default as HomePage} from './HomePage';
 export {default as DetailTransaction} from './DetailTransaction';
+export {default as TransactionHistory} from './TransactionHistory';

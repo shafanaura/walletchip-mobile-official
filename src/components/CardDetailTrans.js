@@ -7,6 +7,7 @@ export class CardDetailTrans extends Component {
   render() {
     return (
       <FlatList
+        inverted={true}
         style={styles.container}
         data={listTransaction}
         keyExtractor={item => item.id}
