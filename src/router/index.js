@@ -6,18 +6,27 @@ import {
   CreatePin,
   ResetPassword,
   ForgotPassword,
+  HomePage,
 } from '../screens';
+import HeaderHome from '../components/HeaderHome';
 
 const Stack = createStackNavigator();
 
 const Router = () => {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="SignIn" component={SignIn} />
+    <Stack.Navigator>
+      {/* <Stack.Screen name="SignIn" component={SignIn} />
       <Stack.Screen name="CreatePin" component={CreatePin} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="ResetPassword" component={ResetPassword} />
-      <Stack.Screen name="SignUp" component={SignUp} />
+      <Stack.Screen name="SignUp" component={SignUp} /> */}
+      <Stack.Screen
+        name="HomePage"
+        component={HomePage}
+        options={{
+          header: props => <HeaderHome {...props} />,
+        }}
+      />
     </Stack.Navigator>
   );
 };
