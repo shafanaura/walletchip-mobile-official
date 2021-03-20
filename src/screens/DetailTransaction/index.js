@@ -3,7 +3,6 @@ import {StyleSheet, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
 import CardDetailTrans from '../../components/CardDetailTrans';
-import MyChart from '../../components/MyChart';
 
 export class DetailTransaction extends Component {
   render() {
