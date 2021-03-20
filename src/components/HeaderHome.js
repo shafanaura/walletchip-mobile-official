@@ -14,7 +14,7 @@ export class HeaderHome extends Component {
             <Text style={styles.title}>Robert Chandler</Text>
           </View>
         </View>
-        <Icon name="bell" size={28} color="#4D4B57" />
+        <Icon name="bell" size={24} color="#4D4B57" />
       </View>
     );
   }
