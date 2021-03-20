@@ -12,16 +12,30 @@ export default class InputText extends Component {
     this.setState({isPasswordShown: !isPasswordShown});
   };
   handleFocus = () => this.setState({isFocused: true});
-  handleBlur = () => this.setState({isFocused: false});
   render() {
     const {isPasswordShown, isFocused} = this.state;
     return (
-      <View style={isFocused ? styles.formFocus : styles.form}>
-        <Icon
-          name={this.props.icon}
-          color={isFocused ? '#6379F4' : 'rgba(169, 169, 169, 0.6)'}
-          size={this.props.sizeIcon}
-        />
+      <View
+        style={
+          this.props.error
+            ? styles.formError
+            : isFocused
+            ? styles.formFocus
+            : styles.form
+        }>
+        <View style={styles.gap}>
+          <Icon
+            name={this.props.icon}
+            color={
+              this.props.error
+                ? 'red'
+                : isFocused
+                ? '#6379F4'
+                : 'rgba(169, 169, 169, 0.6)'
+            }
+            size={this.props.sizeIcon}
+          />
+        </View>
         <TextInput
           style={styles.textInput}
           placeholder={this.props.placeholder}
@@ -60,10 +74,19 @@ const styles = StyleSheet.create({
     borderBottomColor: '#6379F4',
     borderBottomWidth: 1,
   },
+  formError: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomColor: 'red',
+    borderBottomWidth: 1,
+  },
+  gap: {
+    width: 25,
+  },
   textInput: {
     flex: 1,
     fontSize: 16,
+    fontFamily: 'NunitoSans-Regular',
     color: '#3A3D42',
-    marginLeft: 5,
   },
 });

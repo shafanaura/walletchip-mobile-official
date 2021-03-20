@@ -1,18 +1,11 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-} from 'react-native';
+import React, {Component} from 'react';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
 import InputText from '../../components/Form/InputText';
-
-import Logo from '../../assets/images/logo.png';
+import Auth from '../../components/Auth';
+import Button from '../../components/Button';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -24,32 +17,30 @@ const validationSchema = Yup.object().shape({
     .required('Password is required'),
 });
 
-const SignIn = () => {
-  return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <View style={styles.rowImage}>
-        <Image source={Logo} style={styles.image} />
-      </View>
-      <View style={styles.card}>
-        <Text style={styles.title}>Login</Text>
-        <Text style={styles.subTitle}>
-          Login to your existing account to access all the features in
-          Walletchip.
-        </Text>
+class SignIn extends Component {
+  onSubmit = values => {
+    console.log(values);
+    this.props.navigation.replace('HomePage');
+  };
+  render() {
+    return (
+      <Auth
+        title="Login"
+        subTitle="Login to your existing account to access
+      all the features in Walletchip.">
         <Formik
           initialValues={{
             email: '',
             password: '',
           }}
           validationSchema={validationSchema}
-          onSubmit={values => null}>
+          onSubmit={values => this.onSubmit(values)}>
           {({
             handleChange,
             handleSubmit,
             handleBlur,
             values,
             errors,
-            isValid,
             touched,
           }) => (
             <>
@@ -60,6 +51,7 @@ const SignIn = () => {
                 onChange={handleChange('email')}
                 onBlur={handleBlur('email')}
                 value={values.email}
+                error={errors.email && touched.email}
               />
               {errors.email && touched.email ? (
                 <Text style={styles.textError}>{errors.email}</Text>
@@ -71,84 +63,57 @@ const SignIn = () => {
                 password
                 sizeIcon={25}
                 onChange={handleChange('password')}
-                onBlur={handleBlur('email')}
+                onBlur={handleBlur('password')}
                 value={values.password}
+                error={errors.password && touched.password}
               />
-              <TouchableOpacity>
+              {errors.password && touched.password ? (
+                <Text style={styles.textError}>{errors.password}</Text>
+              ) : null}
+              <TouchableOpacity
+                onPress={() =>
+                  this.props.navigation.navigate('ForgotPassword')
+                }>
                 <Text style={styles.textForgot}>Forgot password?</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={handleSubmit}>
-                <View style={styles.button}>
-                  <Text style={styles.textButton}>Login</Text>
-                </View>
-              </TouchableOpacity>
+              <Button
+                onPress={handleSubmit}
+                disabled={values.email === '' || values.password === ''}
+                color={
+                  values.email === '' || values.password === ''
+                    ? '#DADADA'
+                    : '#6379F4'
+                }
+                textColor={
+                  values.email === '' || values.password === ''
+                    ? '#88888F'
+                    : 'white'
+                }
+                text="Login"
+              />
             </>
           )}
         </Formik>
         <View style={styles.row}>
           <Text style={styles.textAccount}>Don't have an account? Let's </Text>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('SignUp')}>
             <Text style={styles.signUp}>Sign Up</Text>
           </TouchableOpacity>
         </View>
-      </View>
-    </ScrollView>
-  );
-};
+      </Auth>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  rowImage: {
-    justifyContent: 'center',
-    flexDirection: 'row',
-    marginTop: 75,
-  },
-  image: {
-    width: 150,
-    resizeMode: 'contain',
-  },
-  card: {
-    flex: 1,
-    backgroundColor: 'white',
-    borderTopRightRadius: 30,
-    borderTopLeftRadius: 30,
-    paddingHorizontal: 16,
-    paddingVertical: 40,
-    marginTop: 60,
-    elevation: 10,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#3A3D42',
-    textAlign: 'center',
-  },
-  subTitle: {
-    fontSize: 16,
-    color: 'rgba(58, 61, 66, 0.6)',
-    textAlign: 'center',
-    marginTop: 23,
-    marginBottom: 53,
-  },
   textForgot: {
     fontSize: 14,
+    fontFamily: 'NunitoSans-Regular',
     color: 'rgba(58, 61, 66, 0.8)',
     textAlign: 'right',
     marginTop: 15,
     marginBottom: 50,
-  },
-  button: {
-    paddingVertical: 16,
-    backgroundColor: '#DADADA',
-    borderRadius: 12,
-  },
-  textButton: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#88888F',
-    textAlign: 'center',
   },
   row: {
     flexDirection: 'row',
@@ -158,15 +123,21 @@ const styles = StyleSheet.create({
   },
   textAccount: {
     fontSize: 16,
+    fontFamily: 'NunitoSans-Regular',
     color: 'rgba(58, 61, 66, 0.8)',
   },
   signUp: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'NunitoSans-ExtraBold',
     color: '#6379F4',
   },
   gap: {
     height: 20,
+  },
+  textError: {
+    fontFamily: 'NunitoSans-Regular',
+    fontSize: 12,
+    color: 'red',
   },
 });
 
