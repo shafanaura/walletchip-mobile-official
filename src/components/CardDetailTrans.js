@@ -17,9 +17,7 @@ export class CardDetailTrans extends Component {
                 <Image source={{uri: item.picture}} style={styles.avatar} />
                 <View style={styles.descAvatar}>
                   <Text style={styles.textName}>{item.name}</Text>
-                  <Text style={styles.category}>
-                    {item.userAs === 'sender' ? 'Subscription' : 'Transfer'}
-                  </Text>
+                  <Text style={styles.category}>Transfer</Text>
                 </View>
               </View>
               <Text
