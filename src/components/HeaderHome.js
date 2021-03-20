@@ -11,7 +11,7 @@ export class HeaderHome extends Component {
           <Image source={Avatar} style={styles.avatar} />
           <View style={styles.descAvatar}>
             <Text style={styles.hello}>Hello,</Text>
-            <Text style={styles.title}>Robert Chandler</Text>
+            <Text style={styles.title}>Niall Horan</Text>
           </View>
         </View>
         <Icon name="bell" size={24} color="#4D4B57" />
