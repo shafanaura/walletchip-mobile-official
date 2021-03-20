@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
+import Avatar from '../assets/image/avatar.jpg';
 import listTransaction from '../utils/listTransaction';
 
 export class CardDetailTrans extends Component {
