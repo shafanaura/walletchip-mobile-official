@@ -76,7 +76,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   container: {
-    marginBottom: 270,
+    paddingBottom: 270,
+    flex: 1,
   },
   textDanger: {
     color: '#FF5B37',
