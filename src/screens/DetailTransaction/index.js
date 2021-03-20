@@ -5,6 +5,9 @@ import Icon from 'react-native-vector-icons/Feather';
 import CardDetailTrans from '../../components/CardDetailTrans';
 
 export class DetailTransaction extends Component {
+  gotoHistory() {
+    this.props.navigation.navigate('TransactionHistory');
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -24,7 +27,7 @@ export class DetailTransaction extends Component {
         </View>
         <View style={styles.rowCard}>
           <Text style={styles.textBold}>Transaction History</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => this.gotoHistory()}>
             <Text style={styles.textLink}>See all</Text>
           </TouchableOpacity>
         </View>
