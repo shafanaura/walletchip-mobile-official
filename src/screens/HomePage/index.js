@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import CardDetailTrans from '../../components/CardDetailTrans';
 
 const ButtonTrans = props => {
   return (
@@ -20,9 +21,18 @@ export class HomePage extends Component {
           <Text style={styles.balance}>Rp120.000</Text>
           <Text style={styles.desc}>+62 813-9387-7946</Text>
         </View>
-        <View style={styles.row}>
+        <View style={styles.rowBtn}>
           <ButtonTrans icon="arrow-up" title="Transfer" />
           <ButtonTrans icon="plus" title="Top Up" />
+        </View>
+        <View style={styles.wrapCard}>
+          <View style={styles.row}>
+            <Text style={styles.textBold}>Transaction History</Text>
+            <TouchableOpacity>
+              <Text style={styles.textLink}>See all</Text>
+            </TouchableOpacity>
+          </View>
+          <CardDetailTrans />
         </View>
       </View>
     );
@@ -58,20 +68,38 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     justifyContent: 'space-around',
     borderRadius: 10,
-    marginVertical: 10,
+    marginTop: 10,
+    marginBottom: 20,
     flexDirection: 'row',
     flex: 1,
     marginHorizontal: 10,
   },
-  row: {
+  rowBtn: {
     flexDirection: 'row',
     justifyContent: 'center',
-    flex: 1,
+  },
+  row: {
+    marginVertical: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   descBtn: {
     fontSize: 18,
     fontFamily: 'NunitoSans-Bold',
     color: '#514F5B',
+  },
+  textBold: {
+    fontFamily: 'NunitoSans-Bold',
+    color: '#514F5B',
+    fontSize: 18,
+  },
+  textLink: {
+    fontFamily: 'NunitoSans-SemiBold',
+    color: '#6379F4',
+  },
+  wrapCard: {
+    padding: 10,
   },
 });
 
