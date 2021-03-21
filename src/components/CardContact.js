@@ -1,9 +1,9 @@
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 const CardContact = props => {
   return (
-    <View style={styles.wrapHeader}>
+    <TouchableOpacity style={styles.wrapHeader} {...props}>
       <View style={styles.row}>
         <Image source={{uri: props.picture}} style={styles.avatar} />
         <View style={styles.descAvatar}>
@@ -14,7 +14,7 @@ const CardContact = props => {
         </View>
       </View>
       {props.children}
-    </View>
+    </TouchableOpacity>
   );
 };
 

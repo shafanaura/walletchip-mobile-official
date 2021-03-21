@@ -3,8 +3,12 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {FlatList, Image, Text, View, TextInput, StyleSheet} from 'react-native';
 import listTransaction from '../../utils/listTransaction';
 import CardContact from '../../components/CardContact';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export class SearchReceiver extends Component {
+  gotoInputAmount = () => {
+    this.props.navigation.navigate('InputAmount');
+  };
   render() {
     return (
       <View style={styles.container}>
@@ -22,11 +26,13 @@ export class SearchReceiver extends Component {
             keyExtractor={item => item.id}
             renderItem={({item}) => {
               return (
-                <View style={styles.wrapHeader}>
+                <TouchableOpacity
+                  onPress={this.gotoInputAmount}
+                  style={styles.wrapHeader}>
                   <Image source={{uri: item.picture}} style={styles.avatar} />
                   <Text style={styles.textName}>{item.firstName}</Text>
                   <Text style={styles.number}>{item.phoneNumber}</Text>
-                </View>
+                </TouchableOpacity>
               );
             }}
           />
@@ -39,6 +45,7 @@ export class SearchReceiver extends Component {
           renderItem={({item}) => {
             return (
               <CardContact
+                onPress={this.gotoInputAmount}
                 picture={item.picture}
                 firstName={item.firstName}
                 lastName={item.lastName}

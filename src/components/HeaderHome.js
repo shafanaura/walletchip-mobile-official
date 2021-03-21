@@ -10,7 +10,13 @@ export class HeaderHome extends Component {
         <View style={styles.row}>
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('Profile')}>
-            <Image source={Avatar} style={styles.avatar} />
+            <Image
+              source={{
+                uri:
+                  'https://matamatamusik.com/wp-content/uploads/2020/01/Niall-Horan-nov-7-2019-bbc-radio-one-billboard-1548.jpg',
+              }}
+              style={styles.avatar}
+            />
           </TouchableOpacity>
           <View style={styles.descAvatar}>
             <Text style={styles.hello}>Hello,</Text>

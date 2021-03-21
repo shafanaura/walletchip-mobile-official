@@ -45,10 +45,9 @@ class SignIn extends Component {
           }) => (
             <>
               <InputText
-                icon="envelope"
+                icon="mail"
                 placeholder="Enter your e-mail"
                 keyboardType="email-address"
-                sizeIcon={20}
                 onChange={handleChange('email')}
                 onBlur={handleBlur('email')}
                 value={values.email}
@@ -62,7 +61,6 @@ class SignIn extends Component {
                 icon="lock"
                 placeholder="Enter your password"
                 password
-                sizeIcon={25}
                 onChange={handleChange('password')}
                 onBlur={handleBlur('password')}
                 value={values.password}

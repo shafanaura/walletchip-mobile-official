@@ -13,6 +13,8 @@ import {
   SearchReceiver,
   Profile,
   PersonalInfo,
+  InputAmount,
+  Confirmation,
   ChangePassword,
 } from '../screens';
 import HeaderHome from '../components/HeaderHome';
@@ -86,6 +88,20 @@ const Router = () => {
         component={SearchReceiver}
         options={{
           title: 'Find Receiver',
+        }}
+      />
+      <Stack.Screen
+        name="InputAmount"
+        component={InputAmount}
+        options={{
+          title: 'Transfer',
+        }}
+      />
+      <Stack.Screen
+        name="Confirmation"
+        component={Confirmation}
+        options={{
+          title: 'Confirmation',
         }}
       />
       <Stack.Screen
