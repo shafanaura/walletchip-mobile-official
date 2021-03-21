@@ -30,7 +30,7 @@ const Router = () => {
           fontFamily: 'NunitoSans-SemiBold',
         },
       }}>
-      {/* <Stack.Screen
+      <Stack.Screen
         name="SignIn"
         component={SignIn}
         options={{headerShown: false}}
@@ -59,7 +59,7 @@ const Router = () => {
         name="SignUp"
         component={SignUp}
         options={{headerShown: false}}
-      /> */}
+      />
       <Stack.Screen
         name="HomePage"
         component={HomePage}

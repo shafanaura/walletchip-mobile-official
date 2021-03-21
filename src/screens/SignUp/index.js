@@ -30,7 +30,7 @@ class SignUp extends Component {
     return (
       <Auth
         title="Sign Up"
-        subTitle="Create your account to access Wallatchip.">
+        subTitle="Create your account to access Walletchip.">
         <Formik
           initialValues={{
             email: '',
