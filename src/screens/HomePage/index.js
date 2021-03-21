@@ -57,8 +57,8 @@ export class HomePage extends Component {
             </TouchableOpacity>
           </View>
           <FlatList
+            showsVerticalScrollIndicator={false}
             style={{minHeight: 290, maxHeight: 290}}
-            inverted={true}
             data={listTransaction}
             keyExtractor={item => item.id}
             renderItem={({item}) => {

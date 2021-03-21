@@ -31,6 +31,7 @@ export class TopUp extends Component {
         </Text>
         <LayoutDetail desc="How to Top-Up">
           <FlatList
+            showsVerticalScrollIndicator={false}
             keyExtractor={item => item.id}
             data={listTopUp}
             renderItem={({item}) => (
