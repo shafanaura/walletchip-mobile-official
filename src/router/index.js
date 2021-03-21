@@ -19,6 +19,7 @@ import {
   ChangePassword,
   PinConfirm,
   TransferResult,
+  Notification,
 } from '../screens';
 import HeaderHome from '../components/HeaderHome';
 
@@ -145,6 +146,13 @@ const Router = () => {
         component={ChangePassword}
         options={{
           title: 'Change Password',
+        }}
+      />
+      <Stack.Screen
+        name="Notification"
+        component={Notification}
+        options={{
+          title: 'Notification',
         }}
       />
     </Stack.Navigator>

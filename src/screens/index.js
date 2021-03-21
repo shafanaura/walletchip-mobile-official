@@ -16,3 +16,4 @@ export {default as TopUp} from './TopUp';
 export {default as ChangePassword} from './ChangePassword';
 export {default as PinConfirm} from './PinConfirm';
 export {default as TransferResult} from './TransferResult';
+export {default as Notification} from './Notification';
