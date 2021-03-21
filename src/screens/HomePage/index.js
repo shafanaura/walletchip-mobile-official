@@ -24,6 +24,9 @@ export class HomePage extends Component {
   gotoHistory = () => {
     this.props.navigation.navigate('TransactionHistory');
   };
+  gotoTopUp = () => {
+    this.props.navigation.navigate('TopUp');
+  };
   onChangeRupiah = angka => {
     var reverse = angka.toString().split('').reverse().join(''),
       ribuan = reverse.match(/\d{1,3}/g);
@@ -44,7 +47,7 @@ export class HomePage extends Component {
             title="Transfer"
             onPress={this.gotoReceiver}
           />
-          <ButtonTrans icon="plus" title="Top Up" />
+          <ButtonTrans onPress={this.gotoTopUp} icon="plus" title="Top Up" />
         </View>
         <View style={styles.wrapCard}>
           <View style={styles.row}>
