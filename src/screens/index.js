@@ -18,3 +18,4 @@ export {default as ManagePhone} from './ManagePhone';
 export {default as PinConfirm} from './PinConfirm';
 export {default as TransferResult} from './TransferResult';
 export {default as Notification} from './Notification';
+export {default as AddPhone} from './AddPhone';
