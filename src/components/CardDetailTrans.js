@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
-import Avatar from '../assets/image/avatar.jpg';
 import listTransaction from '../utils/listTransaction';
 
 export class CardDetailTrans extends Component {
@@ -15,7 +14,6 @@ export class CardDetailTrans extends Component {
       <View>
         <FlatList
           inverted={true}
-          style={styles.container}
           data={listTransaction}
           keyExtractor={item => item.id}
           renderItem={({item}) => {
@@ -87,7 +85,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   container: {
-    marginBottom: 300,
+    flex: 1,
   },
   textDanger: {
     color: '#FF5B37',
