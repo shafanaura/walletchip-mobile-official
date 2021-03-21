@@ -6,34 +6,38 @@ import listTransaction from '../utils/listTransaction';
 export class CardDetailTrans extends Component {
   render() {
     return (
-      <FlatList
-        inverted={true}
-        style={styles.container}
-        data={listTransaction}
-        keyExtractor={item => item.id}
-        renderItem={({item}) => {
-          return (
-            <View style={styles.wrapHeader}>
-              <View style={styles.row}>
-                <Image source={{uri: item.picture}} style={styles.avatar} />
-                <View style={styles.descAvatar}>
-                  <Text style={styles.textName}>{item.name}</Text>
-                  <Text style={styles.category}>Transfer</Text>
+      <View>
+        <FlatList
+          inverted={true}
+          style={styles.container}
+          data={listTransaction}
+          keyExtractor={item => item.id}
+          renderItem={({item}) => {
+            return (
+              <View style={styles.wrapHeader}>
+                <View style={styles.row}>
+                  <Image source={{uri: item.picture}} style={styles.avatar} />
+                  <View style={styles.descAvatar}>
+                    <Text style={styles.textName}>
+                      {item.firstName} {item.lastName}
+                    </Text>
+                    <Text style={styles.category}>Transfer</Text>
+                  </View>
                 </View>
+                <Text
+                  style={[
+                    styles.total,
+                    item.userAs === 'sender'
+                      ? styles.textDanger
+                      : styles.textPrimary,
+                  ]}>
+                  {item.userAs === 'sender' ? '-' : '+'}Rp{item.total}
+                </Text>
               </View>
-              <Text
-                style={[
-                  styles.total,
-                  item.userAs === 'sender'
-                    ? styles.textDanger
-                    : styles.textPrimary,
-                ]}>
-                {item.userAs === 'sender' ? '-' : '+'}Rp{item.total}
-              </Text>
-            </View>
-          );
-        }}
-      />
+            );
+          }}
+        />
+      </View>
     );
   }
 }
@@ -76,8 +80,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   container: {
-    paddingBottom: 270,
-    flex: 1,
+    marginBottom: 300,
   },
   textDanger: {
     color: '#FF5B37',

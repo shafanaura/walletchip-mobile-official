@@ -10,6 +10,7 @@ import {
   DetailTransaction,
   PinSuccess,
   TransactionHistory,
+  SearchReceiver,
   Profile,
   PersonalInfo,
 } from '../screens';
@@ -77,6 +78,13 @@ const Router = () => {
         component={TransactionHistory}
         options={{
           title: 'History',
+        }}
+      />
+      <Stack.Screen
+        name="SearchReceiver"
+        component={SearchReceiver}
+        options={{
+          title: 'Find Receiver',
         }}
       />
       <Stack.Screen
