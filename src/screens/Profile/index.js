@@ -83,7 +83,9 @@ export default class Profile extends Component {
           <Icon name="arrow-right" size={20} />
         </CardInfoProfile>
         <View style={styles.gap} />
-        <CardInfoProfile title="Change Password">
+        <CardInfoProfile
+          title="Change Password"
+          onPress={() => this.props.navigation.navigate('ChangePassword')}>
           <Icon name="arrow-right" size={20} />
         </CardInfoProfile>
         <View style={styles.gap} />
