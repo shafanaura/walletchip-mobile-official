@@ -39,6 +39,7 @@ export default class InputText extends Component {
         <TextInput
           style={styles.textInput}
           placeholder={this.props.placeholder}
+          keyboardType={this.props.keyboardType}
           secureTextEntry={
             this.props.password ? (isPasswordShown ? false : true) : false
           }

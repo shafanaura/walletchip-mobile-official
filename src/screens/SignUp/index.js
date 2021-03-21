@@ -64,6 +64,7 @@ class SignUp extends Component {
               <InputText
                 icon="envelope"
                 placeholder="Enter your e-mail"
+                keyboardType="email-address"
                 sizeIcon={20}
                 onChange={handleChange('email')}
                 onBlur={handleBlur('email')}
