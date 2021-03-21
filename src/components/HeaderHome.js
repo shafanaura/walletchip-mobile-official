@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import Avatar from '../assets/image/avatar.jpg';
 
 export class HeaderHome extends Component {
+  gotoNotif = () => {
+    this.props.navigation.navigate('Notification');
+  };
   render() {
     return (
       <View style={styles.wrapHeader}>
@@ -23,7 +25,9 @@ export class HeaderHome extends Component {
             <Text style={styles.title}>Niall Horan</Text>
           </View>
         </View>
-        <Icon name="bell" size={24} color="#4D4B57" />
+        <TouchableOpacity onPress={this.gotoNotif}>
+          <Icon name="bell" size={24} color="#4D4B57" />
+        </TouchableOpacity>
       </View>
     );
   }

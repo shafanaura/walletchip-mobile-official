@@ -18,6 +18,9 @@ import {
   TopUp,
   ChangePassword,
   ManagePhone,
+  PinConfirm,
+  TransferResult,
+  Notification,
 } from '../screens';
 import HeaderHome from '../components/HeaderHome';
 
@@ -114,6 +117,18 @@ const Router = () => {
         }}
       />
       <Stack.Screen
+        name="PinConfirm"
+        component={PinConfirm}
+        options={{
+          title: 'Enter Your PIN',
+        }}
+      />
+      <Stack.Screen
+        name="TransferResult"
+        component={TransferResult}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
         name="Profile"
         component={Profile}
         options={{
@@ -139,6 +154,13 @@ const Router = () => {
         component={ManagePhone}
         options={{
           title: 'Manage Phone Number',
+        }}
+      />
+      <Stack.Screen
+        name="Notification"
+        component={Notification}
+        options={{
+          title: 'Notification',
         }}
       />
     </Stack.Navigator>
