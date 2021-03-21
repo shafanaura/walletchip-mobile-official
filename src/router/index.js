@@ -18,6 +18,7 @@ import {
   TopUp,
   ChangePassword,
   PinConfirm,
+  TransferResult,
 } from '../screens';
 import HeaderHome from '../components/HeaderHome';
 
@@ -119,6 +120,11 @@ const Router = () => {
         options={{
           title: 'Enter Your PIN',
         }}
+      />
+      <Stack.Screen
+        name="TransferResult"
+        component={TransferResult}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="Profile"
