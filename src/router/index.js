@@ -14,6 +14,7 @@ import {
   Profile,
   PersonalInfo,
   InputAmount,
+  Confirmation,
 } from '../screens';
 import HeaderHome from '../components/HeaderHome';
 
@@ -30,7 +31,7 @@ const Router = () => {
           fontFamily: 'NunitoSans-SemiBold',
         },
       }}>
-      <Stack.Screen
+      {/* <Stack.Screen
         name="SignIn"
         component={SignIn}
         options={{headerShown: false}}
@@ -87,12 +88,19 @@ const Router = () => {
         options={{
           title: 'Find Receiver',
         }}
-      />
+      /> */}
       <Stack.Screen
         name="InputAmount"
         component={InputAmount}
         options={{
           title: 'Transfer',
+        }}
+      />
+      <Stack.Screen
+        name="Confirmation"
+        component={Confirmation}
+        options={{
+          title: 'Confirmation',
         }}
       />
       <Stack.Screen
