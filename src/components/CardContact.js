@@ -4,11 +4,16 @@ import {Image, StyleSheet, Text, View} from 'react-native';
 const CardContact = props => {
   return (
     <View style={styles.wrapHeader}>
-      <Image source={{uri: props.picture}} style={styles.avatar} />
-      <View style={styles.descAvatar}>
-        <Text style={styles.textName}>{props.name}</Text>
-        <Text style={styles.category}>{props.detail}</Text>
+      <View style={styles.row}>
+        <Image source={{uri: props.picture}} style={styles.avatar} />
+        <View style={styles.descAvatar}>
+          <Text style={styles.textName}>
+            {props.firstName} {props.lastName}
+          </Text>
+          <Text style={styles.category}>{props.detail}</Text>
+        </View>
       </View>
+      {props.children}
     </View>
   );
 };
@@ -18,6 +23,7 @@ const styles = StyleSheet.create({
     padding: 10,
     height: 80,
     backgroundColor: 'white',
+    justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
     elevation: 2,
@@ -30,18 +36,33 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     resizeMode: 'cover',
   },
+  row: {
+    flexDirection: 'row',
+  },
   descAvatar: {
+    justifyContent: 'space-between',
     marginLeft: 10,
   },
   textName: {
     fontFamily: 'NunitoSans-SemiBold',
-    fontSize: 18,
-    marginBottom: 3,
+    fontSize: 16,
   },
   category: {
     fontFamily: 'NunitoSans-Regular',
     color: '#646464',
-    marginTop: 3,
+  },
+  total: {
+    fontFamily: 'NunitoSans-Bold',
+    fontSize: 18,
+  },
+  container: {
+    flex: 1,
+  },
+  textDanger: {
+    color: '#FF5B37',
+  },
+  textPrimary: {
+    color: '#1EC15F',
   },
 });
 

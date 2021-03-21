@@ -1,13 +1,20 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, FlatList} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
-import CardDetailTrans from '../../components/CardDetailTrans';
+import CardContact from '../../components/CardContact';
+import listTransaction from '../../utils/listTransaction';
 
 export class DetailTransaction extends Component {
   gotoHistory() {
     this.props.navigation.navigate('TransactionHistory');
   }
+  onChangeRupiah = angka => {
+    var reverse = angka.toString().split('').reverse().join(''),
+      ribuan = reverse.match(/\d{1,3}/g);
+    ribuan = ribuan.join('.').split('').reverse().join('');
+    return ribuan;
+  };
   render() {
     return (
       <View style={styles.container}>
@@ -16,12 +23,16 @@ export class DetailTransaction extends Component {
             <View style={styles.cardContent}>
               <Icon name="arrow-down" size={28} color="#1EC15F" />
               <Text style={styles.textDesc}>Income</Text>
-              <Text style={styles.textTotal}>Rp2.120.000</Text>
+              <Text style={styles.textTotal}>
+                Rp{this.onChangeRupiah(28500000)}
+              </Text>
             </View>
             <View style={styles.cardContent}>
               <Icon name="arrow-up" size={28} color="#FF5B37" />
               <Text style={styles.textDesc}>Expense</Text>
-              <Text style={styles.textTotal}>Rp1.450.000</Text>
+              <Text style={styles.textTotal}>
+                Rp{this.onChangeRupiah(14500000)}
+              </Text>
             </View>
           </View>
         </View>
@@ -31,7 +42,32 @@ export class DetailTransaction extends Component {
             <Text style={styles.textLink}>See all</Text>
           </TouchableOpacity>
         </View>
-        <CardDetailTrans />
+        <FlatList
+          style={{minHeight: 400, maxHeight: 400}}
+          inverted={true}
+          data={listTransaction}
+          keyExtractor={item => item.id}
+          renderItem={({item}) => {
+            return (
+              <CardContact
+                picture={item.picture}
+                firstName={item.firstName}
+                lastName={item.lastName}
+                detail="Transfer">
+                <Text
+                  style={[
+                    styles.total,
+                    item.userAs === 'sender'
+                      ? styles.textDanger
+                      : styles.textPrimary,
+                  ]}>
+                  {item.userAs === 'sender' ? '-' : '+'}Rp
+                  {this.onChangeRupiah(item.total)}
+                </Text>
+              </CardContact>
+            );
+          }}
+        />
       </View>
     );
   }
@@ -83,6 +119,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  textDanger: {
+    color: '#FF5B37',
+  },
+  textPrimary: {
+    color: '#1EC15F',
+  },
+  total: {
+    fontFamily: 'NunitoSans-Bold',
+    fontSize: 16,
   },
 });
 

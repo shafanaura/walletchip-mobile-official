@@ -34,14 +34,14 @@ export class SearchReceiver extends Component {
         <Text style={styles.textQuick}>All Contacts</Text>
         <Text style={styles.textDesc}>17 Contacts Founds</Text>
         <FlatList
-          style={styles.container}
           data={listTransaction}
           keyExtractor={item => item.id}
           renderItem={({item}) => {
             return (
               <CardContact
                 picture={item.picture}
-                name={item.firstName + ' ' + item.lastName}
+                firstName={item.firstName}
+                lastName={item.lastName}
                 detail={item.phoneNumber}
               />
             );

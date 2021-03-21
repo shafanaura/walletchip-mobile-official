@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
-import CardDetailTrans from '../../components/CardDetailTrans';
+import CardContact from '../../components/CardContact';
+import listTransaction from '../../utils/listTransaction';
 
 const ButtonTrans = props => {
   return (
@@ -19,12 +21,18 @@ export class HomePage extends Component {
   gotoReceiver = () => {
     this.props.navigation.navigate('SearchReceiver');
   };
+  onChangeRupiah = angka => {
+    var reverse = angka.toString().split('').reverse().join(''),
+      ribuan = reverse.match(/\d{1,3}/g);
+    ribuan = ribuan.join('.').split('').reverse().join('');
+    return ribuan;
+  };
   render() {
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.cardBalance} onPress={this.gotoDetail}>
           <Text style={styles.desc}>Balance</Text>
-          <Text style={styles.balance}>Rp120.000</Text>
+          <Text style={styles.balance}>Rp{this.onChangeRupiah(185000)}</Text>
           <Text style={styles.desc}>+62 813-9387-7946</Text>
         </TouchableOpacity>
         <View style={styles.rowBtn}>
@@ -42,7 +50,32 @@ export class HomePage extends Component {
               <Text style={styles.textLink}>See all</Text>
             </TouchableOpacity>
           </View>
-          <CardDetailTrans />
+          <FlatList
+            style={{minHeight: 290, maxHeight: 290}}
+            inverted={true}
+            data={listTransaction}
+            keyExtractor={item => item.id}
+            renderItem={({item}) => {
+              return (
+                <CardContact
+                  picture={item.picture}
+                  firstName={item.firstName}
+                  lastName={item.lastName}
+                  detail="Transfer">
+                  <Text
+                    style={[
+                      styles.total,
+                      item.userAs === 'sender'
+                        ? styles.textDanger
+                        : styles.textPrimary,
+                    ]}>
+                    {item.userAs === 'sender' ? '-' : '+'}Rp
+                    {this.onChangeRupiah(item.total)}
+                  </Text>
+                </CardContact>
+              );
+            }}
+          />
         </View>
       </View>
     );
@@ -110,6 +143,16 @@ const styles = StyleSheet.create({
   },
   wrapCard: {
     padding: 10,
+  },
+  textDanger: {
+    color: '#FF5B37',
+  },
+  textPrimary: {
+    color: '#1EC15F',
+  },
+  total: {
+    fontFamily: 'NunitoSans-Bold',
+    fontSize: 16,
   },
 });
 
