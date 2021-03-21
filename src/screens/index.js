@@ -8,3 +8,5 @@ export {default as HomePage} from './HomePage';
 export {default as DetailTransaction} from './DetailTransaction';
 export {default as TransactionHistory} from './TransactionHistory';
 export {default as SearchReceiver} from './SearchReceiver';
+export {default as Profile} from './Profile';
+export {default as PersonalInfo} from './PersonalInfo';

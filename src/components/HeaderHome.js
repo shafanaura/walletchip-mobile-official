@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Avatar from '../assets/image/avatar.jpg';
 
@@ -8,7 +8,10 @@ export class HeaderHome extends Component {
     return (
       <View style={styles.wrapHeader}>
         <View style={styles.row}>
-          <Image source={Avatar} style={styles.avatar} />
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('Profile')}>
+            <Image source={Avatar} style={styles.avatar} />
+          </TouchableOpacity>
           <View style={styles.descAvatar}>
             <Text style={styles.hello}>Hello,</Text>
             <Text style={styles.title}>Niall Horan</Text>

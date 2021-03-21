@@ -11,6 +11,8 @@ import {
   PinSuccess,
   TransactionHistory,
   SearchReceiver,
+  Profile,
+  PersonalInfo,
 } from '../screens';
 import HeaderHome from '../components/HeaderHome';
 
@@ -27,7 +29,7 @@ const Router = () => {
           fontFamily: 'NunitoSans-SemiBold',
         },
       }}>
-      {/* <Stack.Screen
+      <Stack.Screen
         name="SignIn"
         component={SignIn}
         options={{headerShown: false}}
@@ -56,7 +58,7 @@ const Router = () => {
         name="SignUp"
         component={SignUp}
         options={{headerShown: false}}
-      /> */}
+      />
       <Stack.Screen
         name="HomePage"
         component={HomePage}
@@ -83,6 +85,20 @@ const Router = () => {
         component={SearchReceiver}
         options={{
           title: 'Find Receiver',
+        }}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          title: '',
+        }}
+      />
+      <Stack.Screen
+        name="PersonalInfo"
+        component={PersonalInfo}
+        options={{
+          title: 'Personal Information',
         }}
       />
     </Stack.Navigator>
