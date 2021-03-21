@@ -21,6 +21,9 @@ export class HomePage extends Component {
   gotoReceiver = () => {
     this.props.navigation.navigate('SearchReceiver');
   };
+  gotoHistory = () => {
+    this.props.navigation.navigate('TransactionHistory');
+  };
   onChangeRupiah = angka => {
     var reverse = angka.toString().split('').reverse().join(''),
       ribuan = reverse.match(/\d{1,3}/g);
@@ -46,7 +49,7 @@ export class HomePage extends Component {
         <View style={styles.wrapCard}>
           <View style={styles.row}>
             <Text style={styles.textBold}>Transaction History</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={this.gotoHistory}>
               <Text style={styles.textLink}>See all</Text>
             </TouchableOpacity>
           </View>

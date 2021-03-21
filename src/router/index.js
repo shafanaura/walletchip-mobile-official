@@ -13,6 +13,7 @@ import {
   SearchReceiver,
   Profile,
   PersonalInfo,
+  InputAmount,
 } from '../screens';
 import HeaderHome from '../components/HeaderHome';
 
@@ -85,6 +86,13 @@ const Router = () => {
         component={SearchReceiver}
         options={{
           title: 'Find Receiver',
+        }}
+      />
+      <Stack.Screen
+        name="InputAmount"
+        component={InputAmount}
+        options={{
+          title: 'Transfer',
         }}
       />
       <Stack.Screen

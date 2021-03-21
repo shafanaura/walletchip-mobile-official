@@ -10,3 +10,4 @@ export {default as TransactionHistory} from './TransactionHistory';
 export {default as SearchReceiver} from './SearchReceiver';
 export {default as Profile} from './Profile';
 export {default as PersonalInfo} from './PersonalInfo';
+export {default as InputAmount} from './InputAmount';
