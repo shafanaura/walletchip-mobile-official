@@ -8,8 +8,11 @@ import {
   ForgotPassword,
   HomePage,
   DetailTransaction,
+  PinSuccess,
   TransactionHistory,
   SearchReceiver,
+  Profile,
+  PersonalInfo,
 } from '../screens';
 import HeaderHome from '../components/HeaderHome';
 
@@ -26,11 +29,36 @@ const Router = () => {
           fontFamily: 'NunitoSans-SemiBold',
         },
       }}>
-      {/* <Stack.Screen name="SignIn" component={SignIn} />
-      <Stack.Screen name="CreatePin" component={CreatePin} />
-      <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-      <Stack.Screen name="ResetPassword" component={ResetPassword} />
-      <Stack.Screen name="SignUp" component={SignUp} /> */}
+      <Stack.Screen
+        name="SignIn"
+        component={SignIn}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="CreatePin"
+        component={CreatePin}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="PinSuccess"
+        component={PinSuccess}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ForgotPassword"
+        component={ForgotPassword}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ResetPassword"
+        component={ResetPassword}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="SignUp"
+        component={SignUp}
+        options={{headerShown: false}}
+      />
       <Stack.Screen
         name="HomePage"
         component={HomePage}
@@ -57,6 +85,20 @@ const Router = () => {
         component={SearchReceiver}
         options={{
           title: 'Find Receiver',
+        }}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          title: '',
+        }}
+      />
+      <Stack.Screen
+        name="PersonalInfo"
+        component={PersonalInfo}
+        options={{
+          title: 'Personal Information',
         }}
       />
     </Stack.Navigator>
