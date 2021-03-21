@@ -23,12 +23,16 @@ export class DetailTransaction extends Component {
             <View style={styles.cardContent}>
               <Icon name="arrow-down" size={28} color="#1EC15F" />
               <Text style={styles.textDesc}>Income</Text>
-              <Text style={styles.textTotal}>Rp2.120.000</Text>
+              <Text style={styles.textTotal}>
+                Rp{this.onChangeRupiah(28500000)}
+              </Text>
             </View>
             <View style={styles.cardContent}>
               <Icon name="arrow-up" size={28} color="#FF5B37" />
               <Text style={styles.textDesc}>Expense</Text>
-              <Text style={styles.textTotal}>Rp1.450.000</Text>
+              <Text style={styles.textTotal}>
+                Rp{this.onChangeRupiah(14500000)}
+              </Text>
             </View>
           </View>
         </View>

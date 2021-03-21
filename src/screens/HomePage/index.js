@@ -32,7 +32,7 @@ export class HomePage extends Component {
       <View style={styles.container}>
         <TouchableOpacity style={styles.cardBalance} onPress={this.gotoDetail}>
           <Text style={styles.desc}>Balance</Text>
-          <Text style={styles.balance}>Rp120.000</Text>
+          <Text style={styles.balance}>Rp{this.onChangeRupiah(185000)}</Text>
           <Text style={styles.desc}>+62 813-9387-7946</Text>
         </TouchableOpacity>
         <View style={styles.rowBtn}>
