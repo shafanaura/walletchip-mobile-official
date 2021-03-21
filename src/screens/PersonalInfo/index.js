@@ -95,7 +95,10 @@ export default class PersonalInfo extends Component {
                     <Text style={styles.label}>Phone Number</Text>
                     <Text style={styles.value}>+62 813-9387-7946</Text>
                   </View>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.props.navigation.navigate('ManagePhone')
+                    }>
                     <Text style={styles.manage}>Manage</Text>
                   </TouchableOpacity>
                 </View>

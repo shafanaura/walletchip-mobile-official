@@ -17,6 +17,7 @@ import {
   Confirmation,
   TopUp,
   ChangePassword,
+  ManagePhone,
 } from '../screens';
 import HeaderHome from '../components/HeaderHome';
 
@@ -131,6 +132,13 @@ const Router = () => {
         component={ChangePassword}
         options={{
           title: 'Change Password',
+        }}
+      />
+      <Stack.Screen
+        name="ManagePhone"
+        component={ManagePhone}
+        options={{
+          title: 'Manage Phone Number',
         }}
       />
     </Stack.Navigator>
