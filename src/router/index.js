@@ -10,6 +10,8 @@ import {
   DetailTransaction,
   PinSuccess,
   TransactionHistory,
+  Profile,
+  PersonalInfo,
 } from '../screens';
 import HeaderHome from '../components/HeaderHome';
 
@@ -56,18 +58,13 @@ const Router = () => {
         component={SignUp}
         options={{headerShown: false}}
       />
-      {/* <Stack.Screen name="SignIn" component={SignIn} />
-      <Stack.Screen name="CreatePin" component={CreatePin} />
-      <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-      <Stack.Screen name="ResetPassword" component={ResetPassword} />
-      <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen
         name="HomePage"
         component={HomePage}
         options={{
           header: props => <HeaderHome {...props} />,
         }}
-      /> */}
+      />
       <Stack.Screen
         name="DetailTransaction"
         component={DetailTransaction}
@@ -80,6 +77,20 @@ const Router = () => {
         component={TransactionHistory}
         options={{
           title: 'History',
+        }}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          title: '',
+        }}
+      />
+      <Stack.Screen
+        name="PersonalInfo"
+        component={PersonalInfo}
+        options={{
+          title: 'Personal Information',
         }}
       />
     </Stack.Navigator>
