@@ -3,7 +3,7 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 const CardContact = props => {
   return (
-    <TouchableOpacity style={styles.wrapHeader}>
+    <TouchableOpacity style={styles.wrapHeader} {...props}>
       <View style={styles.row}>
         <Image source={{uri: props.picture}} style={styles.avatar} />
         <View style={styles.descAvatar}>
