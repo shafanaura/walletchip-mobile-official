@@ -93,7 +93,9 @@ export default class Profile extends Component {
           <Icon name="arrow-right" size={20} />
         </CardInfoProfile>
         <View style={styles.gap} />
-        <CardInfoProfile title="Notification">
+        <CardInfoProfile
+          title="Notification"
+          onPress={() => this.props.navigation.navigate('ChangePin')}>
           <Switch
             trackColor={{false: 'rgba(169, 169, 169, 0.4)', true: '#6379F4'}}
             thumbColor={this.state.isEnabled ? 'white ' : 'white'}

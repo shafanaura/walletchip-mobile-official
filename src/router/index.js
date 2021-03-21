@@ -14,6 +14,7 @@ import {
   Profile,
   PersonalInfo,
   ChangePassword,
+  ChangePin,
 } from '../screens';
 import HeaderHome from '../components/HeaderHome';
 
@@ -107,6 +108,13 @@ const Router = () => {
         component={ChangePassword}
         options={{
           title: 'Change Password',
+        }}
+      />
+      <Stack.Screen
+        name="ChangePin"
+        component={ChangePin}
+        options={{
+          title: 'Change Pin',
         }}
       />
     </Stack.Navigator>
