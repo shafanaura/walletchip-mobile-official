@@ -14,6 +14,7 @@ import Avatar from '../../assets/image/default-profile.png';
 
 import CardInfoProfile from '../../components/CardInfoProfile';
 import Button from '../../components/Button';
+import {ScrollView} from 'react-native-gesture-handler';
 
 export default class Profile extends Component {
   state = {
@@ -61,53 +62,57 @@ export default class Profile extends Component {
   render() {
     const {modalVisible, profile} = this.state;
     return (
-      <View style={styles.container}>
-        <View style={styles.column}>
-          {profile ? (
-            <Image source={{uri: profile}} style={styles.image} />
-          ) : (
-            <Image source={Avatar} style={styles.image} />
-          )}
-          <TouchableOpacity
-            style={styles.row}
-            onPress={() => this.setModalVisible(true)}>
-            <Icon name="edit-2" size={16} color="#7A7886" />
-            <Text style={styles.text}>Edit</Text>
-          </TouchableOpacity>
-          <Text style={styles.name}>Robert Chandler</Text>
-          <Text style={styles.phone}>+62 813-9387-7946</Text>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.container}>
+          <View style={styles.column}>
+            {profile ? (
+              <Image source={{uri: profile}} style={styles.image} />
+            ) : (
+              <Image source={Avatar} style={styles.image} />
+            )}
+            <TouchableOpacity
+              style={styles.row}
+              onPress={() => this.setModalVisible(true)}>
+              <Icon name="edit-2" size={16} color="#7A7886" />
+              <Text style={styles.text}>Edit</Text>
+            </TouchableOpacity>
+            <Text style={styles.name}>Robert Chandler</Text>
+            <Text style={styles.phone}>+62 813-9387-7946</Text>
+          </View>
+          <CardInfoProfile
+            title="Personal Information"
+            onPress={() => this.props.navigation.navigate('PersonalInfo')}>
+            <Icon name="arrow-right" size={20} color="#7A7886" />
+          </CardInfoProfile>
+          <View style={styles.gap} />
+          <CardInfoProfile
+            title="Change Password"
+            onPress={() => this.props.navigation.navigate('ChangePassword')}>
+            <Icon name="arrow-right" size={20} color="#7A7886" />
+          </CardInfoProfile>
+          <View style={styles.gap} />
+          <CardInfoProfile title="Change Pin">
+            <Icon name="arrow-right" size={20} color="#7A7886" />
+          </CardInfoProfile>
+          <View style={styles.gap} />
+          <CardInfoProfile title="Notification">
+            <Switch
+              trackColor={{false: 'rgba(169, 169, 169, 0.4)', true: '#6379F4'}}
+              thumbColor={this.state.isEnabled ? 'white ' : 'white'}
+              onValueChange={this.toggleSwitch}
+              value={this.state.isEnabled}
+            />
+          </CardInfoProfile>
+          <View style={styles.gap} />
+          <View style={{paddingBottom: 10}}>
+            <CardInfoProfile
+              title="Logout"
+              position="center"
+              textColor="#FF5B37"
+              onPress={() => this.props.navigation.navigate('SignIn')}
+            />
+          </View>
         </View>
-        <CardInfoProfile
-          title="Personal Information"
-          onPress={() => this.props.navigation.navigate('PersonalInfo')}>
-          <Icon name="arrow-right" size={20} color="#7A7886" />
-        </CardInfoProfile>
-        <View style={styles.gap} />
-        <CardInfoProfile
-          title="Change Password"
-          onPress={() => this.props.navigation.navigate('ChangePassword')}>
-          <Icon name="arrow-right" size={20} color="#7A7886" />
-        </CardInfoProfile>
-        <View style={styles.gap} />
-        <CardInfoProfile title="Change Pin">
-          <Icon name="arrow-right" size={20} color="#7A7886" />
-        </CardInfoProfile>
-        <View style={styles.gap} />
-        <CardInfoProfile title="Notification">
-          <Switch
-            trackColor={{false: 'rgba(169, 169, 169, 0.4)', true: '#6379F4'}}
-            thumbColor={this.state.isEnabled ? 'white ' : 'white'}
-            onValueChange={this.toggleSwitch}
-            value={this.state.isEnabled}
-          />
-        </CardInfoProfile>
-        <View style={styles.gap} />
-        <CardInfoProfile
-          title="Logout"
-          position="center"
-          textColor="#FF5B37"
-          onPress={() => this.props.navigation.navigate('SignIn')}
-        />
         <Modal
           animationType="fade"
           transparent={true}
@@ -140,7 +145,7 @@ export default class Profile extends Component {
             </View>
           </View>
         </Modal>
-      </View>
+      </ScrollView>
     );
   }
 }
