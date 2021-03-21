@@ -16,6 +16,7 @@ import {
   InputAmount,
   Confirmation,
   TopUp,
+  ChangePassword,
 } from '../screens';
 import HeaderHome from '../components/HeaderHome';
 
@@ -123,6 +124,13 @@ const Router = () => {
         component={PersonalInfo}
         options={{
           title: 'Personal Information',
+        }}
+      />
+      <Stack.Screen
+        name="ChangePassword"
+        component={ChangePassword}
+        options={{
+          title: 'Change Password',
         }}
       />
     </Stack.Navigator>
