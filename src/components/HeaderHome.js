@@ -1,23 +1,33 @@
 import React, {Component} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import Avatar from '../assets/image/avatar.jpg';
 
 export class HeaderHome extends Component {
+  gotoNotif = () => {
+    this.props.navigation.navigate('Notification');
+  };
   render() {
     return (
       <View style={styles.wrapHeader}>
         <View style={styles.row}>
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('Profile')}>
-            <Image source={Avatar} style={styles.avatar} />
+            <Image
+              source={{
+                uri:
+                  'https://matamatamusik.com/wp-content/uploads/2020/01/Niall-Horan-nov-7-2019-bbc-radio-one-billboard-1548.jpg',
+              }}
+              style={styles.avatar}
+            />
           </TouchableOpacity>
           <View style={styles.descAvatar}>
             <Text style={styles.hello}>Hello,</Text>
             <Text style={styles.title}>Niall Horan</Text>
           </View>
         </View>
-        <Icon name="bell" size={24} color="#4D4B57" />
+        <TouchableOpacity onPress={this.gotoNotif}>
+          <Icon name="bell" size={24} color="#4D4B57" />
+        </TouchableOpacity>
       </View>
     );
   }

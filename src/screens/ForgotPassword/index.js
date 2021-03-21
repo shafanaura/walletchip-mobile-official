@@ -41,7 +41,7 @@ class ForgotPassword extends Component {
           }) => (
             <>
               <InputText
-                icon="envelope"
+                icon="mail"
                 placeholder="Enter your e-mail"
                 keyboardType="email-address"
                 sizeIcon={20}

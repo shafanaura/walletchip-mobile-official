@@ -30,7 +30,7 @@ class SignUp extends Component {
     return (
       <Auth
         title="Sign Up"
-        subTitle="Create your account to access Wallatchip.">
+        subTitle="Create your account to access Walletchip.">
         <Formik
           initialValues={{
             email: '',
@@ -62,7 +62,7 @@ class SignUp extends Component {
               ) : null}
               <View style={styles.gap(20)} />
               <InputText
-                icon="envelope"
+                icon="mail"
                 placeholder="Enter your e-mail"
                 keyboardType="email-address"
                 sizeIcon={20}

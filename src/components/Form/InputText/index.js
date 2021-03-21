@@ -1,8 +1,12 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, TextInput, TouchableOpacity} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/Feather';
 
 export default class InputText extends Component {
+  constructor(props) {
+    super(props);
+    this.inputPassword = React.createRef();
+  }
   state = {
     isPasswordShown: false,
     isFocused: false,
@@ -12,6 +16,18 @@ export default class InputText extends Component {
     this.setState({isPasswordShown: !isPasswordShown});
   };
   handleFocus = () => this.setState({isFocused: true});
+  componentDidMount() {
+    this.inputPassword.current.setNativeProps({
+      style: {fontFamily: 'NunitoSans-Regular'},
+    });
+  }
+  componentDidUpdate() {
+    if (this.inputPassword) {
+      this.inputPassword.current.setNativeProps({
+        style: {fontFamily: 'NunitoSans-Regular'},
+      });
+    }
+  }
   render() {
     const {isPasswordShown, isFocused} = this.state;
     return (
@@ -23,20 +39,20 @@ export default class InputText extends Component {
             ? styles.formFocus
             : styles.form
         }>
-        <View style={styles.gap}>
-          <Icon
-            name={this.props.icon}
-            color={
-              this.props.error
-                ? 'red'
-                : isFocused
-                ? '#6379F4'
-                : 'rgba(169, 169, 169, 0.6)'
-            }
-            size={this.props.sizeIcon}
-          />
-        </View>
+        <Icon
+          style={styles.icon}
+          name={this.props.icon}
+          color={
+            this.props.error
+              ? 'red'
+              : isFocused
+              ? '#6379F4'
+              : 'rgba(169, 169, 169, 0.6)'
+          }
+          size={24}
+        />
         <TextInput
+          ref={this.inputPassword}
           style={styles.textInput}
           placeholder={this.props.placeholder}
           keyboardType={this.props.keyboardType}
@@ -51,9 +67,9 @@ export default class InputText extends Component {
         {this.props.password && (
           <TouchableOpacity onPress={this.togglePasswordVisiblity}>
             <Icon
-              name={isPasswordShown ? 'eye-slash' : 'eye'}
+              name={isPasswordShown ? 'eye-off' : 'eye'}
               color="rgba(169, 169, 169, 0.6)"
-              size={20}
+              size={24}
             />
           </TouchableOpacity>
         )}
@@ -81,11 +97,13 @@ const styles = StyleSheet.create({
     borderBottomColor: 'red',
     borderBottomWidth: 1,
   },
-  gap: {
-    width: 25,
+  icon: {
+    position: 'absolute',
   },
   textInput: {
+    position: 'relative',
     flex: 1,
+    marginLeft: 35,
     fontSize: 16,
     fontFamily: 'NunitoSans-Regular',
     color: '#3A3D42',

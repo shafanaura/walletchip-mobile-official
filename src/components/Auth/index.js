@@ -14,7 +14,7 @@ class Auth extends Component {
         <View style={styles.card}>
           {this.props.success && (
             <View style={styles.rowSuccess}>
-              <Image source={Success} />
+              <Image source={Success} style={styles.success} />
             </View>
           )}
           <Text style={styles.title}>{this.props.title}</Text>
@@ -38,10 +38,15 @@ const styles = StyleSheet.create({
   rowSuccess: {
     justifyContent: 'center',
     flexDirection: 'row',
-    marginBottom: 30,
+    marginBottom: 20,
   },
   image: {
     width: 150,
+    resizeMode: 'contain',
+  },
+  success: {
+    width: 80,
+    height: 80,
     resizeMode: 'contain',
   },
   card: {

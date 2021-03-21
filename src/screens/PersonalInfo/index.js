@@ -33,83 +33,88 @@ export default class PersonalInfo extends Component {
   };
   render() {
     return (
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <Text style={styles.text}>
-          We got your personal information from the sign up proccess. If you
-          want to make changes on your information, contact our support.
-        </Text>
-        <Formik
-          initialValues={{
-            firstname: 'Robert',
-            lastname: 'Chandler',
-            email: 'pewdipie1@gmail.com',
-          }}
-          validationSchema={validationSchema}
-          onSubmit={values => this.onSubmit(values)}>
-          {({
-            handleChange,
-            handleSubmit,
-            handleBlur,
-            values,
-            errors,
-            touched,
-          }) => (
-            <>
-              <InputPersonal
-                label="First Name"
-                placeholder="Enter your first name"
-                onChange={handleChange('firstname')}
-                onBlur={handleBlur('firstname')}
-                value={values.firstname}
-              />
-              {errors.firstname && touched.firstname ? (
-                <Text style={styles.textError}>{errors.firstname}</Text>
-              ) : null}
-              <View style={styles.gap} />
-              <InputPersonal
-                label="Last Name"
-                placeholder="Enter your last name"
-                onChange={handleChange('lastname')}
-                onBlur={handleBlur('lastname')}
-                value={values.lastname}
-              />
-              {errors.lastname && touched.lastname ? (
-                <Text style={styles.textError}>{errors.lastname}</Text>
-              ) : null}
-              <View style={styles.gap} />
-              <InputPersonal
-                label="Verified E-mail"
-                keyboardType="email-address"
-                placeholder="Enter your email"
-                onChange={handleChange('email')}
-                onBlur={handleBlur('email')}
-                value={values.email}
-              />
-              {errors.email && touched.email ? (
-                <Text style={styles.textError}>{errors.email}</Text>
-              ) : null}
-              <View style={styles.gap} />
-              <View style={styles.input}>
-                <View style={styles.row}>
-                  <View>
-                    <Text style={styles.label}>Phone Number</Text>
-                    <Text style={styles.value}>+62 813-9387-7946</Text>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.container}>
+          <Text style={styles.text}>
+            We got your personal information from the sign up proccess. If you
+            want to make changes on your information, contact our support.
+          </Text>
+          <Formik
+            initialValues={{
+              firstname: 'Robert',
+              lastname: 'Chandler',
+              email: 'pewdipie1@gmail.com',
+            }}
+            validationSchema={validationSchema}
+            onSubmit={values => this.onSubmit(values)}>
+            {({
+              handleChange,
+              handleSubmit,
+              handleBlur,
+              values,
+              errors,
+              touched,
+            }) => (
+              <>
+                <InputPersonal
+                  label="First Name"
+                  placeholder="Enter your first name"
+                  onChange={handleChange('firstname')}
+                  onBlur={handleBlur('firstname')}
+                  value={values.firstname}
+                />
+                {errors.firstname && touched.firstname ? (
+                  <Text style={styles.textError}>{errors.firstname}</Text>
+                ) : null}
+                <View style={styles.gap} />
+                <InputPersonal
+                  label="Last Name"
+                  placeholder="Enter your last name"
+                  onChange={handleChange('lastname')}
+                  onBlur={handleBlur('lastname')}
+                  value={values.lastname}
+                />
+                {errors.lastname && touched.lastname ? (
+                  <Text style={styles.textError}>{errors.lastname}</Text>
+                ) : null}
+                <View style={styles.gap} />
+                <InputPersonal
+                  label="Verified E-mail"
+                  keyboardType="email-address"
+                  placeholder="Enter your email"
+                  onChange={handleChange('email')}
+                  onBlur={handleBlur('email')}
+                  value={values.email}
+                />
+                {errors.email && touched.email ? (
+                  <Text style={styles.textError}>{errors.email}</Text>
+                ) : null}
+                <View style={styles.gap} />
+                <View style={styles.input}>
+                  <View style={styles.row}>
+                    <View>
+                      <Text style={styles.label}>Phone Number</Text>
+                      <Text style={styles.value}>+62 813-9387-7946</Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() =>
+                        this.props.navigation.navigate('ManagePhone')
+                      }>
+                      <Text style={styles.manage}>Manage</Text>
+                    </TouchableOpacity>
                   </View>
-                  <TouchableOpacity>
-                    <Text style={styles.manage}>Manage</Text>
-                  </TouchableOpacity>
                 </View>
-              </View>
-              <View style={styles.gap} />
-              <Button
-                text="Save"
-                textColor="white"
-                color="#6379F4"
-                onPress={handleSubmit}
-              />
-            </>
-          )}
-        </Formik>
+                <View style={styles.gap} />
+                <Button
+                  text="Save"
+                  textColor="white"
+                  color="#6379F4"
+                  onPress={handleSubmit}
+                />
+              </>
+            )}
+          </Formik>
+        </View>
       </ScrollView>
     );
   }
