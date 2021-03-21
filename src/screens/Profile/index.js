@@ -9,7 +9,7 @@ import {
   Modal,
 } from 'react-native';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/Feather';
 import Avatar from '../../assets/image/default-profile.png';
 
 import CardInfoProfile from '../../components/CardInfoProfile';
@@ -71,7 +71,7 @@ export default class Profile extends Component {
           <TouchableOpacity
             style={styles.row}
             onPress={() => this.setModalVisible(true)}>
-            <Icon name="pencil" size={20} color="#7A7886" />
+            <Icon name="edit-2" size={16} color="#7A7886" />
             <Text style={styles.text}>Edit</Text>
           </TouchableOpacity>
           <Text style={styles.name}>Robert Chandler</Text>
@@ -80,15 +80,15 @@ export default class Profile extends Component {
         <CardInfoProfile
           title="Personal Information"
           onPress={() => this.props.navigation.navigate('PersonalInfo')}>
-          <Icon name="arrow-right" size={20} />
+          <Icon name="arrow-right" size={20} color="#7A7886" />
         </CardInfoProfile>
         <View style={styles.gap} />
         <CardInfoProfile title="Change Password">
-          <Icon name="arrow-right" size={20} />
+          <Icon name="arrow-right" size={20} color="#7A7886" />
         </CardInfoProfile>
         <View style={styles.gap} />
         <CardInfoProfile title="Change Pin">
-          <Icon name="arrow-right" size={20} />
+          <Icon name="arrow-right" size={20} color="#7A7886" />
         </CardInfoProfile>
         <View style={styles.gap} />
         <CardInfoProfile title="Notification">
