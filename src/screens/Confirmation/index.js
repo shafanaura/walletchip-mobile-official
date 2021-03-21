@@ -13,6 +13,9 @@ export class Confirmation extends Component {
     ribuan = ribuan.join('.').split('').reverse().join('');
     return ribuan;
   };
+  gotoEnterPin = () => {
+    this.props.navigation.navigate('PinConfirm');
+  };
   render() {
     return (
       <ScrollView style={styles.container}>
@@ -36,7 +39,12 @@ export class Confirmation extends Component {
           <CardDetailTrans title="Date & Time" detail="May 11, 2020 - 12.20" />
           <CardDetailTrans title="Notes" detail="For buying some socks" />
           <View style={styles.gap}>
-            <Button text="Continue" color="#6379F4" textColor="white" />
+            <Button
+              onPress={this.gotoEnterPin}
+              text="Continue"
+              color="#6379F4"
+              textColor="white"
+            />
           </View>
         </LayoutDetail>
       </ScrollView>

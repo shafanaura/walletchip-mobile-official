@@ -17,6 +17,7 @@ import {
   Confirmation,
   TopUp,
   ChangePassword,
+  PinConfirm,
 } from '../screens';
 import HeaderHome from '../components/HeaderHome';
 
@@ -110,6 +111,13 @@ const Router = () => {
         component={Confirmation}
         options={{
           title: 'Confirmation',
+        }}
+      />
+      <Stack.Screen
+        name="PinConfirm"
+        component={PinConfirm}
+        options={{
+          title: 'Enter Your PIN',
         }}
       />
       <Stack.Screen
