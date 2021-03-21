@@ -15,6 +15,7 @@ import {
   PersonalInfo,
   InputAmount,
   Confirmation,
+  TopUp,
 } from '../screens';
 import HeaderHome from '../components/HeaderHome';
 
@@ -66,6 +67,13 @@ const Router = () => {
         component={HomePage}
         options={{
           header: props => <HeaderHome {...props} />,
+        }}
+      />
+      <Stack.Screen
+        name="TopUp"
+        component={TopUp}
+        options={{
+          title: 'Top Up',
         }}
       />
       <Stack.Screen
