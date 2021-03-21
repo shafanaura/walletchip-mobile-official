@@ -3,6 +3,10 @@ import {StyleSheet, View, TextInput, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 
 export default class InputText extends Component {
+  constructor(props) {
+    super(props);
+    this.inputPassword = React.createRef();
+  }
   state = {
     isPasswordShown: false,
     isFocused: false,
@@ -12,6 +16,18 @@ export default class InputText extends Component {
     this.setState({isPasswordShown: !isPasswordShown});
   };
   handleFocus = () => this.setState({isFocused: true});
+  componentDidMount() {
+    this.inputPassword.current.setNativeProps({
+      style: {fontFamily: 'NunitoSans-Regular'},
+    });
+  }
+  componentDidUpdate() {
+    if (this.inputPassword) {
+      this.inputPassword.current.setNativeProps({
+        style: {fontFamily: 'NunitoSans-Regular'},
+      });
+    }
+  }
   render() {
     const {isPasswordShown, isFocused} = this.state;
     return (
@@ -36,6 +52,7 @@ export default class InputText extends Component {
           size={24}
         />
         <TextInput
+          ref={this.inputPassword}
           style={styles.textInput}
           placeholder={this.props.placeholder}
           keyboardType={this.props.keyboardType}

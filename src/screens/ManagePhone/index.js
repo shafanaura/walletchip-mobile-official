@@ -53,8 +53,8 @@ const styles = StyleSheet.create({
   subtitle: {
     color: 'gray',
     textAlign: 'center',
-    fontFamily: 'NunitoSans-SemiBold',
-    fontSize: 16,
+    fontFamily: 'NunitoSans-Regular',
+    fontSize: 15,
     lineHeight: 25,
   },
   card: {
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
   btnTitle: {
     color: 'gray',
-    fontFamily: 'NunitoSans-SemiBold',
+    fontFamily: 'NunitoSans-Regular',
     marginBottom: 8,
     fontSize: 15,
   },
