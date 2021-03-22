@@ -1,12 +1,18 @@
 import React, {Component} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import {connect} from 'react-redux';
+import {getUser} from '../redux/actions/user';
 
 export class HeaderHome extends Component {
   gotoNotif = () => {
     this.props.navigation.navigate('Notification');
   };
+  componentDidMount() {
+    this.props.getUser(this.props.auth.token);
+  }
   render() {
+    const {picture, username} = this.props.user.results;
     return (
       <View style={styles.wrapHeader}>
         <View style={styles.row}>
@@ -14,15 +20,14 @@ export class HeaderHome extends Component {
             onPress={() => this.props.navigation.navigate('Profile')}>
             <Image
               source={{
-                uri:
-                  'https://matamatamusik.com/wp-content/uploads/2020/01/Niall-Horan-nov-7-2019-bbc-radio-one-billboard-1548.jpg',
+                uri: picture,
               }}
               style={styles.avatar}
             />
           </TouchableOpacity>
           <View style={styles.descAvatar}>
             <Text style={styles.hello}>Hello,</Text>
-            <Text style={styles.title}>Niall Horan</Text>
+            <Text style={styles.title}>{username}</Text>
           </View>
         </View>
         <TouchableOpacity onPress={this.gotoNotif}>
@@ -66,4 +71,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HeaderHome;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  user: state.user,
+});
+
+const mapDispatchToProps = {getUser};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderHome);

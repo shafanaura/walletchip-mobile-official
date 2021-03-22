@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
+import {connect} from 'react-redux';
 import CardContact from '../../components/CardContact';
 import listTransaction from '../../utils/listTransaction';
 
@@ -162,4 +163,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomePage;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  user: state.user,
+});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
