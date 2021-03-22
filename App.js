@@ -5,6 +5,7 @@ import Router from './src/router';
 import SplashScreen from 'react-native-splash-screen';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
+import FlashMessage from 'react-native-flash-message';
 
 import persistedStore from './src/redux/store';
 
@@ -19,6 +20,7 @@ const App = () => {
       <PersistGate persistor={persistor}>
         <NavigationContainer>
           <Router />
+          <FlashMessage position="top" duration={3000} />
         </NavigationContainer>
       </PersistGate>
     </Provider>

@@ -2,6 +2,10 @@ import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import {connect} from 'react-redux';
+import {login} from '../../redux/actions/auth';
+import {getUser} from '../../redux/actions/user';
+import {showMessage} from '../../helpers/showMessage';
 
 import InputText from '../../components/Form/InputText';
 import Auth from '../../components/Auth';
@@ -18,9 +22,16 @@ const validationSchema = Yup.object().shape({
 });
 
 class SignIn extends Component {
-  onSubmit = values => {
-    console.log(values);
-    this.props.navigation.replace('HomePage');
+  onSubmit = async values => {
+    const {email, password} = values;
+    await this.props.login(email, password);
+    if (this.props.auth.token) {
+      await this.props.getUser(this.props.auth.token);
+      showMessage('Login Success', 'success');
+      this.props.navigation.replace('HomePage');
+    } else {
+      showMessage(this.props.auth.errorMsg);
+    }
   };
   render() {
     return (
@@ -140,4 +151,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignIn;
+const mapStateToProps = state => ({
+  auth: state.auth,
+});
+
+const mapDispatchToProps = {login, getUser};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
