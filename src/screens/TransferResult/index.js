@@ -1,12 +1,19 @@
 import React, {Component} from 'react';
 import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {connect} from 'react-redux';
 import Status from '../../assets/image/success.png';
 import Button from '../../components/Button';
 import CardContact from '../../components/CardContact';
 import CardDetailTrans from '../../components/CardDetailTrans';
 import LayoutDetail from '../../components/LayoutDetail';
+import {getContact, getUser} from '../../redux/actions/user';
+import {
+  getReceiverData,
+  createTransferData,
+} from '../../redux/actions/transaction';
+import moment from 'moment';
 
-export class TicketResult extends Component {
+export class TransferResult extends Component {
   onChangeRupiah = angka => {
     var reverse = angka.toString().split('').reverse().join(''),
       ribuan = reverse.match(/\d{1,3}/g);
@@ -17,6 +24,15 @@ export class TicketResult extends Component {
     this.props.navigation.navigate('HomePage');
   };
   render() {
+    const {
+      picture,
+      first_name,
+      last_name,
+      username,
+      phone,
+    } = this.props.transaction.receiverData;
+    const {balance} = this.props.user.results;
+    const {amount, note, date} = this.props.transaction.data;
     return (
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.center}>
@@ -26,21 +42,24 @@ export class TicketResult extends Component {
         <LayoutDetail desc="Details">
           <CardDetailTrans
             title="Amount"
-            detail={`Rp${this.onChangeRupiah(14500000)}`}
+            detail={`Rp${this.onChangeRupiah(amount)}`}
           />
           <CardDetailTrans
             title="Balance Left"
-            detail={`Rp${this.onChangeRupiah(22500)}`}
+            detail={`Rp${this.onChangeRupiah(balance - amount)}`}
           />
-          <CardDetailTrans title="Date & Time" detail="May 11, 2020 - 12.20" />
-          <CardDetailTrans title="Notes" detail="For buying some socks" />
+          <CardDetailTrans
+            title="Date & Time"
+            detail={moment(date).format('MMM D, YYYY HH:mm')}
+          />
+          <CardDetailTrans title="Notes" detail={note} />
         </LayoutDetail>
         <LayoutDetail desc="Transfer to">
           <CardContact
-            picture="https://pyxis.nymag.com/v1/imgs/9c2/109/b1abeb4d0264c4d40d03ece07e540c1ba4-09-hailee-steinfeld.rsocial.w1200.jpg"
-            firstName="Hailee"
-            lastName="Stainfeld"
-            detail="08565465884"
+            picture={picture}
+            firstName={first_name === null ? username : first_name}
+            lastName={last_name !== null && last_name}
+            detail={phone}
           />
         </LayoutDetail>
         <View style={styles.gap}>
@@ -84,4 +103,18 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
 });
-export default TicketResult;
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  user: state.user,
+  transaction: state.transaction,
+});
+
+const mapDispatchToProps = {
+  getContact,
+  getUser,
+  getReceiverData,
+  createTransferData,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TransferResult);
