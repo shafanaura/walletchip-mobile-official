@@ -13,7 +13,7 @@ export default class PinSuccess extends Component {
         success>
         <View style={styles.gap}>
           <Button
-            text="Confirm"
+            text="Login Now"
             textColor="white"
             color="#6379F4"
             onPress={() => this.props.navigation.replace('SignIn')}

@@ -22,6 +22,7 @@ import {
   PinConfirm,
   TransferResult,
   Notification,
+  ChangePin,
 } from '../screens';
 import HeaderHome from '../components/HeaderHome';
 
@@ -169,6 +170,13 @@ const Router = () => {
         component={Notification}
         options={{
           title: 'Notification',
+        }}
+      />
+      <Stack.Screen
+        name="ChangePin"
+        component={ChangePin}
+        options={{
+          title: 'Change Pin',
         }}
       />
     </Stack.Navigator>

@@ -91,7 +91,9 @@ export default class Profile extends Component {
             <Icon name="arrow-right" size={20} color="#7A7886" />
           </CardInfoProfile>
           <View style={styles.gap} />
-          <CardInfoProfile title="Change Pin">
+          <CardInfoProfile
+            title="Change Pin"
+            onPress={() => this.props.navigation.navigate('ChangePin')}>
             <Icon name="arrow-right" size={20} color="#7A7886" />
           </CardInfoProfile>
           <View style={styles.gap} />

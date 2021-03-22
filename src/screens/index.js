@@ -14,6 +14,7 @@ export {default as InputAmount} from './InputAmount';
 export {default as Confirmation} from './Confirmation';
 export {default as TopUp} from './TopUp';
 export {default as ChangePassword} from './ChangePassword';
+export {default as ChangePin} from './ChangePin';
 export {default as ManagePhone} from './ManagePhone';
 export {default as PinConfirm} from './PinConfirm';
 export {default as TransferResult} from './TransferResult';
