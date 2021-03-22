@@ -62,6 +62,26 @@ const userReducer = (state = initialState, action) => {
         message: '',
       };
     }
+    case 'UPDATE_PHONE': {
+      return {
+        ...state,
+        results: {
+          ...state.results,
+          ...action.payload,
+        },
+        message: action.message,
+      };
+    }
+    case 'UPDATE_PICTURE': {
+      return {
+        ...state,
+        results: {
+          ...state.results,
+          picture: action.payload,
+        },
+        message: action.message,
+      };
+    }
     default: {
       return {
         ...state,

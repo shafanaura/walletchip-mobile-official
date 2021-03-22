@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {
   View,
   Text,
@@ -8,41 +8,73 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
+
+import {connect} from 'react-redux';
+import {updatePhone} from '../../redux/actions/user';
+import {showMessage} from '../../helpers/showMessage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // Import Components
 
-const ManagePhone = () => {
-  return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor="#fff" barStyle="dark-content" />
-      <Text style={styles.subtitle}>
-        You can only delete the phone number and then you must add another phone
-        number.
-      </Text>
-      <View style={styles.card}>
-        <TouchableOpacity
-          style={{
-            width: '90%',
-          }}>
-          <Text style={styles.btnTitle}>Primary</Text>
-          <Text style={styles.btnPhone}>+62-813-9387-7946</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            width: '10%',
-          }}>
-          <Image
-            style={{width: 24, height: 24}}
-            source={require('../../assets/icons/trash.png')}
-          />
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
-  );
-};
+class ManagePhone extends Component {
+  state = {
+    loading: false,
+  };
 
-export default ManagePhone;
+  onSubmit = async () => {
+    this.setState({loading: true});
+    const {token} = this.props.auth;
+    const phone = '0000000000';
+    await this.props.updatePhone(token, phone);
+    if (this.props.user.errorMsg === '') {
+      this.setState({loading: false});
+      showMessage(this.props.user.message, 'success');
+      this.props.navigation.navigate('SignIn');
+    } else {
+      this.setState({loading: false});
+      showMessage(this.props.user.errorMsg);
+    }
+  };
+  render() {
+    return (
+      <SafeAreaView style={styles.container}>
+        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
+        <Text style={styles.subtitle}>
+          You can only delete the phone number and then you must add another
+          phone number.
+        </Text>
+        <View style={styles.card}>
+          <TouchableOpacity
+            style={{
+              width: '90%',
+            }}>
+            <Text style={styles.btnTitle}>Primary</Text>
+            <Text style={styles.btnPhone}>+62-813-9387-7946</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={this.onSubmit}
+            style={{
+              width: '10%',
+            }}>
+            <Image
+              style={{width: 24, height: 24}}
+              source={require('../../assets/icons/trash.png')}
+            />
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
+}
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  user: state.user,
+});
+
+const mapDispatchToProps = {updatePhone};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ManagePhone);
 
 const styles = StyleSheet.create({
   container: {
