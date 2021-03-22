@@ -5,11 +5,12 @@ import hardSet from 'redux-persist/lib/stateReconciler/hardSet';
 
 // Import All Reducer
 import authReducer from './auth';
+import userReducer from './user';
 
 const rootPersistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: ['auth'],
+  blacklist: ['auth', 'user'],
 };
 
 const authPersistConfig = {
@@ -18,8 +19,15 @@ const authPersistConfig = {
   stateReconciler: hardSet,
 };
 
+const userPersistConfig = {
+  key: 'user',
+  storage: AsyncStorage,
+  stateReconciler: hardSet,
+};
+
 const rootReducer = combineReducers({
   auth: persistReducer(authPersistConfig, authReducer),
+  user: persistReducer(userPersistConfig, userReducer),
 });
 
 export default persistReducer(rootPersistConfig, rootReducer);
