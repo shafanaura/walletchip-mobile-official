@@ -1,19 +1,43 @@
 import React, {Component} from 'react';
-import {Text, StyleSheet, View} from 'react-native';
+import {Text, StyleSheet, View, ActivityIndicator} from 'react-native';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
+import {connect} from 'react-redux';
+import {updatePin, comparePin} from '../../redux/actions/user';
+import {showMessage} from '../../helpers/showMessage';
 
 import Button from '../../components/Button';
 
-export default class ChangePin extends Component {
+class ChangePin extends Component {
   state = {
     code: '',
     confirmPin: false,
+    loading: false,
   };
-  onSubmit = () => {
-    this.setState({confirmPin: true, code: ''});
+  onSubmit = async () => {
+    this.setState({loading: true});
+    const {token} = this.props.auth;
+    const {id} = this.props.user.results;
+    await this.props.comparePin(token, this.state.code, id);
+    if (this.props.user.errorMsg === '') {
+      showMessage(this.props.user.message, 'success');
+      this.setState({confirmPin: true, code: '', loading: false});
+    } else {
+      this.setState({loading: false});
+      showMessage(this.props.user.errorMsg);
+    }
   };
-  verifyPin = () => {
-    console.log(this.state.code);
+  verifyPin = async () => {
+    this.setState({loading: true});
+    const {token} = this.props.auth;
+    await this.props.updatePin(token, this.state.code);
+    if (this.props.user.errorMsg === '') {
+      this.setState({loading: false});
+      showMessage(this.props.user.message, 'success');
+      this.props.navigation.navigate('Profile');
+    } else {
+      this.setState({loading: false});
+      showMessage(this.props.user.errorMsg);
+    }
   };
   render() {
     return (
@@ -34,7 +58,9 @@ export default class ChangePin extends Component {
             />
           </View>
         </View>
-        {this.state.confirmPin ? (
+        {this.state.loading ? (
+          <ActivityIndicator size="large" color="#000000" />
+        ) : this.state.confirmPin ? (
           <Button
             onPress={() => this.verifyPin()}
             disabled={this.state.code.length < 6}
@@ -55,6 +81,15 @@ export default class ChangePin extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  user: state.user,
+});
+
+const mapDispatchToProps = {comparePin, updatePin};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChangePin);
 
 const styles = StyleSheet.create({
   container: {
