@@ -27,6 +27,12 @@ const transactionReducer = (state = initialState, action) => {
         data: action.payload,
       };
     }
+    case 'CREATE_TRANSFER': {
+      return {
+        ...state,
+        message: action.payload,
+      };
+    }
     case 'TRANSACTION_HISTORY': {
       return {
         ...state,
