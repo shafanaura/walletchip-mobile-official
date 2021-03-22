@@ -1,11 +1,21 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, Modal, TextInput} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  TextInput,
+  ActivityIndicator,
+} from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
 import Button from '../../components/Button';
 import CardInfo from '../../components/CardInfo';
 import LayoutDetail from '../../components/LayoutDetail';
 import listTopUp from '../../utils/listTopUp';
+import {showMessage} from '../../helpers/showMessage';
+import {connect} from 'react-redux';
+import {updatePersonalInfo} from '../../redux/actions/user';
 
 const CardTopUp = props => {
   return (
@@ -20,18 +30,55 @@ const CardTopUp = props => {
 
 export class TopUp extends Component {
   state = {
+    amount: '',
     isEnabled: false,
     modalVisible: false,
     profile: null,
+    loading: false,
   };
   setModalVisible = visible => {
     this.setState({modalVisible: visible});
   };
+  onSubmit = async () => {
+    this.setState({loading: true});
+    const {token} = this.props.auth;
+    const {balance, phone} = this.props.user.results;
+    if (phone !== null) {
+      if (Number(this.state.amount) < 5000) {
+        this.setState({modalVisible: false, loading: false});
+        showMessage('Minimal top up Rp. 5000');
+      } else if (Number(this.state.amount) > 1000000) {
+        this.setState({modalVisible: false, loading: false});
+        showMessage('Maximal top up Rp. 1.000.000');
+      } else {
+        await this.props.updatePersonalInfo(token, {
+          balance: Number(this.state.amount) + Number(balance),
+        });
+        if (this.props.user.errorMsg === '') {
+          this.setState({modalVisible: false, loading: false});
+          showMessage('Top up successfully', 'success');
+        } else {
+          this.setState({modalVisible: false, loading: false});
+          showMessage(this.props.user.errorMsg);
+        }
+      }
+    } else {
+      this.setState({modalVisible: false, loading: false});
+      showMessage('Please update your phone number first');
+      this.props.navigation.navigate('PersonalInfo');
+    }
+  };
   render() {
-    const {modalVisible, value} = this.state;
+    const {modalVisible} = this.state;
     return (
       <View style={styles.container}>
-        <CardInfo title="Virtual Account Number" detail="2389 081393877946">
+        <CardInfo
+          title="Virtual Account Number"
+          detail={`2389 ${
+            this.props.user.results.phone
+              ? this.props.user.results.phone
+              : 'Phone Number empty'
+          }`}>
           <TouchableOpacity
             style={styles.btn}
             onPress={() => this.setModalVisible(true)}>
@@ -65,6 +112,7 @@ export class TopUp extends Component {
                 keyboardType="number-pad"
                 style={styles.input}
                 placeholder="0.00"
+                onChangeText={amount => this.setState({amount})}
               />
               <View style={styles.row}>
                 <View style={styles.btnSize}>
@@ -76,7 +124,16 @@ export class TopUp extends Component {
                   />
                 </View>
                 <View style={styles.gap}>
-                  <Button text="Confirm" textColor="white" color="#6379F4" />
+                  {this.state.loading ? (
+                    <ActivityIndicator size="large" color="#000000" />
+                  ) : (
+                    <Button
+                      text="Confirm"
+                      textColor="white"
+                      color="#6379F4"
+                      onPress={() => this.onSubmit()}
+                    />
+                  )}
                 </View>
               </View>
             </View>
@@ -167,4 +224,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TopUp;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  user: state.user,
+});
+
+const mapDispatchToProps = {updatePersonalInfo};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TopUp);

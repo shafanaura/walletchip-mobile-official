@@ -5,9 +5,13 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import {connect} from 'react-redux';
+import {updatePersonalInfo} from '../../redux/actions/user';
+import {showMessage} from '../../helpers/showMessage';
 
 import InputPersonal from '../../components/Form/InputPersonal';
 import Button from '../../components/Button';
@@ -27,11 +31,30 @@ const validationSchema = Yup.object().shape({
     .required('*Email is required'),
 });
 
-export default class PersonalInfo extends Component {
-  onSubmit = values => {
-    console.log(values);
+class PersonalInfo extends Component {
+  state = {
+    loading: false,
+  };
+  onSubmit = async values => {
+    this.setState({loading: true});
+    const {token} = this.props.auth;
+    const {firstname, lastname, email} = values;
+    await this.props.updatePersonalInfo(token, {
+      first_name: firstname,
+      last_name: lastname,
+      email: email,
+    });
+    if (this.props.user.errorMsg === '') {
+      this.setState({loading: false});
+      showMessage(this.props.user.message, 'success');
+      this.props.navigation.navigate('Profile');
+    } else {
+      this.setState({loading: false});
+      showMessage(this.props.user.errorMsg);
+    }
   };
   render() {
+    const {first_name, last_name, email} = this.props.user.results;
     return (
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
@@ -41,9 +64,9 @@ export default class PersonalInfo extends Component {
           </Text>
           <Formik
             initialValues={{
-              firstname: 'Robert',
-              lastname: 'Chandler',
-              email: 'pewdipie1@gmail.com',
+              firstname: first_name ? first_name : '',
+              lastname: last_name ? last_name : '',
+              email: email ? email : '',
             }}
             validationSchema={validationSchema}
             onSubmit={values => this.onSubmit(values)}>
@@ -105,12 +128,16 @@ export default class PersonalInfo extends Component {
                   </View>
                 </View>
                 <View style={styles.gap} />
-                <Button
-                  text="Save"
-                  textColor="white"
-                  color="#6379F4"
-                  onPress={handleSubmit}
-                />
+                {this.state.loading ? (
+                  <ActivityIndicator size="large" color="#000000" />
+                ) : (
+                  <Button
+                    text="Save"
+                    textColor="white"
+                    color="#6379F4"
+                    onPress={handleSubmit}
+                  />
+                )}
               </>
             )}
           </Formik>
@@ -119,6 +146,15 @@ export default class PersonalInfo extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  user: state.user,
+});
+
+const mapDispatchToProps = {updatePersonalInfo};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PersonalInfo);
 
 const styles = StyleSheet.create({
   container: {
