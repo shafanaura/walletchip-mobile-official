@@ -8,9 +8,13 @@ export const getUser = token => {
         payload: '',
       });
       const response = await http(token).get('api/dashboard/profile');
+      const results = {...response.data.results};
+      if (results.phone === '0000000000') {
+        results.phone = null;
+      }
       dispatch({
         type: 'GET_USER',
-        payload: response.data.results,
+        payload: results,
       });
     } catch (err) {
       const {message} = err.response.data;
@@ -134,6 +138,69 @@ export const comparePin = (token, pin, id) => {
       dispatch({
         type: 'COMPARE_PIN',
         payload: response.data.message,
+      });
+    } catch (err) {
+      const {message} = err.response.data;
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: message,
+        message: '',
+      });
+    }
+  };
+};
+
+export const updatePhone = (token, phone) => {
+  return async dispatch => {
+    const params = new URLSearchParams();
+    params.append('phone', phone);
+    try {
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: '',
+        message: '',
+      });
+      const response = await http(token).patch('api/phone/update', params);
+      const results = {...response.data.results};
+      if (results.phone === '0000000000') {
+        results.phone = null;
+      }
+      dispatch({
+        type: 'UPDATE_PHONE',
+        payload: results,
+        message: response.data.message,
+      });
+    } catch (err) {
+      const {message} = err.response.data;
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: message,
+        message: '',
+      });
+    }
+  };
+};
+
+export const updatePhoto = (token, photo) => {
+  return async dispatch => {
+    const file = new FormData();
+    const fileUpload = {
+      uri: photo.uri,
+      type: photo.type,
+      name: photo.fileName,
+    };
+    file.append('picture', fileUpload);
+    try {
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: '',
+        message: '',
+      });
+      const response = await http(token).patch('api/user/picture', file);
+      dispatch({
+        type: 'UPDATE_PICTURE',
+        payload: response.data.results,
+        message: response.data.message,
       });
     } catch (err) {
       const {message} = err.response.data;
