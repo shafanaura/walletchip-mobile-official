@@ -1,13 +1,31 @@
 import React, {Component} from 'react';
-import {Text, StyleSheet, View, ScrollView} from 'react-native';
+import {Text, StyleSheet, View, ActivityIndicator} from 'react-native';
 import {Formik} from 'formik';
+import {connect} from 'react-redux';
+import {updatePassword} from '../../redux/actions/user';
+import {showMessage} from '../../helpers/showMessage';
 
 import InputText from '../../components/Form/InputText';
 import Button from '../../components/Button';
 
-export default class ChangePassword extends Component {
-  onSubmit = values => {
-    console.log(values);
+class ChangePassword extends Component {
+  state = {
+    loading: false,
+  };
+  onSubmit = async values => {
+    this.setState({loading: true});
+    const {token} = this.props.auth;
+    const {id} = this.props.user.results;
+    const {password, newPassword} = values;
+    await this.props.updatePassword(token, id, password, newPassword);
+    if (this.props.user.errorMsg === '') {
+      this.setState({loading: false});
+      showMessage(this.props.user.message, 'success');
+      this.props.navigation.navigate('Profile');
+    } else {
+      this.setState({loading: false});
+      showMessage(this.props.user.errorMsg);
+    }
   };
   passwordValidation(values) {
     const errors = {};
@@ -87,35 +105,48 @@ export default class ChangePassword extends Component {
               ) : null}
               <View style={styles.gap} />
             </View>
-            <Button
-              onPress={handleSubmit}
-              disabled={
-                values.password === '' ||
-                values.newPassword === '' ||
-                values.repeatPassword === ''
-              }
-              color={
-                values.password === '' ||
-                values.newPassword === '' ||
-                values.repeatPassword === ''
-                  ? '#DADADA'
-                  : '#6379F4'
-              }
-              textColor={
-                values.password === '' ||
-                values.newPassword === '' ||
-                values.repeatPassword === ''
-                  ? '#88888F'
-                  : 'white'
-              }
-              text="Change Password"
-            />
+            {this.state.loading ? (
+              <ActivityIndicator size="large" color="#000000" />
+            ) : (
+              <Button
+                onPress={handleSubmit}
+                disabled={
+                  values.password === '' ||
+                  values.newPassword === '' ||
+                  values.repeatPassword === ''
+                }
+                color={
+                  values.password === '' ||
+                  values.newPassword === '' ||
+                  values.repeatPassword === ''
+                    ? '#DADADA'
+                    : '#6379F4'
+                }
+                textColor={
+                  values.password === '' ||
+                  values.newPassword === '' ||
+                  values.repeatPassword === ''
+                    ? '#88888F'
+                    : 'white'
+                }
+                text="Change Password"
+              />
+            )}
           </View>
         )}
       </Formik>
     );
   }
 }
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  user: state.user,
+});
+
+const mapDispatchToProps = {updatePassword};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChangePassword);
 
 const styles = StyleSheet.create({
   container: {
