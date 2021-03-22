@@ -35,12 +35,13 @@ export class HomePage extends Component {
     return ribuan;
   };
   render() {
+    const {balance, phone} = this.props.user.results;
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.cardBalance} onPress={this.gotoDetail}>
           <Text style={styles.desc}>Balance</Text>
-          <Text style={styles.balance}>Rp{this.onChangeRupiah(185000)}</Text>
-          <Text style={styles.desc}>+62 813-9387-7946</Text>
+          <Text style={styles.balance}>Rp{this.onChangeRupiah(balance)}</Text>
+          <Text style={styles.desc}>{phone}</Text>
         </TouchableOpacity>
         <View style={styles.rowBtn}>
           <ButtonTrans

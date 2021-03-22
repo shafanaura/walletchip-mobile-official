@@ -1,6 +1,7 @@
 const initialState = {
   results: null,
   errorMsg: null,
+  allContact: [],
 };
 
 const userReducer = (state = initialState, action) => {
@@ -9,6 +10,12 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         results: action.payload,
+      };
+    }
+    case 'GET_ALL_CONTACT': {
+      return {
+        ...state,
+        allContact: action.payload,
       };
     }
     case 'SET_USER_MESSAGE': {
