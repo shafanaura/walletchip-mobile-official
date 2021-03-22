@@ -18,7 +18,7 @@ export class TicketResult extends Component {
   };
   render() {
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.center}>
           <Image source={Status} style={styles.img} />
           <Text style={styles.status}>Transfer Success</Text>

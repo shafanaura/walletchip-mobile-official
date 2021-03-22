@@ -18,6 +18,7 @@ import {
   TopUp,
   ChangePassword,
   ManagePhone,
+  AddPhone,
   PinConfirm,
   TransferResult,
   Notification,
@@ -155,6 +156,13 @@ const Router = () => {
         component={ManagePhone}
         options={{
           title: 'Manage Phone Number',
+        }}
+      />
+      <Stack.Screen
+        name="AddPhone"
+        component={AddPhone}
+        options={{
+          title: 'Add Phone Number',
         }}
       />
       <Stack.Screen

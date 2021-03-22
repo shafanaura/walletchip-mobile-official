@@ -18,6 +18,7 @@ export class Notification extends Component {
       <View style={styles.container}>
         <LayoutDetail desc="Today">
           <FlatList
+            showsVerticalScrollIndicator={false}
             keyExtractor={item => item.id}
             data={listTransaction}
             renderItem={({item}) => (
