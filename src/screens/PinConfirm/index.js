@@ -10,13 +10,14 @@ export class PinConfirm extends Component {
   };
   onSubmit = async () => {
     const {receiverId, amount, date, note} = this.props.transaction.data;
-    await this.props.transfer({
-      receiverId: receiverId,
-      amount: amount,
-      note: note,
-      transactionDate: date,
-      pin: this.state.code,
-    });
+    await this.props.transfer(
+      this.props.auth.token,
+      receiverId,
+      amount,
+      date,
+      note,
+      this.state.code,
+    );
     this.props.navigation.navigate('TransferResult');
   };
   render() {

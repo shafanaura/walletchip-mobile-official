@@ -81,30 +81,28 @@ export const createTransferData = data => {
   };
 };
 
-export const transfer = (token, data) => {
+export const transfer = (
+  token,
+  receiverId,
+  amount,
+  transactionDate,
+  note,
+  pin,
+) => {
   return async dispatch => {
     const params = new URLSearchParams();
-    if (data.receiverId) {
-      params.append('receiverId', data.receiverId);
-    }
-    if (data.amount) {
-      params.append('amount', data.amount);
-    }
-    if (data.transactionDate) {
-      params.append('transactionDate', data.transactionDate);
-    }
-    if (data.note) {
-      params.append('note', data.note);
-    }
-    if (data.pin) {
-      params.append('pin', data.pin);
-    }
+    params.append('receiverId', receiverId);
+    params.append('amount', amount);
+    params.append('transactionDate', transactionDate);
+    params.append('note', note);
+    params.append('pin', pin);
+    const data = {receiverId, amount, transactionDate, note, pin};
     try {
       dispatch({
         type: 'SET_TRANSACTION_MESSAGE',
         payload: '',
       });
-      const response = await http(token).post('api/transfer', params);
+      const response = await http(token).post('api/transfer', data);
       dispatch({
         type: 'CREATE_TRANSFER',
         payload: response.data.message,
