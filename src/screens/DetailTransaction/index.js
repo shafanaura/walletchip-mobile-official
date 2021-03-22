@@ -43,8 +43,8 @@ export class DetailTransaction extends Component {
           </TouchableOpacity>
         </View>
         <FlatList
+          showsVerticalScrollIndicator={false}
           style={{minHeight: 400, maxHeight: 400}}
-          inverted={true}
           data={listTransaction}
           keyExtractor={item => item.id}
           renderItem={({item}) => {

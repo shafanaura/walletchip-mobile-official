@@ -20,8 +20,8 @@ export class SearchReceiver extends Component {
         <Text style={styles.textQuick}>Quick Access</Text>
         <View style={styles.wrapText}>
           <FlatList
+            showsVerticalScrollIndicator={false}
             horizontal
-            inverted={true}
             data={listTransaction}
             keyExtractor={item => item.id}
             renderItem={({item}) => {
@@ -40,6 +40,7 @@ export class SearchReceiver extends Component {
         <Text style={styles.textQuick}>All Contacts</Text>
         <Text style={styles.textDesc}>17 Contacts Founds</Text>
         <FlatList
+          showsVerticalScrollIndicator={false}
           data={listTransaction}
           keyExtractor={item => item.id}
           renderItem={({item}) => {

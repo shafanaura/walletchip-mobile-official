@@ -27,7 +27,7 @@ export class TransactionHistory extends Component {
       <View style={styles.container}>
         <Text style={styles.desc}>This Week</Text>
         <FlatList
-          inverted={true}
+          showsVerticalScrollIndicator={false}
           data={listTransaction}
           keyExtractor={item => item.id}
           renderItem={({item}) => {

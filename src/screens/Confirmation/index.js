@@ -18,7 +18,7 @@ export class Confirmation extends Component {
   };
   render() {
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <LayoutDetail desc="Transfer To">
           <CardContact
             picture="https://pyxis.nymag.com/v1/imgs/9c2/109/b1abeb4d0264c4d40d03ece07e540c1ba4-09-hailee-steinfeld.rsocial.w1200.jpg"
