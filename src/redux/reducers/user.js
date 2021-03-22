@@ -2,6 +2,8 @@ const initialState = {
   results: null,
   message: '',
   errorMsg: null,
+  allContact: [],
+  quickAccessContact: [],
 };
 
 const userReducer = (state = initialState, action) => {
@@ -38,6 +40,19 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         message: action.payload,
+      };
+    }
+    case 'GET_ALL_CONTACT': {
+      return {
+        ...state,
+        allContact: action.payload,
+      };
+    }
+    case 'GET_CONTACT_QUICK_ACCESS': {
+      return {
+        ...state,
+        quickAccessContact: action.payload,
+        message: action.message,
       };
     }
     case 'SET_USER_MESSAGE': {

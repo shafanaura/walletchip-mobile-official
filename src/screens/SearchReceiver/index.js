@@ -1,15 +1,23 @@
 import React, {Component} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {FlatList, Image, Text, View, TextInput, StyleSheet} from 'react-native';
-import listTransaction from '../../utils/listTransaction';
 import CardContact from '../../components/CardContact';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {connect} from 'react-redux';
+import {getContact, getContactQuickAccess} from '../../redux/actions/user';
+import {selectReceiver} from '../../redux/actions/transaction';
 
 export class SearchReceiver extends Component {
-  gotoInputAmount = () => {
+  gotoInputAmount(id) {
+    this.props.selectReceiver(id);
     this.props.navigation.navigate('InputAmount');
-  };
+  }
+  async componentDidMount() {
+    this.props.getContact(this.props.auth.token);
+    this.props.getContactQuickAccess(this.props.auth.token);
+  }
   render() {
+    const {allContact, quickAccessContact} = this.props.user;
     return (
       <View style={styles.container}>
         <Icon name="search" size={24} color="#A9A9A9" style={styles.icon} />
@@ -19,38 +27,44 @@ export class SearchReceiver extends Component {
         />
         <Text style={styles.textQuick}>Quick Access</Text>
         <View style={styles.wrapText}>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            horizontal
-            data={listTransaction}
-            keyExtractor={item => item.id}
-            renderItem={({item}) => {
-              return (
-                <TouchableOpacity
-                  onPress={this.gotoInputAmount}
-                  style={styles.wrapHeader}>
-                  <Image source={{uri: item.picture}} style={styles.avatar} />
-                  <Text style={styles.textName}>{item.firstName}</Text>
-                  <Text style={styles.number}>{item.phoneNumber}</Text>
-                </TouchableOpacity>
-              );
-            }}
-          />
+          {quickAccessContact === undefined ? (
+            <Text style={styles.textMessage}>{this.props.user.message}</Text>
+          ) : (
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              horizontal
+              data={quickAccessContact}
+              keyExtractor={item => item.transactionDate}
+              renderItem={({item}) => {
+                return (
+                  <TouchableOpacity
+                    onPress={this.gotoInputAmount}
+                    style={styles.wrapHeader}>
+                    <Image source={{uri: item.picture}} style={styles.avatar} />
+                    <Text style={styles.textName}>{item.first_name}</Text>
+                    <Text style={styles.number}>{item.phone}</Text>
+                  </TouchableOpacity>
+                );
+              }}
+            />
+          )}
         </View>
         <Text style={styles.textQuick}>All Contacts</Text>
         <Text style={styles.textDesc}>17 Contacts Founds</Text>
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={listTransaction}
+          data={allContact}
           keyExtractor={item => item.id}
           renderItem={({item}) => {
             return (
               <CardContact
-                onPress={this.gotoInputAmount}
+                onPress={() => this.gotoInputAmount(item.id)}
                 picture={item.picture}
-                firstName={item.firstName}
-                lastName={item.lastName}
-                detail={item.phoneNumber}
+                firstName={
+                  item.first_name === null ? item.username : item.first_name
+                }
+                lastName={item.last_name !== null && item.last_name}
+                detail={item.phone}
               />
             );
           }}
@@ -92,8 +106,8 @@ const styles = StyleSheet.create({
     elevation: 2,
     borderRadius: 10,
     marginRight: 20,
-    maxWidth: 100,
-    maxHeight: 150,
+    width: 100,
+    height: 150,
     marginBottom: 20,
   },
   avatar: {
@@ -121,9 +135,25 @@ const styles = StyleSheet.create({
     color: '#8F8F8F',
   },
   wrapText: {
-    marginTop: 20,
-    marginBottom: 10,
+    marginVertical: 20,
+  },
+  textMessage: {
+    fontFamily: 'NunitoSans-SemiBold',
+    color: '#8F8F8F',
+    fontSize: 18,
   },
 });
 
-export default SearchReceiver;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  user: state.user,
+  transaction: state.transaction,
+});
+
+const mapDispatchToProps = {
+  getContact,
+  getContactQuickAccess,
+  selectReceiver,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchReceiver);

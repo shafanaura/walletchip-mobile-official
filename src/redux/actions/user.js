@@ -150,6 +150,28 @@ export const comparePin = (token, pin, id) => {
   };
 };
 
+export const getContact = token => {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: '',
+      });
+      const response = await http(token).get('api/user');
+      dispatch({
+        type: 'GET_ALL_CONTACT',
+        payload: response.data.results,
+      });
+    } catch (err) {
+      const {message} = err.response.data;
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: message,
+      });
+    }
+  };
+};
+
 export const updatePhone = (token, phone) => {
   return async dispatch => {
     const params = new URLSearchParams();
@@ -177,6 +199,29 @@ export const updatePhone = (token, phone) => {
         payload: message,
         message: '',
       });
+    }
+  };
+};
+
+export const getContactQuickAccess = token => {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: '',
+      });
+      const response = await http(token).get('api/user/quick-access');
+      dispatch({
+        type: 'GET_CONTACT_QUICK_ACCESS',
+        payload: response.data.results,
+        message: response.data.message,
+      });
+    } catch (err) {
+      const {message} = err.response.data;
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: message,
+       });
     }
   };
 };
