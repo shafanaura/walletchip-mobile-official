@@ -16,7 +16,11 @@ import CardInfoProfile from '../../components/CardInfoProfile';
 import Button from '../../components/Button';
 import {ScrollView} from 'react-native-gesture-handler';
 
-export default class Profile extends Component {
+import {connect} from 'react-redux';
+import {updatePhoto} from '../../redux/actions/user';
+import {showMessage} from '../../helpers/showMessage';
+
+class Profile extends Component {
   state = {
     isEnabled: false,
     modalVisible: false,
@@ -28,7 +32,8 @@ export default class Profile extends Component {
   toggleSwitch = () => this.setState({isEnabled: !this.state.isEnabled});
   addPhotoGallery = () => {
     this.setState({modalVisible: false});
-    launchImageLibrary({}, response => {
+    const {token} = this.props.auth;
+    launchImageLibrary({}, async response => {
       if (response.didCancel) {
         console.log('User cancelled upload image');
       } else if (response.errorMessage) {
@@ -36,17 +41,26 @@ export default class Profile extends Component {
       } else if (response.fileSize >= 1 * 1024 * 1024) {
         console.log('Image to large');
       } else {
-        this.setState({profile: response.uri});
+        this.setState({profile: response});
+        await this.props.updatePhoto(token, this.state.profile);
+        if (this.props.user.errorMsg === '') {
+          this.setState({loading: false});
+          showMessage(this.props.user.message, 'success');
+        } else {
+          this.setState({loading: false});
+          showMessage(this.props.user.errorMsg);
+        }
       }
     });
   };
   addPhotoCamera = () => {
     this.setState({modalVisible: false});
+    const {token} = this.props.auth;
     launchCamera(
       {
         quality: 0.3,
       },
-      response => {
+      async response => {
         if (response.didCancel) {
           console.log('User cancelled upload image');
         } else if (response.errorMessage) {
@@ -54,19 +68,30 @@ export default class Profile extends Component {
         } else if (response.fileSize >= 1 * 1024 * 1024) {
           console.log('Image to large');
         } else {
-          this.setState({profile: response.uri});
+          this.setState({profile: response});
+          await this.props.updatePhoto(token, this.state.profile);
+          if (this.props.user.errorMsg === '') {
+            this.setState({loading: false});
+            showMessage(this.props.user.message, 'success');
+          } else {
+            this.setState({loading: false});
+            showMessage(this.props.user.errorMsg);
+          }
         }
       },
     );
   };
   render() {
-    const {modalVisible, profile} = this.state;
+    const {modalVisible} = this.state;
     return (
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <View style={styles.column}>
-            {profile ? (
-              <Image source={{uri: profile}} style={styles.image} />
+            {this.props.user.results.picture ? (
+              <Image
+                source={{uri: this.props.user.results.picture}}
+                style={styles.image}
+              />
             ) : (
               <Image source={Avatar} style={styles.image} />
             )}
@@ -151,6 +176,15 @@ export default class Profile extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  user: state.user,
+});
+
+const mapDispatchToProps = {updatePhoto};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);
 
 const styles = StyleSheet.create({
   container: {
