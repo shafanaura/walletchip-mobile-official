@@ -4,15 +4,12 @@ import {FlatList, Image, Text, View, TextInput, StyleSheet} from 'react-native';
 import CardContact from '../../components/CardContact';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
-import {
-  getContact,
-  getContactQuickAccess,
-  createTransferData,
-} from '../../redux/actions/user';
+import {getContact, getContactQuickAccess} from '../../redux/actions/user';
+import {selectReceiver} from '../../redux/actions/transaction';
 
 export class SearchReceiver extends Component {
   gotoInputAmount(id) {
-    this.props.createTransferData({receiverId: id});
+    this.props.selectReceiver(id);
     this.props.navigation.navigate('InputAmount');
   }
   async componentDidMount() {
@@ -20,7 +17,7 @@ export class SearchReceiver extends Component {
     this.props.getContactQuickAccess(this.props.auth.token);
   }
   render() {
-    const {allContact, quickAccess} = this.props.user;
+    const {allContact, quickAccessContact} = this.props.user;
     return (
       <View style={styles.container}>
         <Icon name="search" size={24} color="#A9A9A9" style={styles.icon} />
@@ -30,14 +27,14 @@ export class SearchReceiver extends Component {
         />
         <Text style={styles.textQuick}>Quick Access</Text>
         <View style={styles.wrapText}>
-          {quickAccess === undefined ? (
+          {quickAccessContact === undefined ? (
             <Text style={styles.textMessage}>{this.props.user.message}</Text>
           ) : (
             <FlatList
               showsVerticalScrollIndicator={false}
               horizontal
-              data={quickAccess}
-              keyExtractor={item => item.id}
+              data={quickAccessContact}
+              keyExtractor={item => item.transactionDate}
               renderItem={({item}) => {
                 return (
                   <TouchableOpacity
@@ -150,12 +147,13 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => ({
   auth: state.auth,
   user: state.user,
+  transaction: state.transaction,
 });
 
 const mapDispatchToProps = {
   getContact,
   getContactQuickAccess,
-  createTransferData,
+  selectReceiver,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchReceiver);

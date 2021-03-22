@@ -3,24 +3,20 @@ import {Text, View, StyleSheet} from 'react-native';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 import Button from '../../components/Button';
 import {connect} from 'react-redux';
-import {
-  getContact,
-  getUser,
-  getReceiverData,
-  createTransferData,
-  createTransfer,
-  transferData,
-} from '../../redux/actions/user';
+import {transfer} from '../../redux/actions/transaction';
 export class PinConfirm extends Component {
   state = {
     code: '',
   };
-  componentDidMount() {
-    this.props.createTransferData({
-      receiverId: this.props.user.transferData.receiverId,
+  onSubmit = async () => {
+    const {receiverId, amount, date, note} = this.props.transaction.data;
+    await this.props.transfer({
+      receiverId: receiverId,
+      amount: amount,
+      note: note,
+      transactionDate: date,
+      pin: this.state.code,
     });
-  }
-  onSubmit = () => {
     this.props.navigation.navigate('TransferResult');
   };
   render() {
@@ -95,15 +91,11 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => ({
   auth: state.auth,
   user: state.user,
+  transaction: state.transaction,
 });
 
 const mapDispatchToProps = {
-  getContact,
-  getUser,
-  getReceiverData,
-  createTransferData,
-  createTransfer,
-  transferData,
+  transfer,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PinConfirm);

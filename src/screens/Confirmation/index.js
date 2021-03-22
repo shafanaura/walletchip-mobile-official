@@ -6,12 +6,11 @@ import CardContact from '../../components/CardContact';
 import CardDetailTrans from '../../components/CardDetailTrans';
 import LayoutDetail from '../../components/LayoutDetail';
 import {connect} from 'react-redux';
+import {getContact, getUser} from '../../redux/actions/user';
 import {
-  getContact,
-  getUser,
   getReceiverData,
   createTransferData,
-} from '../../redux/actions/user';
+} from '../../redux/actions/transaction';
 import moment from 'moment';
 
 export class Confirmation extends Component {
@@ -31,9 +30,9 @@ export class Confirmation extends Component {
       last_name,
       username,
       phone,
-    } = this.props.user.receiverDetail;
+    } = this.props.transaction.receiverData;
     const {balance} = this.props.user.results;
-    const {amount, note, date} = this.props.user.transferData;
+    const {amount, note, date} = this.props.transaction.data;
     return (
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <LayoutDetail desc="Transfer To">
@@ -86,6 +85,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => ({
   auth: state.auth,
   user: state.user,
+  transaction: state.transaction,
 });
 
 const mapDispatchToProps = {

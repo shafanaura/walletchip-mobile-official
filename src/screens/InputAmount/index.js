@@ -5,12 +5,12 @@ import CardContact from '../../components/CardContact';
 import InputText from '../../components/Form/InputText';
 import {Formik} from 'formik';
 import {connect} from 'react-redux';
+import {getContact, getUser} from '../../redux/actions/user';
 import {
-  getContact,
-  getUser,
   getReceiverData,
+  selectReceiver,
   createTransferData,
-} from '../../redux/actions/user';
+} from '../../redux/actions/transaction';
 
 const date = new Date();
 
@@ -41,12 +41,12 @@ export class InputAmount extends Component {
     this.props.getUser(this.props.auth.token);
     this.props.getReceiverData(
       this.props.auth.token,
-      this.props.user.transferData.receiverId,
+      this.props.transaction.receiver,
     );
   }
   onSubmit = values => {
     this.props.createTransferData({
-      receiverId: this.props.user.transferData.receiverId,
+      receiverId: this.props.transaction.receiver,
       amount: parseInt(values.amount),
       note: values.note,
       date: date,
@@ -66,7 +66,7 @@ export class InputAmount extends Component {
       last_name,
       username,
       phone,
-    } = this.props.user.receiverDetail;
+    } = this.props.transaction.receiverData;
     const {balance} = this.props.user.results;
     return (
       <View style={styles.container}>
@@ -183,12 +183,14 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => ({
   auth: state.auth,
   user: state.user,
+  transaction: state.transaction,
 });
 
 const mapDispatchToProps = {
   getContact,
   getUser,
   getReceiverData,
+  selectReceiver,
   createTransferData,
 };
 
