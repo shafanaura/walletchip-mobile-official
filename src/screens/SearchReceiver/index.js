@@ -1,13 +1,30 @@
 import React, {Component} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {FlatList, Image, Text, View, TextInput, StyleSheet} from 'react-native';
+import {
+  FlatList,
+  Image,
+  Text,
+  View,
+  TextInput,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 import CardContact from '../../components/CardContact';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
-import {getContact, getContactQuickAccess} from '../../redux/actions/user';
+import {
+  getContact,
+  getContactQuickAccess,
+  pagingGetContact,
+} from '../../redux/actions/user';
 import {selectReceiver} from '../../redux/actions/transaction';
 
 export class SearchReceiver extends Component {
+  state = {
+    search: '',
+    loading: false,
+    message: '',
+  };
   gotoInputAmount(id) {
     this.props.selectReceiver(id);
     this.props.navigation.navigate('InputAmount');
@@ -16,6 +33,34 @@ export class SearchReceiver extends Component {
     this.props.getContact(this.props.auth.token);
     this.props.getContactQuickAccess(this.props.auth.token);
   }
+  next = async () => {
+    if (
+      this.props.user.pageInfoContact.currentPage <
+      this.props.user.pageInfoContact.totalPage
+    ) {
+      const {search} = this.state;
+      this.props.pagingGetContact(
+        this.props.auth.token,
+        search,
+        this.props.user.pageInfoContact.currentPage + 1,
+      );
+    }
+  };
+  search = async value => {
+    this.setState({loading: true, search: value});
+    await this.props.getContact(this.props.auth.token, value);
+    if (this.props.user.allContact.length > 0) {
+      this.setState({
+        message: '',
+        loading: false,
+      });
+    } else {
+      this.setState({
+        message: `${value} Not Found`,
+        loading: false,
+      });
+    }
+  };
   render() {
     const {allContact, quickAccessContact} = this.props.user;
     return (
@@ -24,6 +69,7 @@ export class SearchReceiver extends Component {
         <TextInput
           style={styles.textInput}
           placeholder="Search receiver here"
+          onChangeText={value => this.search(value)}
         />
         <Text style={styles.textQuick}>Quick Access</Text>
         <View style={styles.wrapText}>
@@ -38,7 +84,7 @@ export class SearchReceiver extends Component {
               renderItem={({item}) => {
                 return (
                   <TouchableOpacity
-                    onPress={this.gotoInputAmount}
+                    onPress={() => this.gotoInputAmount(item.id)}
                     style={styles.wrapHeader}>
                     <Image source={{uri: item.picture}} style={styles.avatar} />
                     <Text style={styles.textName}>{item.first_name}</Text>
@@ -50,25 +96,35 @@ export class SearchReceiver extends Component {
           )}
         </View>
         <Text style={styles.textQuick}>All Contacts</Text>
-        <Text style={styles.textDesc}>17 Contacts Founds</Text>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={allContact}
-          keyExtractor={item => item.id}
-          renderItem={({item}) => {
-            return (
-              <CardContact
-                onPress={() => this.gotoInputAmount(item.id)}
-                picture={item.picture}
-                firstName={
-                  item.first_name === null ? item.username : item.first_name
-                }
-                lastName={item.last_name !== null && item.last_name}
-                detail={item.phone}
-              />
-            );
-          }}
-        />
+        <Text style={styles.textDesc}>
+          {this.props.user.pageInfoContact.totalData} Contacts Founds
+        </Text>
+        {this.state.loading ? (
+          <ActivityIndicator size="large" color="#000000" />
+        ) : this.state.message !== '' ? (
+          <Text>{this.state.message}</Text>
+        ) : (
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={allContact}
+            keyExtractor={item => item.id}
+            renderItem={({item}) => {
+              return (
+                <CardContact
+                  onPress={() => this.gotoInputAmount(item.id)}
+                  picture={item.picture}
+                  firstName={
+                    item.first_name === null ? item.username : item.first_name
+                  }
+                  lastName={item.last_name !== null && item.last_name}
+                  detail={item.phone}
+                />
+              );
+            }}
+            onEndReached={this.next}
+            onEndReachedThreshold={0.5}
+          />
+        )}
       </View>
     );
   }
@@ -154,6 +210,7 @@ const mapDispatchToProps = {
   getContact,
   getContactQuickAccess,
   selectReceiver,
+  pagingGetContact,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchReceiver);

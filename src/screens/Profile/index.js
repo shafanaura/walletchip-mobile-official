@@ -101,8 +101,20 @@ class Profile extends Component {
               <Icon name="edit-2" size={16} color="#7A7886" />
               <Text style={styles.text}>Edit</Text>
             </TouchableOpacity>
-            <Text style={styles.name}>Robert Chandler</Text>
-            <Text style={styles.phone}>+62 813-9387-7946</Text>
+            <Text style={styles.name}>
+              {this.props.user.results.first_name
+                ? `${this.props.user.results.first_name} ${
+                    this.props.user.results.last_name
+                      ? this.props.user.results.last_name
+                      : ''
+                  }`
+                : this.props.user.results.username}
+            </Text>
+            <Text style={styles.phone}>
+              {this.props.user.results.phone !== null
+                ? this.props.user.results.phone
+                : 'Phone number empty'}
+            </Text>
           </View>
           <CardInfoProfile
             title="Personal Information"
