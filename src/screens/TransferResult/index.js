@@ -1,15 +1,19 @@
 import React, {Component} from 'react';
 import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {connect} from 'react-redux';
 import Status from '../../assets/image/success.png';
 import Button from '../../components/Button';
 import CardContact from '../../components/CardContact';
 import CardDetailTrans from '../../components/CardDetailTrans';
 import LayoutDetail from '../../components/LayoutDetail';
-
-import {connect} from 'react-redux';
+import {getContact, getUser} from '../../redux/actions/user';
+import {
+  getReceiverData,
+  createTransferData,
+} from '../../redux/actions/transaction';
 import moment from 'moment';
 
-export class TicketResult extends Component {
+export class TransferResult extends Component {
   onChangeRupiah = angka => {
     var reverse = angka.toString().split('').reverse().join(''),
       ribuan = reverse.match(/\d{1,3}/g);
@@ -42,7 +46,7 @@ export class TicketResult extends Component {
           />
           <CardDetailTrans
             title="Balance Left"
-            detail={`Rp${this.onChangeRupiah(balance)}`}
+            detail={`Rp${this.onChangeRupiah(balance - amount)}`}
           />
           <CardDetailTrans
             title="Date & Time"
@@ -106,4 +110,11 @@ const mapStateToProps = state => ({
   transaction: state.transaction,
 });
 
-export default connect(mapStateToProps)(TicketResult);
+const mapDispatchToProps = {
+  getContact,
+  getUser,
+  getReceiverData,
+  createTransferData,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TransferResult);
