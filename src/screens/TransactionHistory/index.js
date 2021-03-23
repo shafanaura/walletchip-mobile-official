@@ -1,14 +1,20 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, FlatList} from 'react-native';
+import {StyleSheet, Text, View, Modal, FlatList} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import CardContact from '../../components/CardContact';
 import {connect} from 'react-redux';
 import {
-  transactionHistory,
-  pagingGetTransaction,
+  transactionToday,
+  pagingGetTransactionToday,
+  transactionWeek,
+  pagingGetTransactionWeek,
+  transactionMonth,
+  pagingGetTransactionMonth,
 } from '../../redux/actions/transaction';
+import Button from '../../components/Button';
+import moment from 'moment';
 
 export class TransactionHistory extends Component {
   constructor(props) {
@@ -17,10 +23,13 @@ export class TransactionHistory extends Component {
       date: new Date(),
       show: false,
       value: '',
+      modalVisible: false,
     };
   }
   async componentDidMount() {
-    await this.props.transactionHistory(this.props.auth.token);
+    await this.props.transactionToday(this.props.auth.token);
+    this.props.transactionWeek(this.props.auth.token);
+    this.props.transactionMonth(this.props.auth.token);
   }
   onChangeRupiah = angka => {
     var reverse = angka.toString().split('').reverse().join(''),
@@ -28,49 +37,149 @@ export class TransactionHistory extends Component {
     ribuan = ribuan.join('.').split('').reverse().join('');
     return ribuan;
   };
-  next = async () => {
+  setModalVisible = visible => {
+    this.setState({modalVisible: visible});
+  };
+  nextDay = async () => {
     if (
-      this.props.transaction.pageInfoTransaction.currentPage <
-      this.props.transaction.pageInfoTransaction.totalPage
+      this.props.transaction.pageInfoTransactionToday.currentPage <
+      this.props.transaction.pageInfoTransactionToday.totalPage
     ) {
-      await this.props.pagingGetTransaction(
+      await this.props.pagingGetTransactionToday(
         this.props.auth.token,
-        this.props.transaction.pageInfoTransaction.currentPage + 1,
+        this.props.transaction.pageInfoTransactionToday.currentPage + 1,
+      );
+    }
+  };
+  nextWeek = async () => {
+    if (
+      this.props.transaction.pageInfoTransactionWeek.currentPage <
+      this.props.transaction.pageInfoTransactionWeek.totalPage
+    ) {
+      await this.props.pagingGetTransactionWeek(
+        this.props.auth.token,
+        this.props.transaction.pageInfoTransactionWeek.currentPage + 1,
+      );
+    }
+  };
+  nextMonth = async () => {
+    if (
+      this.props.transaction.pageInfoTransactionMonth.currentPage <
+      this.props.transaction.pageInfoTransactionMonth.totalPage
+    ) {
+      await this.props.pagingGetTransactionMonth(
+        this.props.auth.token,
+        this.props.transaction.pageInfoTransactionMonth.currentPage + 1,
       );
     }
   };
   render() {
+    const {modalVisible} = this.state;
     const {date, show} = this.state;
-    const {allTransaction} = this.props.transaction;
+    const {
+      todayTransaction,
+      weekTransaction,
+      monthTransaction,
+    } = this.props.transaction;
     return (
       <View style={styles.container}>
+        {/* Transaction Today */}
         <Text style={styles.desc}>Today</Text>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={allTransaction}
-          keyExtractor={item => item.id}
-          renderItem={({item}) => {
-            return (
-              <CardContact
-                picture={item.picture}
-                firstName={item.another_user}
-                detail="Transfer">
-                <Text
-                  style={[
-                    styles.total,
-                    item.did_user_transfer === 1
-                      ? styles.textDanger
-                      : styles.textPrimary,
-                  ]}>
-                  {item.did_user_transfer === 1 ? '-' : '+'}Rp
-                  {this.onChangeRupiah(item.amount)}
-                </Text>
-              </CardContact>
-            );
-          }}
-          onEndReached={this.next}
-          onEndReachedThreshold={0.5}
-        />
+        {todayTransaction !== undefined ? (
+          <FlatList
+            style={{height: 250, flexGrow: 0}}
+            showsVerticalScrollIndicator={false}
+            data={todayTransaction}
+            keyExtractor={item => item.id}
+            renderItem={({item}) => {
+              return (
+                <CardContact
+                  picture={item.picture}
+                  firstName={item.another_user}
+                  detail="Transfer">
+                  <Text
+                    style={[
+                      styles.total,
+                      item.did_user_transfer === 1
+                        ? styles.textDanger
+                        : styles.textPrimary,
+                    ]}>
+                    {item.did_user_transfer === 1 ? '-' : '+'}Rp
+                    {this.onChangeRupiah(item.amount)}
+                  </Text>
+                </CardContact>
+              );
+            }}
+            onEndReached={this.nextDay}
+            onEndReachedThreshold={0.5}
+          />
+        ) : (
+          <Text style={styles.textMessage}>No transaction...</Text>
+        )}
+        {/* Transaction Week */}
+        <Text style={styles.desc}>This Week</Text>
+        {weekTransaction !== undefined ? (
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={weekTransaction}
+            keyExtractor={item => item.id}
+            renderItem={({item}) => {
+              return (
+                <CardContact
+                  picture={item.picture}
+                  firstName={item.another_user}
+                  detail="Transfer">
+                  <Text
+                    style={[
+                      styles.total,
+                      item.did_user_transfer === 1
+                        ? styles.textDanger
+                        : styles.textPrimary,
+                    ]}>
+                    {item.did_user_transfer === 1 ? '-' : '+'}Rp
+                    {this.onChangeRupiah(item.amount)}
+                  </Text>
+                </CardContact>
+              );
+            }}
+            onEndReached={this.nextWeek}
+            onEndReachedThreshold={0.5}
+          />
+        ) : (
+          <Text style={styles.textMessage}>No transaction...</Text>
+        )}
+        {/* Transaction Month */}
+        {/* <Text style={styles.desc}>This Month</Text>
+        {monthTransaction !== undefined ? (
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={monthTransaction}
+            keyExtractor={item => item.id}
+            renderItem={({item}) => {
+              return (
+                <CardContact
+                  picture={item.picture}
+                  firstName={item.another_user}
+                  detail="Transfer">
+                  <Text
+                    style={[
+                      styles.total,
+                      item.did_user_transfer === 1
+                        ? styles.textDanger
+                        : styles.textPrimary,
+                    ]}>
+                    {item.did_user_transfer === 1 ? '-' : '+'}Rp
+                    {this.onChangeRupiah(item.amount)}
+                  </Text>
+                </CardContact>
+              );
+            }}
+            onEndReached={this.nextMonth}
+            onEndReachedThreshold={0.5}
+          />
+        ) : (
+          <Text style={styles.textMessage}>No transaction...</Text>
+        )} */}
         <View style={styles.footer}>
           <TouchableOpacity style={styles.btnFilter}>
             <Icon name="arrow-up" color="#FF5B37" size={26} />
@@ -80,11 +189,7 @@ export class TransactionHistory extends Component {
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.btnFilter, styles.btnFlex]}
-            onPress={() =>
-              this.setState({
-                show: !show,
-              })
-            }>
+            onPress={() => this.setModalVisible(true)}>
             <Text style={styles.btnText}>Filter by Date</Text>
           </TouchableOpacity>
           {show && (
@@ -94,10 +199,58 @@ export class TransactionHistory extends Component {
               mode="date"
               is24Hour={true}
               display="default"
-              // onChange={this.onChangeDate}
             />
           )}
         </View>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            this.setModalVisible(!modalVisible);
+          }}>
+          <View style={styles.modalContainer}>
+            <View style={styles.contentModal}>
+              <View style={styles.row}>
+                <View style={styles.flex}>
+                  <Text style={styles.descModal}>From</Text>
+                  <TouchableOpacity>
+                    <Text style={styles.descDate}>Select a date</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.flex}>
+                  <Text style={styles.descModal}>To</Text>
+                  <TouchableOpacity>
+                    <Text style={styles.descDate}>Select a date</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={styles.row}>
+                <View style={styles.btnSize}>
+                  <Button
+                    text="Cancel"
+                    textColor="#4D4B57"
+                    color="#E5E8ED"
+                    onPress={() => this.setModalVisible(false)}
+                  />
+                </View>
+
+                <View style={styles.gap}>
+                  <Button
+                    text="Apply"
+                    textColor="white"
+                    color="#6379F4"
+                    onPress={() =>
+                      this.setState({
+                        show: !show,
+                      })
+                    }
+                  />
+                </View>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </View>
     );
   }
@@ -149,6 +302,47 @@ const styles = StyleSheet.create({
     fontFamily: 'NunitoSans-Bold',
     fontSize: 16,
   },
+  textMessage: {
+    fontFamily: 'NunitoSans-SemiBold',
+    color: '#8F8F8F',
+    fontSize: 18,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  contentModal: {
+    width: '100%',
+    backgroundColor: '#ffffff',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 20,
+  },
+  row: {
+    flexDirection: 'row',
+  },
+  gap: {
+    flex: 1,
+  },
+  btnSize: {marginRight: 20},
+  flex: {
+    flex: 1,
+  },
+  descModal: {
+    fontFamily: 'NunitoSans-Regular',
+    color: '#7A7886',
+  },
+  descDate: {
+    fontFamily: 'NunitoSans-Bold',
+    color: '#4D4B57',
+    fontSize: 16,
+    marginBottom: 40,
+    marginTop: 5,
+  },
 });
 
 const mapStateToProps = state => ({
@@ -157,6 +351,13 @@ const mapStateToProps = state => ({
   transaction: state.transaction,
 });
 
-const mapDispatchToProps = {transactionHistory, pagingGetTransaction};
+const mapDispatchToProps = {
+  transactionToday,
+  pagingGetTransactionToday,
+  transactionWeek,
+  pagingGetTransactionWeek,
+  transactionMonth,
+  pagingGetTransactionMonth,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(TransactionHistory);

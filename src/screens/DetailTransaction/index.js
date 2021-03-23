@@ -4,8 +4,21 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
 import CardContact from '../../components/CardContact';
 import listTransaction from '../../utils/listTransaction';
-
+import {connect} from 'react-redux';
+import {transactionHistory} from '../../redux/actions/transaction';
+import http from '../../helpers/http';
 export class DetailTransaction extends Component {
+  state = {
+    showResults: undefined,
+  };
+  async componentDidMount() {
+    const response = await http(this.props.auth.token).get(
+      'api/transaction-history?limit=8',
+    );
+    this.setState({
+      showResults: response.data.results,
+    });
+  }
   gotoHistory() {
     this.props.navigation.navigate('TransactionHistory');
   }
@@ -42,32 +55,36 @@ export class DetailTransaction extends Component {
             <Text style={styles.textLink}>See all</Text>
           </TouchableOpacity>
         </View>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          style={{minHeight: 400, maxHeight: 400}}
-          data={listTransaction}
-          keyExtractor={item => item.id}
-          renderItem={({item}) => {
-            return (
-              <CardContact
-                picture={item.picture}
-                firstName={item.firstName}
-                lastName={item.lastName}
-                detail="Transfer">
-                <Text
-                  style={[
-                    styles.total,
-                    item.userAs === 'sender'
-                      ? styles.textDanger
-                      : styles.textPrimary,
-                  ]}>
-                  {item.userAs === 'sender' ? '-' : '+'}Rp
-                  {this.onChangeRupiah(item.total)}
-                </Text>
-              </CardContact>
-            );
-          }}
-        />
+        {this.state.showResults !== undefined ? (
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={this.state.showResults}
+            keyExtractor={item => item.id}
+            renderItem={({item}) => {
+              return (
+                <CardContact
+                  picture={item.picture}
+                  firstName={item.another_user}
+                  detail="Transfer">
+                  <Text
+                    style={[
+                      styles.total,
+                      item.did_user_transfer === 1
+                        ? styles.textDanger
+                        : styles.textPrimary,
+                    ]}>
+                    {item.did_user_transfer === 1 ? '-' : '+'}Rp
+                    {this.onChangeRupiah(item.amount)}
+                  </Text>
+                </CardContact>
+              );
+            }}
+          />
+        ) : (
+          <Text style={styles.textMessage}>
+            You has no transaction history...
+          </Text>
+        )}
       </View>
     );
   }
@@ -130,6 +147,20 @@ const styles = StyleSheet.create({
     fontFamily: 'NunitoSans-Bold',
     fontSize: 16,
   },
+  textMessage: {
+    fontFamily: 'NunitoSans-SemiBold',
+    color: '#8F8F8F',
+    fontSize: 18,
+    textAlign: 'center',
+  },
 });
 
-export default DetailTransaction;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  user: state.user,
+  transaction: state.transaction,
+});
+
+const mapDispatchToProps = {transactionHistory};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DetailTransaction);

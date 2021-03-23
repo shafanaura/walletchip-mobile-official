@@ -95,8 +95,6 @@ export class HomePage extends Component {
                   </CardContact>
                 );
               }}
-              onEndReached={this.next}
-              onEndReachedThreshold={0.5}
             />
           ) : (
             <Text style={styles.textMessage}>
