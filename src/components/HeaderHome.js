@@ -12,7 +12,7 @@ export class HeaderHome extends Component {
     this.props.getUser(this.props.auth.token);
   }
   render() {
-    const {picture, username} = this.props.user.results;
+    const {picture, username, first_name, last_name} = this.props.user.results;
     return (
       <View style={styles.wrapHeader}>
         <View style={styles.row}>
@@ -27,7 +27,11 @@ export class HeaderHome extends Component {
           </TouchableOpacity>
           <View style={styles.descAvatar}>
             <Text style={styles.hello}>Hello,</Text>
-            <Text style={styles.title}>{username}</Text>
+            <Text style={styles.title}>
+              {first_name + ' ' + last_name
+                ? first_name + ' ' + last_name
+                : username}
+            </Text>
           </View>
         </View>
         <TouchableOpacity onPress={this.gotoNotif}>
