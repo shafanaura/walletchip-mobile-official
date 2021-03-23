@@ -28,9 +28,7 @@ export class HeaderHome extends Component {
           <View style={styles.descAvatar}>
             <Text style={styles.hello}>Hello,</Text>
             <Text style={styles.title}>
-              {first_name + ' ' + last_name
-                ? first_name + ' ' + last_name
-                : username}
+              {first_name !== null ? first_name + ' ' + last_name : username}
             </Text>
           </View>
         </View>
