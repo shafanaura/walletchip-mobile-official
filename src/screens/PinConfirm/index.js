@@ -25,7 +25,7 @@ export class PinConfirm extends Component {
     );
     if (this.props.transaction.errorMsg === '') {
       this.setState({loading: false});
-      this.props.navigation.navigate('TransferResult');
+      this.props.navigation.replace('TransferResult');
       await this.props.getUser(this.props.auth.token);
     } else {
       this.setState({loading: false});

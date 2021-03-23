@@ -128,7 +128,12 @@ const Router = () => {
       <Stack.Screen
         name="TransferResult"
         component={TransferResult}
-        options={{headerShown: false}}
+        options={{
+          headerShown: false,
+          headerLeft: () => {
+            return null;
+          },
+        }}
       />
       <Stack.Screen
         name="Profile"

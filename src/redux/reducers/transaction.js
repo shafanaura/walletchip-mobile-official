@@ -1,7 +1,7 @@
 const initialState = {
   results: null,
   amountTransaction: null,
-  transactionHistory: null,
+  history: null,
   receiver: null,
   confirmation: null,
   pageInfo: null,
@@ -38,9 +38,8 @@ const transactionReducer = (state = initialState, action) => {
     case 'TRANSACTION_HISTORY': {
       return {
         ...state,
-        transactionHistory: action.payload,
-        pageInfo: action.pageInfo,
-        message: action.message,
+        allTransaction: action.payload,
+        pageInfoTransaction: action.pageInfo,
       };
     }
     case 'PAGING_GET_ALL_TRANSACTION': {
@@ -69,7 +68,7 @@ const transactionReducer = (state = initialState, action) => {
         ...state,
         results: null,
         amountTransaction: null,
-        transactionHistory: null,
+        history: null,
         receiver: null,
         confirmation: null,
         pageInfo: null,

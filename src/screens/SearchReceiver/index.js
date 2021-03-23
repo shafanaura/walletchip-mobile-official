@@ -92,12 +92,12 @@ export class SearchReceiver extends Component {
                     <Text style={styles.textName}>
                       {item.first_name
                         ? item.first_name
-                        : item.another_user.slice(-4)}
+                        : `${item.another_user.slice(0, 5)}...`}
                     </Text>
                     <Text style={styles.number}>
                       {item.phone
                         ? `-${item.phone.slice(-4)}`
-                        : 'No number phone'}
+                        : 'No phone number'}
                     </Text>
                   </TouchableOpacity>
                 );
@@ -130,7 +130,7 @@ export class SearchReceiver extends Component {
                     item.first_name === null ? item.username : item.first_name
                   }
                   lastName={item.last_name !== null && item.last_name}
-                  detail={item.phone}
+                  detail={item.phone ? item.phone : 'No phone number'}
                 />
               );
             }}

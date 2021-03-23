@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
-import {connect} from 'react-redux';
 import CardContact from '../../components/CardContact';
+import {connect} from 'react-redux';
 import {transactionHistory} from '../../redux/actions/transaction';
 
 const ButtonTrans = props => {
@@ -39,7 +39,7 @@ export class HomePage extends Component {
   };
   render() {
     const {balance, phone} = this.props.user.results;
-    const {transactionHistory} = this.props.transaction;
+    const {allTransaction} = this.props.transaction;
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.cardBalance} onPress={this.gotoDetail}>
@@ -62,11 +62,11 @@ export class HomePage extends Component {
               <Text style={styles.textLink}>See all</Text>
             </TouchableOpacity>
           </View>
-          {transactionHistory !== undefined ? (
+          {allTransaction !== undefined ? (
             <FlatList
               showsVerticalScrollIndicator={false}
               style={{minHeight: 290, maxHeight: 290}}
-              data={transactionHistory}
+              data={allTransaction}
               keyExtractor={item => item.id}
               renderItem={({item}) => {
                 return (

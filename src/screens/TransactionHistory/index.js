@@ -3,8 +3,12 @@ import {StyleSheet, Text, View, FlatList} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import listTransaction from '../../utils/listTransaction';
 import CardContact from '../../components/CardContact';
+import {connect} from 'react-redux';
+import {
+  transactionHistory,
+  pagingGetTransaction,
+} from '../../redux/actions/transaction';
 
 export class TransactionHistory extends Component {
   constructor(props) {
@@ -15,41 +19,57 @@ export class TransactionHistory extends Component {
       value: '',
     };
   }
+  async componentDidMount() {
+    await this.props.transactionHistory(this.props.auth.token);
+  }
   onChangeRupiah = angka => {
     var reverse = angka.toString().split('').reverse().join(''),
       ribuan = reverse.match(/\d{1,3}/g);
     ribuan = ribuan.join('.').split('').reverse().join('');
     return ribuan;
   };
+  next = async () => {
+    if (
+      this.props.transaction.pageInfoTransaction.currentPage <
+      this.props.transaction.pageInfoTransaction.totalPage
+    ) {
+      await this.props.pagingGetTransaction(
+        this.props.auth.token,
+        this.props.transaction.pageInfoTransaction.currentPage + 1,
+      );
+    }
+  };
   render() {
     const {date, show} = this.state;
+    const {allTransaction} = this.props.transaction;
     return (
       <View style={styles.container}>
-        <Text style={styles.desc}>This Week</Text>
+        <Text style={styles.desc}>Today</Text>
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={listTransaction}
+          data={allTransaction}
           keyExtractor={item => item.id}
           renderItem={({item}) => {
             return (
               <CardContact
                 picture={item.picture}
-                firstName={item.firstName}
-                lastName={item.lastName}
+                firstName={item.another_user}
                 detail="Transfer">
                 <Text
                   style={[
                     styles.total,
-                    item.userAs === 'sender'
+                    item.did_user_transfer === 1
                       ? styles.textDanger
                       : styles.textPrimary,
                   ]}>
-                  {item.userAs === 'sender' ? '-' : '+'}Rp
-                  {this.onChangeRupiah(item.total)}
+                  {item.did_user_transfer === 1 ? '-' : '+'}Rp
+                  {this.onChangeRupiah(item.amount)}
                 </Text>
               </CardContact>
             );
           }}
+          onEndReached={this.next}
+          onEndReachedThreshold={0.5}
         />
         <View style={styles.footer}>
           <TouchableOpacity style={styles.btnFilter}>
@@ -131,4 +151,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TransactionHistory;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  user: state.user,
+  transaction: state.transaction,
+});
+
+const mapDispatchToProps = {transactionHistory, pagingGetTransaction};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TransactionHistory);

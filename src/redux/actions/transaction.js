@@ -131,19 +131,22 @@ export const clearTransaction = () => ({
   type: 'CLEAR_TRANSACTION',
 });
 
-export const transactionHistory = token => {
+export const transactionHistory = (token, page, limit) => {
   return async dispatch => {
     try {
       dispatch({
         type: 'SET_TRANSACTION_MESSAGE',
         payload: '',
       });
-      const response = await http(token).get('api/transaction-history');
+      const response = await http(token).get(
+        `api/transaction-history?page=${page ? page : 1}&limit=${
+          limit ? limit : 6
+        }`,
+      );
       dispatch({
         type: 'TRANSACTION_HISTORY',
         payload: response.data.results,
         pageInfo: response.data.pageInfo,
-        message: response.data.message,
       });
     } catch (err) {
       const {message} = err.response.data;
@@ -155,14 +158,18 @@ export const transactionHistory = token => {
   };
 };
 
-export const pagingGetTransaction = (token, page) => {
+export const pagingGetTransaction = (token, page, limit) => {
   return async dispatch => {
     try {
       dispatch({
-        type: 'SET_USER_MESSAGE',
+        type: 'SET_TRANSACTION_MESSAGE',
         payload: '',
       });
-      const response = await http(token).get('api/transaction-history?page=2');
+      const response = await http(token).get(
+        `api/transaction-history?page=${page ? page : 1}&limit=${
+          limit ? limit : 6
+        }`,
+      );
       dispatch({
         type: 'PAGING_GET_ALL_TRANSACTION',
         payload: response.data.results,
@@ -171,7 +178,7 @@ export const pagingGetTransaction = (token, page) => {
     } catch (err) {
       const {message} = err.response.data;
       dispatch({
-        type: 'SET_USER_MESSAGE',
+        type: 'SET_TRANSACTION_MESSAGE',
         payload: message,
       });
     }
