@@ -10,6 +10,7 @@ import PushNotification from 'react-native-push-notification';
 
 import {navigationRef} from './src/helpers/rootNavigation';
 import * as RootNavigation from './src/helpers/rootNavigation';
+import linking from './src/router/linking';
 
 import persistedStore from './src/redux/store';
 
@@ -32,7 +33,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <NavigationContainer ref={navigationRef}>
+        <NavigationContainer linking={linking} ref={navigationRef}>
           <Router />
           <FlashMessage position="top" duration={3000} />
         </NavigationContainer>

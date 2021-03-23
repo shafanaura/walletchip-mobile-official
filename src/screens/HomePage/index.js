@@ -4,7 +4,7 @@ import {FlatList} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
 import {connect} from 'react-redux';
 import CardContact from '../../components/CardContact';
-import listTransaction from '../../utils/listTransaction';
+import {transactionHistory} from '../../redux/actions/transaction';
 
 const ButtonTrans = props => {
   return (
@@ -16,6 +16,9 @@ const ButtonTrans = props => {
 };
 
 export class HomePage extends Component {
+  async componentDidMount() {
+    await this.props.transactionHistory(this.props.auth.token);
+  }
   gotoDetail = () => {
     this.props.navigation.navigate('DetailTransaction');
   };
@@ -36,12 +39,13 @@ export class HomePage extends Component {
   };
   render() {
     const {balance, phone} = this.props.user.results;
+    const {transactionHistory} = this.props.transaction;
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.cardBalance} onPress={this.gotoDetail}>
           <Text style={styles.desc}>Balance</Text>
           <Text style={styles.balance}>Rp{this.onChangeRupiah(balance)}</Text>
-          <Text style={styles.desc}>{phone}</Text>
+          <Text style={styles.desc}>{phone ? phone : 'No phone number'}</Text>
         </TouchableOpacity>
         <View style={styles.rowBtn}>
           <ButtonTrans
@@ -58,32 +62,39 @@ export class HomePage extends Component {
               <Text style={styles.textLink}>See all</Text>
             </TouchableOpacity>
           </View>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            style={{minHeight: 290, maxHeight: 290}}
-            data={listTransaction}
-            keyExtractor={item => item.id}
-            renderItem={({item}) => {
-              return (
-                <CardContact
-                  picture={item.picture}
-                  firstName={item.firstName}
-                  lastName={item.lastName}
-                  detail="Transfer">
-                  <Text
-                    style={[
-                      styles.total,
-                      item.userAs === 'sender'
-                        ? styles.textDanger
-                        : styles.textPrimary,
-                    ]}>
-                    {item.userAs === 'sender' ? '-' : '+'}Rp
-                    {this.onChangeRupiah(item.total)}
-                  </Text>
-                </CardContact>
-              );
-            }}
-          />
+          {transactionHistory !== undefined ? (
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              style={{minHeight: 290, maxHeight: 290}}
+              data={transactionHistory}
+              keyExtractor={item => item.id}
+              renderItem={({item}) => {
+                return (
+                  <CardContact
+                    picture={item.picture}
+                    firstName={item.another_user}
+                    detail="Transfer">
+                    <Text
+                      style={[
+                        styles.total,
+                        item.did_user_transfer === 1
+                          ? styles.textDanger
+                          : styles.textPrimary,
+                      ]}>
+                      {item.did_user_transfer === 1 ? '-' : '+'}Rp
+                      {this.onChangeRupiah(item.amount)}
+                    </Text>
+                  </CardContact>
+                );
+              }}
+              onEndReached={this.next}
+              onEndReachedThreshold={0.5}
+            />
+          ) : (
+            <Text style={styles.textMessage}>
+              You has no transaction history...
+            </Text>
+          )}
         </View>
       </View>
     );
@@ -162,13 +173,20 @@ const styles = StyleSheet.create({
     fontFamily: 'NunitoSans-Bold',
     fontSize: 16,
   },
+  textMessage: {
+    fontFamily: 'NunitoSans-SemiBold',
+    color: '#8F8F8F',
+    fontSize: 18,
+    textAlign: 'center',
+  },
 });
 
 const mapStateToProps = state => ({
   auth: state.auth,
   user: state.user,
+  transaction: state.transaction,
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {transactionHistory};
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
