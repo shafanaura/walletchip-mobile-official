@@ -130,3 +130,50 @@ export const confirmation = value => ({
 export const clearTransaction = () => ({
   type: 'CLEAR_TRANSACTION',
 });
+
+export const transactionHistory = token => {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: 'SET_TRANSACTION_MESSAGE',
+        payload: '',
+      });
+      const response = await http(token).get('api/transaction-history');
+      dispatch({
+        type: 'TRANSACTION_HISTORY',
+        payload: response.data.results,
+        pageInfo: response.data.pageInfo,
+        message: response.data.message,
+      });
+    } catch (err) {
+      const {message} = err.response.data;
+      dispatch({
+        type: 'SET_TRANSACTION_MESSAGE',
+        payload: message,
+      });
+    }
+  };
+};
+
+export const pagingGetTransaction = (token, page) => {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: '',
+      });
+      const response = await http(token).get('api/transaction-history?page=2');
+      dispatch({
+        type: 'PAGING_GET_ALL_TRANSACTION',
+        payload: response.data.results,
+        pageInfo: response.data.pageInfo,
+      });
+    } catch (err) {
+      const {message} = err.response.data;
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: message,
+      });
+    }
+  };
+};

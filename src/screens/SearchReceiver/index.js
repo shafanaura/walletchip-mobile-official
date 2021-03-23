@@ -74,7 +74,9 @@ export class SearchReceiver extends Component {
         <Text style={styles.textQuick}>Quick Access</Text>
         <View style={styles.wrapText}>
           {quickAccessContact === undefined ? (
-            <Text style={styles.textMessage}>{this.props.user.message}</Text>
+            <Text style={styles.textMessage}>
+              You has never made a transaction with anyone
+            </Text>
           ) : (
             <FlatList
               showsVerticalScrollIndicator={false}
@@ -87,7 +89,11 @@ export class SearchReceiver extends Component {
                     onPress={() => this.gotoInputAmount(item.id)}
                     style={styles.wrapHeader}>
                     <Image source={{uri: item.picture}} style={styles.avatar} />
-                    <Text style={styles.textName}>{item.first_name}</Text>
+                    <Text style={styles.textName}>
+                      {item.first_name
+                        ? item.first_name
+                        : item.another_user.slice(-4)}
+                    </Text>
                     <Text style={styles.number}>
                       {item.phone
                         ? `-${item.phone.slice(-4)}`
