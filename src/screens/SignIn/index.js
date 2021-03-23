@@ -1,5 +1,11 @@
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {connect} from 'react-redux';
@@ -22,14 +28,20 @@ const validationSchema = Yup.object().shape({
 });
 
 class SignIn extends Component {
+  state = {
+    loading: false,
+  };
   onSubmit = async values => {
+    this.setState({loading: true});
     const {email, password} = values;
     await this.props.login(email, password);
     if (this.props.auth.token) {
       await this.props.getUser(this.props.auth.token);
+      this.setState({loading: false});
       showMessage('Login Success', 'success');
       this.props.navigation.replace('HomePage');
     } else {
+      this.setState({loading: false});
       showMessage(this.props.auth.errorMsg);
     }
   };
@@ -86,21 +98,25 @@ class SignIn extends Component {
                 }>
                 <Text style={styles.textForgot}>Forgot password?</Text>
               </TouchableOpacity>
-              <Button
-                onPress={handleSubmit}
-                disabled={values.email === '' || values.password === ''}
-                color={
-                  values.email === '' || values.password === ''
-                    ? '#DADADA'
-                    : '#6379F4'
-                }
-                textColor={
-                  values.email === '' || values.password === ''
-                    ? '#88888F'
-                    : 'white'
-                }
-                text="Login"
-              />
+              {this.state.loading ? (
+                <ActivityIndicator color="#000000" size="large" />
+              ) : (
+                <Button
+                  onPress={handleSubmit}
+                  disabled={values.email === '' || values.password === ''}
+                  color={
+                    values.email === '' || values.password === ''
+                      ? '#DADADA'
+                      : '#6379F4'
+                  }
+                  textColor={
+                    values.email === '' || values.password === ''
+                      ? '#88888F'
+                      : 'white'
+                  }
+                  text="Login"
+                />
+              )}
             </>
           )}
         </Formik>

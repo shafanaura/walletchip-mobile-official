@@ -4,6 +4,7 @@ const initialState = {
   errorMsg: null,
   allContact: [],
   quickAccessContact: [],
+  pageInfoContact: null,
 };
 
 const userReducer = (state = initialState, action) => {
@@ -46,6 +47,16 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         allContact: action.payload,
+        pageInfoContact: action.pageInfo,
+      };
+    }
+    case 'PAGING_GET_ALL_CONTACT': {
+      const oldData = state.allContact;
+      const newData = [...oldData, ...action.payload];
+      return {
+        ...state,
+        allContact: newData,
+        pageInfoContact: action.pageInfo,
       };
     }
     case 'GET_CONTACT_QUICK_ACCESS': {
