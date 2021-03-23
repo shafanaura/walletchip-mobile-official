@@ -8,9 +8,13 @@ export const getUser = token => {
         payload: '',
       });
       const response = await http(token).get('api/dashboard/profile');
+      const results = {...response.data.results};
+      if (results.phone === '0000000000') {
+        results.phone = null;
+      }
       dispatch({
         type: 'GET_USER',
-        payload: response.data.results,
+        payload: results,
       });
     } catch (err) {
       const {message} = err.response.data;
@@ -134,6 +138,142 @@ export const comparePin = (token, pin, id) => {
       dispatch({
         type: 'COMPARE_PIN',
         payload: response.data.message,
+      });
+    } catch (err) {
+      const {message} = err.response.data;
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: message,
+        message: '',
+      });
+    }
+  };
+};
+
+export const getContact = (token, search, page) => {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: '',
+      });
+      const response = await http(token).get(
+        `api/user?search=${search ? search : ''}&page=${page ? page : 1}`,
+      );
+      dispatch({
+        type: 'GET_ALL_CONTACT',
+        payload: response.data.results,
+        pageInfo: response.data.pageInfo,
+      });
+    } catch (err) {
+      const {message} = err.response.data;
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: message,
+      });
+    }
+  };
+};
+
+export const pagingGetContact = (token, search, page) => {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: '',
+      });
+      const response = await http(token).get(
+        `api/user?search=${search ? search : ''}&page=${page ? page : 1}`,
+      );
+      dispatch({
+        type: 'PAGING_GET_ALL_CONTACT',
+        payload: response.data.results,
+        pageInfo: response.data.pageInfo,
+      });
+    } catch (err) {
+      const {message} = err.response.data;
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: message,
+      });
+    }
+  };
+};
+
+export const updatePhone = (token, phone) => {
+  return async dispatch => {
+    const params = new URLSearchParams();
+    params.append('phone', phone);
+    try {
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: '',
+        message: '',
+      });
+      const response = await http(token).patch('api/phone/update', params);
+      const results = {...response.data.results};
+      if (results.phone === '0000000000') {
+        results.phone = null;
+      }
+      dispatch({
+        type: 'UPDATE_PHONE',
+        payload: results,
+        message: response.data.message,
+      });
+    } catch (err) {
+      const {message} = err.response.data;
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: message,
+        message: '',
+      });
+    }
+  };
+};
+
+export const getContactQuickAccess = token => {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: '',
+      });
+      const response = await http(token).get('api/user/quick-access');
+      dispatch({
+        type: 'GET_CONTACT_QUICK_ACCESS',
+        payload: response.data.results,
+        message: response.data.message,
+      });
+    } catch (err) {
+      const {message} = err.response.data;
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: message,
+      });
+    }
+  };
+};
+
+export const updatePhoto = (token, photo) => {
+  return async dispatch => {
+    const file = new FormData();
+    const fileUpload = {
+      uri: photo.uri,
+      type: photo.type,
+      name: photo.fileName,
+    };
+    file.append('picture', fileUpload);
+    try {
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: '',
+        message: '',
+      });
+      const response = await http(token).patch('api/user/picture', file);
+      dispatch({
+        type: 'UPDATE_PICTURE',
+        payload: response.data.results,
+        message: response.data.message,
       });
     } catch (err) {
       const {message} = err.response.data;
