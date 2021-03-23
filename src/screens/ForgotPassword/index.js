@@ -10,6 +10,9 @@ import InputText from '../../components/Form/InputText';
 import Auth from '../../components/Auth';
 import Button from '../../components/Button';
 
+import {connect} from 'react-redux';
+import {setEmailForgotPassword} from '../../redux/actions/auth';
+
 const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email('*Must be a valid email address')
@@ -22,11 +25,13 @@ class ForgotPassword extends Component {
     loading: false,
   };
   onSubmit = async values => {
+    this.props.setEmailForgotPassword(null);
     this.setState({loading: true});
     const email = new URLSearchParams();
     email.append('email', values.email);
     try {
       const {data} = await http().post('api/auth/password', email);
+      this.props.setEmailForgotPassword(values.email);
       this.setState({loading: false});
       showMessage(data.message, 'success');
     } catch (error) {
@@ -99,4 +104,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ForgotPassword;
+const mapDispatchToProps = {setEmailForgotPassword};
+
+export default connect(mapDispatchToProps)(ForgotPassword);
