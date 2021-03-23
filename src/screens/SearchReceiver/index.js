@@ -30,7 +30,7 @@ export class SearchReceiver extends Component {
     this.props.navigation.navigate('InputAmount');
   }
   async componentDidMount() {
-    this.props.getContact(this.props.auth.token);
+    await this.props.getContact(this.props.auth.token);
     this.props.getContactQuickAccess(this.props.auth.token);
   }
   next = async () => {
@@ -39,7 +39,7 @@ export class SearchReceiver extends Component {
       this.props.user.pageInfoContact.totalPage
     ) {
       const {search} = this.state;
-      this.props.pagingGetContact(
+      await this.props.pagingGetContact(
         this.props.auth.token,
         search,
         this.props.user.pageInfoContact.currentPage + 1,
@@ -97,13 +97,16 @@ export class SearchReceiver extends Component {
         </View>
         <Text style={styles.textQuick}>All Contacts</Text>
         <Text style={styles.textDesc}>
-          {this.props.user.pageInfoContact.totalData} Contacts Founds
+          {this.props.user.pageInfoContact !== null
+            ? this.props.user.pageInfoContact.totalData
+            : ''}{' '}
+          Contacts Founds
         </Text>
         {this.state.loading ? (
           <ActivityIndicator size="large" color="#000000" />
         ) : this.state.message !== '' ? (
           <Text>{this.state.message}</Text>
-        ) : (
+        ) : allContact.length > 0 ? (
           <FlatList
             showsVerticalScrollIndicator={false}
             data={allContact}
@@ -124,7 +127,7 @@ export class SearchReceiver extends Component {
             onEndReached={this.next}
             onEndReachedThreshold={0.5}
           />
-        )}
+        ) : null}
       </View>
     );
   }
