@@ -1,16 +1,37 @@
 import React, {Component} from 'react';
 import {View, StyleSheet} from 'react-native';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
+import jwtdecode from 'jwt-decode';
 
 import Auth from '../../components/Auth';
 import Button from '../../components/Button';
+import http from '../../helpers/http';
+import {showMessage} from '../../helpers/showMessage';
 
 class CreatePin extends Component {
+  constructor(props) {
+    super(props);
+
+    const {route} = this.props;
+    if (route.params.token) {
+      const {id} = jwtdecode(route.params.token);
+      this.setState({id});
+    }
+  }
   state = {
     code: '',
+    id: null,
   };
-  onSubmit = () => {
-    this.props.navigation.navigate('PinSuccess');
+  onSubmit = async () => {
+    try {
+      const {data} = await http().patch(
+        `api/auth/verified?id=${this.state.id}`,
+      );
+      showMessage(data.message, 'success');
+      this.props.navigation.navigate('SignIn');
+    } catch (error) {
+      showMessage(error.response.data.message, 'danger');
+    }
   };
   render() {
     return (

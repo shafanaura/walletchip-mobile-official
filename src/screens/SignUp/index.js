@@ -3,6 +3,10 @@ import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
+// Import Helpers
+import {showMessage} from '../../helpers/showMessage';
+import http from '../../helpers/http';
+
 import InputText from '../../components/Form/InputText';
 import Auth from '../../components/Auth';
 import Button from '../../components/Button';
@@ -22,9 +26,20 @@ const validationSchema = Yup.object().shape({
 });
 
 class SignUp extends Component {
-  onSubmit = values => {
-    console.log(values);
-    this.props.navigation.navigate('CreatePin');
+  onSubmit = async values => {
+    const credentials = new URLSearchParams();
+    credentials.append('username', values.username);
+    credentials.append('email', values.email);
+    credentials.append('password', values.password);
+    try {
+      await http().post('api/auth/register', credentials);
+      showMessage(
+        'Thanks for signing up, please check your email to validate your account!',
+        'success',
+      );
+    } catch (error) {
+      showMessage(error.response.data.message, 'danger');
+    }
   };
   render() {
     return (
