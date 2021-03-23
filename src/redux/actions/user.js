@@ -41,6 +41,9 @@ export const updatePersonalInfo = (token, data) => {
     if (data.balance) {
       params.append('balance', data.balance);
     }
+    if (data.token) {
+      params.append('token', data.token);
+    }
     try {
       dispatch({
         type: 'SET_USER_MESSAGE',
