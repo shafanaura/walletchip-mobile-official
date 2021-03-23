@@ -5,6 +5,8 @@ const initialState = {
   receiver: null,
   confirmation: null,
   pageInfo: null,
+  pageInfoTransaction: null,
+  allTransaction: [],
   errorMsg: '',
   message: '',
   receiverDetail: null,
@@ -38,6 +40,16 @@ const transactionReducer = (state = initialState, action) => {
         ...state,
         transactionHistory: action.payload,
         pageInfo: action.pageInfo,
+        message: action.message,
+      };
+    }
+    case 'PAGING_GET_ALL_TRANSACTION': {
+      const oldData = state.allTransaction;
+      const newData = [...oldData, ...action.payload];
+      return {
+        ...state,
+        allTransaction: newData,
+        pageInfoTransaction: action.pageInfo,
       };
     }
     case 'SELECT_RECEIVER': {
