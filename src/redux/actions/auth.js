@@ -24,3 +24,12 @@ export const login = (email, password) => {
     }
   };
 };
+
+export const setEmailForgotPassword = email => {
+  return async dispatch => {
+    dispatch({
+      type: 'EMAIL_FORGOT_PASSWORD',
+      payload: email,
+    });
+  };
+};

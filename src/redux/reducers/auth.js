@@ -1,6 +1,7 @@
 const initialState = {
   token: null,
   errorMsg: null,
+  email: '',
 };
 
 const authReducer = (state = initialState, action) => {
@@ -22,6 +23,12 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         errorMsg: action.payload,
+      };
+    }
+    case 'EMAIL_FORGOT_PASSWORD': {
+      return {
+        ...state,
+        email: action.payload,
       };
     }
     default: {

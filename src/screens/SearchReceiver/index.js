@@ -87,7 +87,9 @@ export class SearchReceiver extends Component {
         <Text style={styles.textQuick}>Quick Access</Text>
         <View style={styles.wrapText}>
           {quickAccessContact === undefined ? (
-            <Text style={styles.textMessage}>{this.props.user.message}</Text>
+            <Text style={styles.textMessage}>
+              You has never made a transaction with anyone
+            </Text>
           ) : (
             <FlatList
               showsVerticalScrollIndicator={false}

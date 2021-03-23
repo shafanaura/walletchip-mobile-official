@@ -12,6 +12,7 @@ import {
   createTransferData,
 } from '../../redux/actions/transaction';
 import moment from 'moment';
+import {transactionHistory} from '../../redux/actions/transaction';
 
 export class TransferResult extends Component {
   onChangeRupiah = angka => {
@@ -21,6 +22,7 @@ export class TransferResult extends Component {
     return ribuan;
   };
   goHome = () => {
+    this.props.transactionHistory(this.props.auth.token);
     this.props.navigation.navigate('HomePage');
   };
   render() {
@@ -115,6 +117,7 @@ const mapDispatchToProps = {
   getUser,
   getReceiverData,
   createTransferData,
+  transactionHistory,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TransferResult);
