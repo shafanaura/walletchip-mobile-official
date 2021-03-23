@@ -80,7 +80,7 @@ export class SearchReceiver extends Component {
               showsVerticalScrollIndicator={false}
               horizontal
               data={quickAccessContact}
-              keyExtractor={item => item.transactionDate}
+              keyExtractor={item => item.id}
               renderItem={({item}) => {
                 return (
                   <TouchableOpacity
@@ -88,7 +88,11 @@ export class SearchReceiver extends Component {
                     style={styles.wrapHeader}>
                     <Image source={{uri: item.picture}} style={styles.avatar} />
                     <Text style={styles.textName}>{item.first_name}</Text>
-                    <Text style={styles.number}>{item.phone}</Text>
+                    <Text style={styles.number}>
+                      {item.phone
+                        ? `-${item.phone.slice(-4)}`
+                        : 'No number phone'}
+                    </Text>
                   </TouchableOpacity>
                 );
               }}
