@@ -46,7 +46,7 @@ export class TransferResult extends Component {
           />
           <CardDetailTrans
             title="Balance Left"
-            detail={`Rp${this.onChangeRupiah(balance - amount)}`}
+            detail={`Rp${this.onChangeRupiah(balance)}`}
           />
           <CardDetailTrans
             title="Date & Time"
