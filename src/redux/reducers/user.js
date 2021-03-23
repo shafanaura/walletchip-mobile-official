@@ -63,7 +63,16 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         quickAccessContact: action.payload,
-        message: action.message,
+        pageInfoQA: action.pageInfo,
+      };
+    }
+    case 'PAGING_GET_CONTACT_QUICK_ACCESS': {
+      const oldData = state.quickAccessContact;
+      const newData = [...oldData, ...action.payload];
+      return {
+        ...state,
+        quickAccessContact: newData,
+        pageInfoQA: action.pageInfo,
       };
     }
     case 'SET_USER_MESSAGE': {

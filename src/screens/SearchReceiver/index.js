@@ -16,6 +16,7 @@ import {
   getContact,
   getContactQuickAccess,
   pagingGetContact,
+  pagingGetQA,
 } from '../../redux/actions/user';
 import {selectReceiver} from '../../redux/actions/transaction';
 
@@ -31,7 +32,7 @@ export class SearchReceiver extends Component {
   }
   async componentDidMount() {
     await this.props.getContact(this.props.auth.token);
-    this.props.getContactQuickAccess(this.props.auth.token);
+    await this.props.getContactQuickAccess(this.props.auth.token);
   }
   next = async () => {
     if (
@@ -43,6 +44,18 @@ export class SearchReceiver extends Component {
         this.props.auth.token,
         search,
         this.props.user.pageInfoContact.currentPage + 1,
+      );
+    }
+  };
+  nextQA = async () => {
+    if (
+      this.props.user.pageInfoQA &&
+      this.props.user.pageInfoQA.currentPage <
+        this.props.user.pageInfoQA.totalPage
+    ) {
+      await this.props.pagingGetQA(
+        this.props.auth.token,
+        this.props.user.pageInfoQA.currentPage + 1,
       );
     }
   };
@@ -82,26 +95,26 @@ export class SearchReceiver extends Component {
               showsVerticalScrollIndicator={false}
               horizontal
               data={quickAccessContact}
-              keyExtractor={item => item.id}
+              keyExtractor={item => item.user_id}
               renderItem={({item}) => {
                 return (
                   <TouchableOpacity
-                    onPress={() => this.gotoInputAmount(item.id)}
+                    onPress={() => this.gotoInputAmount(item.user_id)}
                     style={styles.wrapHeader}>
                     <Image source={{uri: item.picture}} style={styles.avatar} />
                     <Text style={styles.textName}>
-                      {item.first_name
-                        ? item.first_name
-                        : item.another_user.slice(-4)}
+                      {item.first_name ? item.first_name : item.username}
                     </Text>
                     <Text style={styles.number}>
                       {item.phone
                         ? `-${item.phone.slice(-4)}`
-                        : 'No number phone'}
+                        : 'No phone number'}
                     </Text>
                   </TouchableOpacity>
                 );
               }}
+              onEndReached={this.nextQA}
+              onEndReachedThreshold={0.5}
             />
           )}
         </View>
@@ -224,6 +237,7 @@ const mapDispatchToProps = {
   getContactQuickAccess,
   selectReceiver,
   pagingGetContact,
+  pagingGetQA,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchReceiver);
