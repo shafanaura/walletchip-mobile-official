@@ -8,9 +8,13 @@ export const getUser = token => {
         payload: '',
       });
       const response = await http(token).get('api/dashboard/profile');
+      const results = {...response.data.results};
+      if (results.phone === '0000000000') {
+        results.phone = null;
+      }
       dispatch({
         type: 'GET_USER',
-        payload: response.data.results,
+        payload: results,
       });
     } catch (err) {
       const {message} = err.response.data;
@@ -146,23 +150,82 @@ export const comparePin = (token, pin, id) => {
   };
 };
 
-export const getContact = token => {
+export const getContact = (token, search, page) => {
   return async dispatch => {
     try {
       dispatch({
         type: 'SET_USER_MESSAGE',
         payload: '',
       });
-      const response = await http(token).get('api/user');
+      const response = await http(token).get(
+        `api/user?search=${search ? search : ''}&page=${page ? page : 1}`,
+      );
       dispatch({
         type: 'GET_ALL_CONTACT',
         payload: response.data.results,
+        pageInfo: response.data.pageInfo,
       });
     } catch (err) {
       const {message} = err.response.data;
       dispatch({
         type: 'SET_USER_MESSAGE',
         payload: message,
+      });
+    }
+  };
+};
+
+export const pagingGetContact = (token, search, page) => {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: '',
+      });
+      const response = await http(token).get(
+        `api/user?search=${search ? search : ''}&page=${page ? page : 1}`,
+      );
+      dispatch({
+        type: 'PAGING_GET_ALL_CONTACT',
+        payload: response.data.results,
+        pageInfo: response.data.pageInfo,
+      });
+    } catch (err) {
+      const {message} = err.response.data;
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: message,
+      });
+    }
+  };
+};
+
+export const updatePhone = (token, phone) => {
+  return async dispatch => {
+    const params = new URLSearchParams();
+    params.append('phone', phone);
+    try {
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: '',
+        message: '',
+      });
+      const response = await http(token).patch('api/phone/update', params);
+      const results = {...response.data.results};
+      if (results.phone === '0000000000') {
+        results.phone = null;
+      }
+      dispatch({
+        type: 'UPDATE_PHONE',
+        payload: results,
+        message: response.data.message,
+      });
+    } catch (err) {
+      const {message} = err.response.data;
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: message,
+        message: '',
       });
     }
   };
@@ -191,16 +254,24 @@ export const getContactQuickAccess = token => {
   };
 };
 
-export const getReceiverData = (token, id) => {
+export const updatePhoto = (token, photo) => {
   return async dispatch => {
+    const file = new FormData();
+    const fileUpload = {
+      uri: photo.uri,
+      type: photo.type,
+      name: photo.fileName,
+    };
+    file.append('picture', fileUpload);
     try {
       dispatch({
         type: 'SET_USER_MESSAGE',
         payload: '',
+        message: '',
       });
-      const response = await http(token).get(`api/receiver/${id}`);
+      const response = await http(token).patch('api/user/picture', file);
       dispatch({
-        type: 'GET_RECEIVER_DETAIL',
+        type: 'UPDATE_PICTURE',
         payload: response.data.results,
         message: response.data.message,
       });
@@ -209,81 +280,7 @@ export const getReceiverData = (token, id) => {
       dispatch({
         type: 'SET_USER_MESSAGE',
         payload: message,
-      });
-    }
-  };
-};
-
-export const createTransferData = data => {
-  return async dispatch => {
-    const params = new URLSearchParams();
-    if (data.receiverId) {
-      params.append('receiverId', data.receiverId);
-    }
-    if (data.amount) {
-      params.append('amount', data.amount);
-    }
-    if (data.transactionDate) {
-      params.append('transactionDate', data.transactionDate);
-    }
-    if (data.note) {
-      params.append('note', data.note);
-    }
-    if (data.pin) {
-      params.append('pin', data.pin);
-    }
-    try {
-      dispatch({
-        type: 'SET_USER_MESSAGE',
-        payload: '',
-      });
-      dispatch({
-        type: 'CREATE_TRANSFER_DATA',
-        payload: data,
-      });
-    } catch (err) {
-      const {message} = err.response.data;
-      dispatch({
-        type: 'SET_USER_MESSAGE',
-        payload: message,
-      });
-    }
-  };
-};
-
-export const createTransfer = (token, data) => {
-  return async dispatch => {
-    const params = new URLSearchParams();
-    if (data.receiverId) {
-      params.append('receiverId', data.receiverId);
-    }
-    if (data.amount) {
-      params.append('amount', data.amount);
-    }
-    if (data.transactionDate) {
-      params.append('transactionDate', data.transactionDate);
-    }
-    if (data.note) {
-      params.append('note', data.note);
-    }
-    if (data.pin) {
-      params.append('pin', data.pin);
-    }
-    try {
-      dispatch({
-        type: 'SET_USER_MESSAGE',
-        payload: '',
-      });
-      const response = await http(token).get('api/transfer', params);
-      dispatch({
-        type: 'CREATE_TRANSFER',
-        payload: response.data.message,
-      });
-    } catch (err) {
-      const {message} = err.response.data;
-      dispatch({
-        type: 'SET_USER_MESSAGE',
-        payload: message,
+        message: '',
       });
     }
   };

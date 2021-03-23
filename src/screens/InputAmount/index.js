@@ -4,18 +4,53 @@ import Button from '../../components/Button';
 import CardContact from '../../components/CardContact';
 import InputText from '../../components/Form/InputText';
 import {Formik} from 'formik';
-import * as Yup from 'yup';
+import {connect} from 'react-redux';
+import {getContact, getUser} from '../../redux/actions/user';
+import {
+  getReceiverData,
+  selectReceiver,
+  createTransferData,
+} from '../../redux/actions/transaction';
 
-const validationSchema = Yup.object().shape({
-  amount: Yup.number('*Number only'),
-});
+const date = new Date();
 
 export class InputAmount extends Component {
   state = {
-    value: '200000',
+    amountBalance: null,
   };
+  amountValidation(values) {
+    const errors = {};
+    const {balance} = this.props.user.results;
+    if (!values.amount) {
+      errors.amount = 'Amount Required';
+    } else if (values.amount > balance) {
+      errors.amount = 'Balance not enough';
+    } else if (values.amount < 5000) {
+      errors.amount = 'Minimun Transfer Rp. 5000';
+    }
+
+    if (!values.note) {
+      errors.note = 'Notes Required!';
+    } else if (values.amount.length < 2) {
+      errors.note = 'must have at least 2 characters!';
+    }
+
+    return errors;
+  }
+  componentDidMount() {
+    this.props.getUser(this.props.auth.token);
+    this.props.getReceiverData(
+      this.props.auth.token,
+      this.props.transaction.receiver,
+    );
+  }
   onSubmit = values => {
-    console.log(values);
+    this.props.createTransferData({
+      receiverId: this.props.transaction.receiver,
+      amount: parseInt(values.amount),
+      note: values.note,
+      date: date,
+    });
     this.props.navigation.navigate('Confirmation');
   };
   onChangeRupiah = angka => {
@@ -25,19 +60,28 @@ export class InputAmount extends Component {
     return ribuan;
   };
   render() {
+    const {
+      picture,
+      first_name,
+      last_name,
+      username,
+      phone,
+    } = this.props.transaction.receiverData;
+    const {balance} = this.props.user.results;
     return (
       <View style={styles.container}>
         <CardContact
-          picture="https://matamatamusik.com/wp-content/uploads/2020/01/Niall-Horan-nov-7-2019-bbc-radio-one-billboard-1548.jpg"
-          firstName="Niall"
-          lastName="Horan"
-          detail="085656888775"
+          picture={picture}
+          firstName={first_name === null ? username : first_name}
+          lastName={last_name !== null && last_name}
+          detail={phone}
         />
         <Formik
           initialValues={{
             amount: '',
+            note: '',
           }}
-          validationSchema={validationSchema}
+          validate={values => this.amountValidation(values)}
           onSubmit={values => this.onSubmit(values)}>
           {({
             handleChange,
@@ -50,34 +94,50 @@ export class InputAmount extends Component {
             <>
               <View style={styles.center}>
                 <Text style={styles.amount}>
-                  Rp{this.onChangeRupiah(250000)} Available
+                  Rp{this.onChangeRupiah(balance)} Available
                 </Text>
                 <TextInput
                   keyboardType="number-pad"
                   style={styles.input}
                   placeholder="0.00"
-                  onChange={handleChange('amount')}
+                  onChangeText={handleChange('amount')}
                   onBlur={handleBlur('amount')}
                   value={values.amount}
                   error={errors.amount && touched.amount}
                 />
+                {errors.amount && touched.amount ? (
+                  <Text style={styles.textError}>{errors.amount}</Text>
+                ) : null}
               </View>
               <InputText
                 style={styles.inputNote}
                 icon="edit-2"
                 placeholder="Add some notes"
+                onChange={handleChange('note')}
+                onBlur={handleBlur('note')}
+                value={values.note}
+                error={errors.note && touched.note}
               />
-              {errors.amount && touched.amount ? (
-                <Text style={styles.textError}>{errors.amount}</Text>
+              {errors.note && touched.note ? (
+                <Text style={styles.textError}>{errors.note}</Text>
               ) : null}
-              <Button
-                style={{marginTop: 10}}
-                onPress={handleSubmit}
-                disabled={values.amount === ''}
-                color={values.amount === '' ? '#DADADA' : '#6379F4'}
-                textColor={values.amount === '' ? '#88888F' : 'white'}
-                text="Continue"
-              />
+              <View style={{paddingTop: 20}}>
+                <Button
+                  onPress={handleSubmit}
+                  disabled={values.amount === '' || values.note === ''}
+                  color={
+                    values.amount === '' || values.note === ''
+                      ? '#DADADA'
+                      : '#6379F4'
+                  }
+                  textColor={
+                    values.amount === '' || values.note === ''
+                      ? '#88888F'
+                      : 'white'
+                  }
+                  text="Continue"
+                />
+              </View>
             </>
           )}
         </Formik>
@@ -116,8 +176,22 @@ const styles = StyleSheet.create({
     color: 'red',
   },
   inputNote: {
-    marginBottom: 100,
+    marginBottom: 10,
   },
 });
 
-export default InputAmount;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  user: state.user,
+  transaction: state.transaction,
+});
+
+const mapDispatchToProps = {
+  getContact,
+  getUser,
+  getReceiverData,
+  selectReceiver,
+  createTransferData,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(InputAmount);

@@ -4,8 +4,7 @@ const initialState = {
   errorMsg: null,
   allContact: [],
   quickAccessContact: [],
-  receiverDetail: {},
-  transferData: [],
+  pageInfoContact: null,
 };
 
 const userReducer = (state = initialState, action) => {
@@ -48,6 +47,16 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         allContact: action.payload,
+        pageInfoContact: action.pageInfo,
+      };
+    }
+    case 'PAGING_GET_ALL_CONTACT': {
+      const oldData = state.allContact;
+      const newData = [...oldData, ...action.payload];
+      return {
+        ...state,
+        allContact: newData,
+        pageInfoContact: action.pageInfo,
       };
     }
     case 'GET_CONTACT_QUICK_ACCESS': {
@@ -57,29 +66,31 @@ const userReducer = (state = initialState, action) => {
         message: action.message,
       };
     }
-    case 'GET_RECEIVER_DETAIL': {
-      return {
-        ...state,
-        receiverDetail: action.payload,
-      };
-    }
-    case 'CREATE_TRANSFER_DATA': {
-      return {
-        ...state,
-        transferData: action.payload,
-      };
-    }
-    case 'CREATE_TRANSFER': {
-      return {
-        ...state,
-        message: action.payload,
-      };
-    }
     case 'SET_USER_MESSAGE': {
       return {
         ...state,
         errorMsg: action.payload,
         message: '',
+      };
+    }
+    case 'UPDATE_PHONE': {
+      return {
+        ...state,
+        results: {
+          ...state.results,
+          ...action.payload,
+        },
+        message: action.message,
+      };
+    }
+    case 'UPDATE_PICTURE': {
+      return {
+        ...state,
+        results: {
+          ...state.results,
+          picture: action.payload,
+        },
+        message: action.message,
       };
     }
     default: {

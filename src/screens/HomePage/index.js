@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
+import {connect} from 'react-redux';
 import CardContact from '../../components/CardContact';
 import listTransaction from '../../utils/listTransaction';
 
@@ -34,12 +35,13 @@ export class HomePage extends Component {
     return ribuan;
   };
   render() {
+    const {balance, phone} = this.props.user.results;
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.cardBalance} onPress={this.gotoDetail}>
           <Text style={styles.desc}>Balance</Text>
-          <Text style={styles.balance}>Rp{this.onChangeRupiah(185000)}</Text>
-          <Text style={styles.desc}>+62 813-9387-7946</Text>
+          <Text style={styles.balance}>Rp{this.onChangeRupiah(balance)}</Text>
+          <Text style={styles.desc}>{phone}</Text>
         </TouchableOpacity>
         <View style={styles.rowBtn}>
           <ButtonTrans
@@ -162,4 +164,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomePage;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  user: state.user,
+});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

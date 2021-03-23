@@ -1,14 +1,36 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, ActivityIndicator} from 'react-native';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 import Button from '../../components/Button';
+import {connect} from 'react-redux';
+import {transfer} from '../../redux/actions/transaction';
+import {getUser} from '../../redux/actions/user';
+import {showMessage} from '../../helpers/showMessage';
 
 export class PinConfirm extends Component {
   state = {
     code: '',
+    loading: false,
   };
-  onSubmit = () => {
-    this.props.navigation.navigate('TransferResult');
+  onSubmit = async () => {
+    this.setState({loading: true});
+    const {receiverId, amount, date, note} = this.props.transaction.data;
+    await this.props.transfer(
+      this.props.auth.token,
+      receiverId,
+      amount,
+      date,
+      note,
+      this.state.code,
+    );
+    if (this.props.transaction.errorMsg === '') {
+      this.setState({loading: false});
+      this.props.navigation.navigate('TransferResult');
+      await this.props.getUser(this.props.auth.token);
+    } else {
+      this.setState({loading: false});
+      showMessage(this.props.transaction.errorMsg);
+    }
   };
   render() {
     return (
@@ -29,12 +51,16 @@ export class PinConfirm extends Component {
             onTextChange={code => this.setState({code})}
           />
         </View>
-        <Button
-          text="Confirm"
-          textColor={this.state.code.length === 6 ? 'white' : '#88888F'}
-          color={this.state.code.length === 6 ? '#6379F4' : '#DADADA'}
-          onPress={() => this.onSubmit()}
-        />
+        {this.state.loading ? (
+          <ActivityIndicator size="large" color="#000000" />
+        ) : (
+          <Button
+            text="Confirm"
+            textColor={this.state.code.length === 6 ? 'white' : '#88888F'}
+            color={this.state.code.length === 6 ? '#6379F4' : '#DADADA'}
+            onPress={() => this.onSubmit()}
+          />
+        )}
       </View>
     );
   }
@@ -79,4 +105,15 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PinConfirm;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  user: state.user,
+  transaction: state.transaction,
+});
+
+const mapDispatchToProps = {
+  transfer,
+  getUser,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PinConfirm);
