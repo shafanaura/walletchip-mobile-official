@@ -6,6 +6,12 @@ const config = {
         token: token => `${token}`,
       },
     },
+    ResetPassword: {
+      path: 'forgot/:token',
+      parse: {
+        token: token => `${token}`,
+      },
+    },
   },
 };
 

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, ActivityIndicator} from 'react-native';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 import jwtdecode from 'jwt-decode';
 
@@ -11,28 +11,40 @@ import {showMessage} from '../../helpers/showMessage';
 class CreatePin extends Component {
   constructor(props) {
     super(props);
-
-    const {route} = this.props;
-    if (route.params.token) {
-      const {id} = jwtdecode(route.params.token);
-      this.setState({id});
-    }
   }
   state = {
     code: '',
     id: null,
+    loading: false,
   };
   onSubmit = async () => {
+    this.setState({loading: true});
+    const pin = new URLSearchParams();
+    pin.append('pin', this.state.code);
     try {
-      const {data} = await http().patch(
-        `api/auth/verified?id=${this.state.id}`,
-      );
+      const {data} = await http().post(`api/auth/pin?id=${this.state.id}`, pin);
       showMessage(data.message, 'success');
-      this.props.navigation.navigate('SignIn');
+      try {
+        await http().patch(`api/auth/verified?id=${this.state.id}`);
+        this.setState({loading: false});
+        this.props.navigation.navigate('SignIn');
+      } catch (error) {
+        this.setState({loading: false});
+        showMessage(error.response.data.message, 'danger');
+      }
     } catch (error) {
+      this.setState({loading: false});
       showMessage(error.response.data.message, 'danger');
     }
   };
+  componentDidMount() {
+    const {route} = this.props;
+    if (route.params.token) {
+      const {id} = jwtdecode(route.params.token);
+      console.log(id);
+      this.setState({id});
+    }
+  }
   render() {
     return (
       <Auth
@@ -47,12 +59,16 @@ class CreatePin extends Component {
             onTextChange={code => this.setState({code})}
           />
         </View>
-        <Button
-          text="Confirm"
-          textColor={this.state.code.length === 6 ? 'white' : '#88888F'}
-          color={this.state.code.length === 6 ? '#6379F4' : '#DADADA'}
-          onPress={() => this.onSubmit()}
-        />
+        {this.state.loading ? (
+          <ActivityIndicator color="#000000" size="large" />
+        ) : (
+          <Button
+            text="Confirm"
+            textColor={this.state.code.length === 6 ? 'white' : '#88888F'}
+            color={this.state.code.length === 6 ? '#6379F4' : '#DADADA'}
+            onPress={() => this.onSubmit()}
+          />
+        )}
       </Auth>
     );
   }

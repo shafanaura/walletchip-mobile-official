@@ -1,15 +1,40 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {Formik} from 'formik';
+import jwtdecode from 'jwt-decode';
 
 import InputText from '../../components/Form/InputText';
 import Auth from '../../components/Auth';
 import Button from '../../components/Button';
 
 class ResetPassword extends Component {
-  onSubmit = values => {
-    console.log(values);
-    this.props.navigation.navigate('SignIn');
+  state = {
+    id: null,
+  };
+  componentDidMount() {
+    const {route} = this.props;
+    if (route.params.token) {
+      const {id} = jwtdecode(route.params.token);
+      console.log(id);
+      this.setState({id});
+    }
+  }
+  onSubmit = async values => {
+    this.setState({loading: true});
+    const credentials = new URLSearchParams();
+    credentials.append('password', values.password);
+    try {
+      const {data} = await http().post(
+        `api/auth/password/${this.state.id}`,
+        credentials,
+      );
+      showMessage(data.message, 'success');
+      this.setState({loading: false});
+      this.props.navigation.navigate('SignIn');
+    } catch (error) {
+      this.setState({loading: false});
+      showMessage(error.response.data.message, 'danger');
+    }
   };
   passwordValidation(values) {
     const errors = {};

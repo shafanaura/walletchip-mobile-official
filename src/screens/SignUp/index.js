@@ -1,5 +1,11 @@
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
@@ -26,18 +32,24 @@ const validationSchema = Yup.object().shape({
 });
 
 class SignUp extends Component {
+  state = {
+    loading: false,
+  };
   onSubmit = async values => {
+    this.setState({loading: true});
     const credentials = new URLSearchParams();
     credentials.append('username', values.username);
     credentials.append('email', values.email);
     credentials.append('password', values.password);
     try {
       await http().post('api/auth/register', credentials);
+      this.setState({loading: false});
       showMessage(
         'Thanks for signing up, please check your email to validate your account!',
         'success',
       );
     } catch (error) {
+      this.setState({loading: false});
       showMessage(error.response.data.message, 'danger');
     }
   };
@@ -104,29 +116,33 @@ class SignUp extends Component {
                 <Text style={styles.textError}>{errors.password}</Text>
               ) : null}
               <View style={styles.gap(40)} />
-              <Button
-                onPress={handleSubmit}
-                disabled={
-                  values.username === '' ||
-                  values.email === '' ||
-                  values.password === ''
-                }
-                color={
-                  values.username === '' ||
-                  values.email === '' ||
-                  values.password === ''
-                    ? '#DADADA'
-                    : '#6379F4'
-                }
-                textColor={
-                  values.username === '' ||
-                  values.email === '' ||
-                  values.password === ''
-                    ? '#88888F'
-                    : 'white'
-                }
-                text="Sign Up"
-              />
+              {this.state.loading ? (
+                <ActivityIndicator color="#000000" size="large" />
+              ) : (
+                <Button
+                  onPress={handleSubmit}
+                  disabled={
+                    values.username === '' ||
+                    values.email === '' ||
+                    values.password === ''
+                  }
+                  color={
+                    values.username === '' ||
+                    values.email === '' ||
+                    values.password === ''
+                      ? '#DADADA'
+                      : '#6379F4'
+                  }
+                  textColor={
+                    values.username === '' ||
+                    values.email === '' ||
+                    values.password === ''
+                      ? '#88888F'
+                      : 'white'
+                  }
+                  text="Sign Up"
+                />
+              )}
             </>
           )}
         </Formik>
