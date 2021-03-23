@@ -5,6 +5,7 @@ const initialState = {
   allContact: [],
   quickAccessContact: [],
   pageInfoContact: null,
+  pageInfoQA: null,
 };
 
 const userReducer = (state = initialState, action) => {

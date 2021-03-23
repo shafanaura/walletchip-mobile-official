@@ -54,7 +54,7 @@ class PersonalInfo extends Component {
     }
   };
   render() {
-    const {first_name, last_name, email} = this.props.user.results;
+    const {first_name, last_name, email, phone} = this.props.user.results;
     return (
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
@@ -117,7 +117,7 @@ class PersonalInfo extends Component {
                   <View style={styles.row}>
                     <View>
                       <Text style={styles.label}>Phone Number</Text>
-                      <Text style={styles.value}>+62 813-9387-7946</Text>
+                      <Text style={styles.value}>{phone ? phone : '-'}</Text>
                     </View>
                     <TouchableOpacity
                       onPress={() =>

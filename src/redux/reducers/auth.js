@@ -15,8 +15,8 @@ const authReducer = (state = initialState, action) => {
     case 'LOGOUT': {
       return {
         ...state,
-        token: action.token,
-        errorMsg: action.errorMsg,
+        token: null,
+        errorMsg: '',
       };
     }
     case 'SET_AUTH_MESSAGE': {

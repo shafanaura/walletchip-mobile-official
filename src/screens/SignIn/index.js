@@ -40,7 +40,6 @@ class SignIn extends Component {
       this.setState({loading: false});
       await this.props.getUser(this.props.auth.token);
       showMessage('Login Success', 'success');
-      this.props.navigation.replace('HomePage');
       PushNotification.configure({
         onRegister: async token => {
           this.props.updatePersonalInfo(this.props.auth.token, {
@@ -48,6 +47,7 @@ class SignIn extends Component {
           });
         },
       });
+      this.props.navigation.replace('HomePage');
     } else {
       this.setState({loading: false});
       showMessage(this.props.auth.errorMsg);
