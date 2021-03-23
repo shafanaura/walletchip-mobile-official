@@ -10,8 +10,9 @@ import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {connect} from 'react-redux';
 import {login} from '../../redux/actions/auth';
-import {getUser} from '../../redux/actions/user';
+import {getUser, updatePersonalInfo} from '../../redux/actions/user';
 import {showMessage} from '../../helpers/showMessage';
+import PushNotification from 'react-native-push-notification';
 
 import InputText from '../../components/Form/InputText';
 import Auth from '../../components/Auth';
@@ -36,10 +37,17 @@ class SignIn extends Component {
     const {email, password} = values;
     await this.props.login(email, password);
     if (this.props.auth.token) {
-      await this.props.getUser(this.props.auth.token);
       this.setState({loading: false});
+      await this.props.getUser(this.props.auth.token);
       showMessage('Login Success', 'success');
       this.props.navigation.replace('HomePage');
+      PushNotification.configure({
+        onRegister: async token => {
+          this.props.updatePersonalInfo(this.props.auth.token, {
+            token: token.token,
+          });
+        },
+      });
     } else {
       this.setState({loading: false});
       showMessage(this.props.auth.errorMsg);
@@ -169,8 +177,9 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => ({
   auth: state.auth,
+  user: state.user,
 });
 
-const mapDispatchToProps = {login, getUser};
+const mapDispatchToProps = {login, getUser, updatePersonalInfo};
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
