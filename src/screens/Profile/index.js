@@ -17,19 +17,24 @@ import Button from '../../components/Button';
 import {ScrollView} from 'react-native-gesture-handler';
 
 import {connect} from 'react-redux';
-import {updatePhoto} from '../../redux/actions/user';
+import {updatePhoto, updatePersonalInfo} from '../../redux/actions/user';
+import {logout} from '../../redux/actions/auth';
 import {showMessage} from '../../helpers/showMessage';
 
 class Profile extends Component {
   state = {
-    isEnabled: false,
     modalVisible: false,
     profile: null,
   };
   setModalVisible = visible => {
     this.setState({modalVisible: visible});
   };
-  toggleSwitch = () => this.setState({isEnabled: !this.state.isEnabled});
+  toggleSwitch = async () => {
+    const {token} = this.props.auth;
+    const notification =
+      Number(this.props.user.results.notification) === 0 ? 1 : 0;
+    await this.props.updatePersonalInfo(token, {notification});
+  };
   addPhotoGallery = () => {
     this.setState({modalVisible: false});
     const {token} = this.props.auth;
@@ -137,9 +142,15 @@ class Profile extends Component {
           <CardInfoProfile title="Notification">
             <Switch
               trackColor={{false: 'rgba(169, 169, 169, 0.4)', true: '#6379F4'}}
-              thumbColor={this.state.isEnabled ? 'white ' : 'white'}
+              thumbColor={
+                this.props.user.results.notification === 0 ? 'white ' : 'white'
+              }
               onValueChange={this.toggleSwitch}
-              value={this.state.isEnabled}
+              value={
+                Number(this.props.user.results.notification) === 0
+                  ? false
+                  : true
+              }
             />
           </CardInfoProfile>
           <View style={styles.gap} />
@@ -148,7 +159,9 @@ class Profile extends Component {
               title="Logout"
               position="center"
               textColor="#FF5B37"
-              onPress={() => this.props.navigation.navigate('SignIn')}
+              onPress={async () => {
+                await this.props.logout();
+              }}
             />
           </View>
         </View>
@@ -194,7 +207,7 @@ const mapStateToProps = state => ({
   user: state.user,
 });
 
-const mapDispatchToProps = {updatePhoto};
+const mapDispatchToProps = {updatePhoto, updatePersonalInfo, logout};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
 

@@ -33,3 +33,7 @@ export const setEmailForgotPassword = email => {
     });
   };
 };
+
+export const logout = () => ({
+  type: 'LOGOUT',
+});

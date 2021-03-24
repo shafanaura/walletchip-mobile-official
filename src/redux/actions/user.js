@@ -44,6 +44,9 @@ export const updatePersonalInfo = (token, data) => {
     if (data.token) {
       params.append('token', data.token);
     }
+    if (data.notification === 1 || data.notification === 0) {
+      params.append('notification', data.notification);
+    }
     try {
       dispatch({
         type: 'SET_USER_MESSAGE',
@@ -160,7 +163,9 @@ export const getContact = (token, search, page) => {
         type: 'SET_USER_MESSAGE',
         payload: '',
       });
-      const response = await http(token).get('api/user');
+      const response = await http(token).get(
+        `api/user?search=${search ? search : ''}&page=${page ? page : 1}`,
+      );
       dispatch({
         type: 'GET_ALL_CONTACT',
         payload: response.data.results,
