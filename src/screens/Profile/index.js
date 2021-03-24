@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Switch,
   Modal,
+  ActivityIndicator,
 } from 'react-native';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/Feather';
@@ -25,6 +26,7 @@ class Profile extends Component {
   state = {
     modalVisible: false,
     profile: null,
+    loading: false,
   };
   setModalVisible = visible => {
     this.setState({modalVisible: visible});
@@ -36,14 +38,17 @@ class Profile extends Component {
     await this.props.updatePersonalInfo(token, {notification});
   };
   addPhotoGallery = () => {
-    this.setState({modalVisible: false});
+    this.setState({modalVisible: false, loading: true});
     const {token} = this.props.auth;
     launchImageLibrary({}, async response => {
       if (response.didCancel) {
+        this.setState({loading: false});
         console.log('User cancelled upload image');
       } else if (response.errorMessage) {
+        this.setState({loading: false});
         console.log('Image Error: ', response.errorMessage);
       } else if (response.fileSize >= 1 * 1024 * 1024) {
+        this.setState({loading: false});
         console.log('Image to large');
       } else {
         this.setState({profile: response});
@@ -59,7 +64,7 @@ class Profile extends Component {
     });
   };
   addPhotoCamera = () => {
-    this.setState({modalVisible: false});
+    this.setState({modalVisible: false, loading: true});
     const {token} = this.props.auth;
     launchCamera(
       {
@@ -67,10 +72,13 @@ class Profile extends Component {
       },
       async response => {
         if (response.didCancel) {
+          this.setState({loading: false});
           console.log('User cancelled upload image');
         } else if (response.errorMessage) {
+          this.setState({loading: false});
           console.log('Image Error: ', response.errorMessage);
         } else if (response.fileSize >= 1 * 1024 * 1024) {
+          this.setState({loading: false});
           console.log('Image to large');
         } else {
           this.setState({profile: response});
@@ -100,12 +108,16 @@ class Profile extends Component {
             ) : (
               <Image source={Avatar} style={styles.image} />
             )}
-            <TouchableOpacity
-              style={styles.row}
-              onPress={() => this.setModalVisible(true)}>
-              <Icon name="edit-2" size={16} color="#7A7886" />
-              <Text style={styles.text}>Edit</Text>
-            </TouchableOpacity>
+            {this.state.loading ? (
+              <ActivityIndicator size="large" color="#000000" />
+            ) : (
+              <TouchableOpacity
+                style={styles.row}
+                onPress={() => this.setModalVisible(true)}>
+                <Icon name="edit-2" size={16} color="#7A7886" />
+                <Text style={styles.text}>Edit</Text>
+              </TouchableOpacity>
+            )}
             <Text style={styles.name}>
               {this.props.user.results.first_name
                 ? `${this.props.user.results.first_name} ${
@@ -117,7 +129,7 @@ class Profile extends Component {
             </Text>
             <Text style={styles.phone}>
               {this.props.user.results.phone !== null
-                ? this.props.user.results.phone
+                ? `+62 ${this.props.user.results.phone}`
                 : 'Phone number empty'}
             </Text>
           </View>

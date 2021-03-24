@@ -10,6 +10,9 @@ import InputText from '../../components/Form/InputText';
 import Auth from '../../components/Auth';
 import Button from '../../components/Button';
 
+import http from '../../helpers/http';
+import {showMessage} from '../../helpers/showMessage';
+
 class ResetPassword extends Component {
   state = {
     id: null,
@@ -28,7 +31,7 @@ class ResetPassword extends Component {
     credentials.append('email', this.props.email);
     credentials.append('password', values.password);
     try {
-      const {data} = await http().post(
+      const {data} = await http().patch(
         `api/auth/password/${this.state.id}`,
         credentials,
       );
@@ -38,7 +41,7 @@ class ResetPassword extends Component {
       this.props.navigation.navigate('SignIn');
     } catch (error) {
       this.setState({loading: false});
-      showMessage(error.response.data.message, 'danger');
+      showMessage(error.response.data.message);
     }
   };
   passwordValidation(values) {
@@ -137,9 +140,9 @@ const styles = StyleSheet.create({
   }),
 });
 
-const mapStateToProps = state => {
-  email: state.auth.email;
-};
+const mapStateToProps = state => ({
+  email: state.auth.email,
+});
 
 const mapDispatchToProps = {setEmailForgotPassword};
 

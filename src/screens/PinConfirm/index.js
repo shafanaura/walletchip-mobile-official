@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import {transfer} from '../../redux/actions/transaction';
 import {getUser} from '../../redux/actions/user';
 import {showMessage} from '../../helpers/showMessage';
+import moment from 'moment';
 
 export class PinConfirm extends Component {
   state = {
@@ -19,7 +20,7 @@ export class PinConfirm extends Component {
       this.props.auth.token,
       receiverId,
       amount,
-      date,
+      moment(date).format('YYYY-MM-DD'),
       note,
       this.state.code,
     );
