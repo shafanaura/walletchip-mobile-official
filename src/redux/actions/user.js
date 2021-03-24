@@ -41,6 +41,12 @@ export const updatePersonalInfo = (token, data) => {
     if (data.balance) {
       params.append('balance', data.balance);
     }
+    if (data.token) {
+      params.append('token', data.token);
+    }
+    if (data.notification === 1 || data.notification === 0) {
+      params.append('notification', data.notification);
+    }
     try {
       dispatch({
         type: 'SET_USER_MESSAGE',
@@ -166,6 +172,7 @@ export const getContact = (token, search, page) => {
         pageInfo: response.data.pageInfo,
       });
     } catch (err) {
+      console.log(err);
       const {message} = err.response.data;
       dispatch({
         type: 'SET_USER_MESSAGE',
@@ -238,11 +245,36 @@ export const getContactQuickAccess = token => {
         type: 'SET_USER_MESSAGE',
         payload: '',
       });
-      const response = await http(token).get('api/user/quick-access');
+      const response = await http(token).get('api/transaction-quick-access');
       dispatch({
         type: 'GET_CONTACT_QUICK_ACCESS',
         payload: response.data.results,
-        message: response.data.message,
+        pageInfo: response.data.pageInfo,
+      });
+    } catch (err) {
+      const {message} = err.response.data;
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: message,
+      });
+    }
+  };
+};
+
+export const pagingGetQA = (token, page) => {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: 'SET_USER_MESSAGE',
+        payload: '',
+      });
+      const response = await http(token).get(
+        `api/transaction-quick-access?page=${page ? page : 1}`,
+      );
+      dispatch({
+        type: 'PAGING_GET_CONTACT_QUICK_ACCESS',
+        payload: response.data.results,
+        pageInfoQA: response.data.pageInfo,
       });
     } catch (err) {
       const {message} = err.response.data;

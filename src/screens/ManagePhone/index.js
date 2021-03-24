@@ -29,7 +29,6 @@ class ManagePhone extends Component {
     if (this.props.user.errorMsg === '') {
       this.setState({loading: false});
       showMessage(this.props.user.message, 'success');
-      this.props.navigation.navigate('SignIn');
     } else {
       this.setState({loading: false});
       showMessage(this.props.user.errorMsg);
@@ -49,7 +48,11 @@ class ManagePhone extends Component {
               width: '90%',
             }}>
             <Text style={styles.btnTitle}>Primary</Text>
-            <Text style={styles.btnPhone}>+62-813-9387-7946</Text>
+            <Text style={styles.btnPhone}>
+              {this.props.user.results.phone
+                ? this.props.user.results.phone
+                : '-'}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={this.onSubmit}

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "80605814536",
+    "project_id": "walletchip-8c9c9",
+    "storage_bucket": "walletchip-8c9c9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:80605814536:android:ea30d47ad8d05439bdd6bd",
+        "android_client_info": {
+          "package_name": "com.arkademy.walletchip"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "80605814536-bn90b5im977asu7h47rehg9aj8g5t1c7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKVT6BGwy5XTuCk5mi0Pcl4VAiBYi_UcA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "80605814536-bn90b5im977asu7h47rehg9aj8g5t1c7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

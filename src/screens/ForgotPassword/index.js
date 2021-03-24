@@ -1,11 +1,17 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+
+import http from '../../helpers/http';
+import {showMessage} from '../../helpers/showMessage';
 
 import InputText from '../../components/Form/InputText';
 import Auth from '../../components/Auth';
 import Button from '../../components/Button';
+
+import {connect} from 'react-redux';
+import {setEmailForgotPassword} from '../../redux/actions/auth';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -15,9 +21,23 @@ const validationSchema = Yup.object().shape({
 });
 
 class ForgotPassword extends Component {
-  onSubmit = values => {
-    console.log(values);
-    this.props.navigation.navigate('ResetPassword');
+  state = {
+    loading: false,
+  };
+  onSubmit = async values => {
+    this.props.setEmailForgotPassword(null);
+    this.setState({loading: true});
+    const email = new URLSearchParams();
+    email.append('email', values.email);
+    try {
+      const {data} = await http().post('api/auth/password', email);
+      this.props.setEmailForgotPassword(values.email);
+      this.setState({loading: false});
+      showMessage(data.message, 'success');
+    } catch (error) {
+      this.setState({loading: false});
+      showMessage(error.response.data.message, 'danger');
+    }
   };
   render() {
     return (
@@ -54,13 +74,17 @@ class ForgotPassword extends Component {
                 <Text style={styles.textError}>{errors.email}</Text>
               ) : null}
               <View style={styles.gap} />
-              <Button
-                onPress={handleSubmit}
-                disabled={values.email === ''}
-                color={values.email === '' ? '#DADADA' : '#6379F4'}
-                textColor={values.email === '' ? '#88888F' : 'white'}
-                text="Confirm"
-              />
+              {this.state.loading ? (
+                <ActivityIndicator color="#000000" size="large" />
+              ) : (
+                <Button
+                  onPress={handleSubmit}
+                  disabled={values.email === ''}
+                  color={values.email === '' ? '#DADADA' : '#6379F4'}
+                  textColor={values.email === '' ? '#88888F' : 'white'}
+                  text="Confirm"
+                />
+              )}
             </>
           )}
         </Formik>
@@ -80,4 +104,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ForgotPassword;
+const mapDispatchToProps = {setEmailForgotPassword};
+
+export default connect(mapDispatchToProps)(ForgotPassword);
