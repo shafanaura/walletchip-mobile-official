@@ -20,6 +20,7 @@ const initialState = {
   transferData: [],
   receiverData: {},
   data: null,
+  total: null,
 };
 
 const transactionReducer = (state = initialState, action) => {
@@ -94,6 +95,12 @@ const transactionReducer = (state = initialState, action) => {
       return {
         ...state,
         receiver: action.payload,
+      };
+    }
+    case 'TOTAL_TRANSACTION': {
+      return {
+        ...state,
+        total: action.payload,
       };
     }
     case 'CONFIRMATION': {
