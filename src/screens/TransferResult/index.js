@@ -22,7 +22,6 @@ export class TransferResult extends Component {
     return ribuan;
   };
   goHome = () => {
-    this.props.transactionToday(this.props.auth.token);
     this.props.navigation.replace('HomePage');
   };
   render() {

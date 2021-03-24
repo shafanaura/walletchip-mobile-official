@@ -1,5 +1,5 @@
 const initialState = {
-  results: null,
+  results: {balance: 0, phone: ''},
   message: '',
   errorMsg: null,
   allContact: [],
