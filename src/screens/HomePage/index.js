@@ -1,5 +1,11 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ActivityIndicator,
+} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
 import CardContact from '../../components/CardContact';
@@ -19,6 +25,7 @@ const ButtonTrans = props => {
 export class HomePage extends Component {
   state = {
     showResults: undefined,
+    loading: false,
   };
   async componentDidMount() {
     await this.props.getUser(this.props.auth.token);

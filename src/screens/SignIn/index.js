@@ -38,8 +38,8 @@ class SignIn extends Component {
     await this.props.login(email, password);
     if (this.props.auth.token) {
       this.setState({loading: false});
-      await this.props.getUser(this.props.auth.token);
-      showMessage('Login Success', 'success');
+      await showMessage('Login Success', 'success');
+      this.props.getUser(this.props.auth.token);
       PushNotification.configure({
         onRegister: async token => {
           this.props.updatePersonalInfo(this.props.auth.token, {
