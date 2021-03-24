@@ -1,5 +1,11 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ActivityIndicator,
+} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
 import CardContact from '../../components/CardContact';
@@ -19,6 +25,7 @@ const ButtonTrans = props => {
 export class HomePage extends Component {
   state = {
     showResults: undefined,
+    loading: false,
   };
   async componentDidMount() {
     await this.props.getUser(this.props.auth.token);
@@ -73,37 +80,41 @@ export class HomePage extends Component {
               <Text style={styles.textLink}>See all</Text>
             </TouchableOpacity>
           </View>
-          {this.state.showResults !== undefined ? (
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              style={{minHeight: 290, maxHeight: 290}}
-              data={this.state.showResults}
-              keyExtractor={item => item.id}
-              renderItem={({item}) => {
-                return (
-                  <CardContact
-                    picture={item.picture}
-                    firstName={item.another_user}
-                    detail="Transfer">
-                    <Text
-                      style={[
-                        styles.total,
-                        item.did_user_transfer === 1
-                          ? styles.textDanger
-                          : styles.textPrimary,
-                      ]}>
-                      {item.did_user_transfer === 1 ? '-' : '+'}Rp
-                      {this.onChangeRupiah(item.amount)}
-                    </Text>
-                  </CardContact>
-                );
-              }}
-            />
-          ) : (
-            <Text style={styles.textMessage}>
-              You has no transaction history...
-            </Text>
-          )}
+          {this.state.showResults !== undefined
+            ? (
+                <FlatList
+                  showsVerticalScrollIndicator={false}
+                  style={{minHeight: 290, maxHeight: 290}}
+                  data={this.state.showResults}
+                  keyExtractor={item => item.id}
+                  renderItem={({item}) => {
+                    return (
+                      <CardContact
+                        picture={item.picture}
+                        firstName={item.another_user}
+                        detail="Transfer">
+                        <Text
+                          style={[
+                            styles.total,
+                            item.did_user_transfer === 1
+                              ? styles.textDanger
+                              : styles.textPrimary,
+                          ]}>
+                          {item.did_user_transfer === 1 ? '-' : '+'}Rp
+                          {this.onChangeRupiah(item.amount)}
+                        </Text>
+                      </CardContact>
+                    );
+                  }}
+                />
+              ) || (
+                <Text style={styles.textMessage}>
+                  You has no transaction history...
+                </Text>
+              )
+            : this.state.showResults === undefined && (
+                <ActivityIndicator size="large" color="#000000" />
+              )}
         </View>
       </View>
     );
