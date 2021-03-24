@@ -131,19 +131,22 @@ export const clearTransaction = () => ({
   type: 'CLEAR_TRANSACTION',
 });
 
-export const transactionHistory = token => {
+export const transactionToday = (token, page, limit) => {
   return async dispatch => {
     try {
       dispatch({
         type: 'SET_TRANSACTION_MESSAGE',
         payload: '',
       });
-      const response = await http(token).get('api/transaction-history');
+      const response = await http(token).get(
+        `api/transaction-history-today?page=${page ? page : 1}&limit=${
+          limit ? limit : 6
+        }`,
+      );
       dispatch({
-        type: 'TRANSACTION_HISTORY',
+        type: 'TRANSACTION_HISTORY_TODAY',
         payload: response.data.results,
         pageInfo: response.data.pageInfo,
-        message: response.data.message,
       });
     } catch (err) {
       const {message} = err.response.data;
@@ -155,23 +158,135 @@ export const transactionHistory = token => {
   };
 };
 
-export const pagingGetTransaction = (token, page) => {
+export const pagingGetTransactionToday = (token, page, limit) => {
   return async dispatch => {
     try {
       dispatch({
-        type: 'SET_USER_MESSAGE',
+        type: 'SET_TRANSACTION_MESSAGE',
         payload: '',
       });
-      const response = await http(token).get('api/transaction-history?page=2');
+      const response = await http(token).get(
+        `api/transaction-history-today?page=${page ? page : 1}&limit=${
+          limit ? limit : 6
+        }`,
+      );
       dispatch({
-        type: 'PAGING_GET_ALL_TRANSACTION',
+        type: 'PAGING_GET_ALL_TRANSACTION_TODAY',
         payload: response.data.results,
         pageInfo: response.data.pageInfo,
       });
     } catch (err) {
       const {message} = err.response.data;
       dispatch({
-        type: 'SET_USER_MESSAGE',
+        type: 'SET_TRANSACTION_MESSAGE',
+        payload: message,
+      });
+    }
+  };
+};
+
+export const transactionWeek = (token, page, limit) => {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: 'SET_TRANSACTION_MESSAGE',
+        payload: '',
+      });
+      const response = await http(token).get(
+        `api/transaction-history-week?page=${page ? page : 1}&limit=${
+          limit ? limit : 6
+        }`,
+      );
+      dispatch({
+        type: 'TRANSACTION_HISTORY_WEEK',
+        payload: response.data.results,
+        pageInfo: response.data.pageInfo,
+      });
+    } catch (err) {
+      const {message} = err.response.data;
+      dispatch({
+        type: 'SET_TRANSACTION_MESSAGE',
+        payload: message,
+      });
+    }
+  };
+};
+
+export const pagingGetTransactionWeek = (token, page, limit) => {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: 'SET_TRANSACTION_MESSAGE',
+        payload: '',
+      });
+      const response = await http(token).get(
+        `api/transaction-history-week?page=${page ? page : 1}&limit=${
+          limit ? limit : 6
+        }`,
+      );
+      dispatch({
+        type: 'PAGING_GET_ALL_TRANSACTION_WEEK',
+        payload: response.data.results,
+        pageInfo: response.data.pageInfo,
+      });
+    } catch (err) {
+      const {message} = err.response.data;
+      dispatch({
+        type: 'SET_TRANSACTION_MESSAGE',
+        payload: message,
+      });
+    }
+  };
+};
+
+export const transactionMonth = (token, page, limit) => {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: 'SET_TRANSACTION_MESSAGE',
+        payload: '',
+      });
+      const response = await http(token).get(
+        `api/transaction-history-month?page=${page ? page : 1}&limit=${
+          limit ? limit : 6
+        }`,
+      );
+      dispatch({
+        type: 'TRANSACTION_HISTORY_MONTH',
+        payload: response.data.results,
+        pageInfo: response.data.pageInfo,
+      });
+    } catch (err) {
+      const {message} = err.response.data;
+      dispatch({
+        type: 'SET_TRANSACTION_MESSAGE',
+        payload: message,
+      });
+    }
+  };
+};
+
+export const pagingGetTransactionMonth = (token, page, limit) => {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: 'SET_TRANSACTION_MESSAGE',
+        payload: '',
+      });
+      const response = await http(token).get(
+        `api/transaction-history-month?page=${page ? page : 1}&limit=${
+          limit ? limit : 6
+        }`,
+      );
+      dispatch({
+        type: 'PAGING_GET_ALL_TRANSACTION_MONTH',
+        payload: response.data.results,
+        pageInfo: response.data.pageInfo,
+      });
+    } catch (err) {
+      const {message} = err.response.data;
+      dispatch({
+        type: 'SET_TRANSACTION_MESSAGE',
         payload: message,
       });
     }

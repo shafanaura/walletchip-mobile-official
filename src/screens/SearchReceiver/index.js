@@ -103,7 +103,9 @@ export class SearchReceiver extends Component {
                     style={styles.wrapHeader}>
                     <Image source={{uri: item.picture}} style={styles.avatar} />
                     <Text style={styles.textName}>
-                      {item.first_name ? item.first_name : item.username}
+                      {item.first_name
+                        ? item.first_name
+                        : `${item.another_user.slice(0, 5)}...`}
                     </Text>
                     <Text style={styles.number}>
                       {item.phone
@@ -143,7 +145,7 @@ export class SearchReceiver extends Component {
                     item.first_name === null ? item.username : item.first_name
                   }
                   lastName={item.last_name !== null && item.last_name}
-                  detail={item.phone}
+                  detail={item.phone ? item.phone : 'No phone number'}
                 />
               );
             }}

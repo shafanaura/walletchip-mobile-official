@@ -74,7 +74,7 @@ export class InputAmount extends Component {
           picture={picture}
           firstName={first_name === null ? username : first_name}
           lastName={last_name !== null && last_name}
-          detail={phone}
+          detail={phone ? phone : 'No phone number'}
         />
         <Formik
           initialValues={{

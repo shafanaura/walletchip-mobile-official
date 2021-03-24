@@ -2,9 +2,10 @@ import React, {Component} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
-import {connect} from 'react-redux';
 import CardContact from '../../components/CardContact';
+import {connect} from 'react-redux';
 import {transactionHistory} from '../../redux/actions/transaction';
+import http from '../../helpers/http';
 
 const ButtonTrans = props => {
   return (
@@ -16,8 +17,16 @@ const ButtonTrans = props => {
 };
 
 export class HomePage extends Component {
+  state = {
+    showResults: undefined,
+  };
   async componentDidMount() {
-    await this.props.transactionHistory(this.props.auth.token);
+    const response = await http(this.props.auth.token).get(
+      'api/transaction-history?limit=6',
+    );
+    this.setState({
+      showResults: response.data.results,
+    });
   }
   gotoDetail = () => {
     this.props.navigation.navigate('DetailTransaction');
@@ -39,7 +48,6 @@ export class HomePage extends Component {
   };
   render() {
     const {balance, phone} = this.props.user.results;
-    const {transactionHistory} = this.props.transaction;
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.cardBalance} onPress={this.gotoDetail}>
@@ -62,11 +70,11 @@ export class HomePage extends Component {
               <Text style={styles.textLink}>See all</Text>
             </TouchableOpacity>
           </View>
-          {transactionHistory !== undefined ? (
+          {this.state.showResults !== undefined ? (
             <FlatList
               showsVerticalScrollIndicator={false}
               style={{minHeight: 290, maxHeight: 290}}
-              data={transactionHistory}
+              data={this.state.showResults}
               keyExtractor={item => item.id}
               renderItem={({item}) => {
                 return (
@@ -87,8 +95,6 @@ export class HomePage extends Component {
                   </CardContact>
                 );
               }}
-              onEndReached={this.next}
-              onEndReachedThreshold={0.5}
             />
           ) : (
             <Text style={styles.textMessage}>

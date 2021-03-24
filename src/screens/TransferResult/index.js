@@ -23,7 +23,7 @@ export class TransferResult extends Component {
   };
   goHome = () => {
     this.props.transactionHistory(this.props.auth.token);
-    this.props.navigation.navigate('HomePage');
+    this.props.navigation.replace('HomePage');
   };
   render() {
     const {
@@ -61,7 +61,7 @@ export class TransferResult extends Component {
             picture={picture}
             firstName={first_name === null ? username : first_name}
             lastName={last_name !== null && last_name}
-            detail={phone}
+            detail={phone ? phone : 'No phone number'}
           />
         </LayoutDetail>
         <View style={styles.gap}>
