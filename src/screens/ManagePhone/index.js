@@ -7,12 +7,12 @@ import {
   StatusBar,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 
 import {connect} from 'react-redux';
 import {updatePhone} from '../../redux/actions/user';
 import {showMessage} from '../../helpers/showMessage';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // Import Components
 
@@ -46,24 +46,29 @@ class ManagePhone extends Component {
           <TouchableOpacity
             style={{
               width: '90%',
-            }}>
+            }}
+            onPress={() => this.props.navigation.navigate('AddPhone')}>
             <Text style={styles.btnTitle}>Primary</Text>
             <Text style={styles.btnPhone}>
               {this.props.user.results.phone
-                ? this.props.user.results.phone
+                ? `+62 ${this.props.user.results.phone}`
                 : '-'}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={this.onSubmit}
-            style={{
-              width: '10%',
-            }}>
-            <Image
-              style={{width: 24, height: 24}}
-              source={require('../../assets/icons/trash.png')}
-            />
-          </TouchableOpacity>
+          {this.state.loading ? (
+            <ActivityIndicator size="large" color="#000000" />
+          ) : (
+            <TouchableOpacity
+              onPress={this.onSubmit}
+              style={{
+                width: '10%',
+              }}>
+              <Image
+                style={{width: 24, height: 24}}
+                source={require('../../assets/icons/trash.png')}
+              />
+            </TouchableOpacity>
+          )}
         </View>
       </SafeAreaView>
     );

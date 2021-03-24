@@ -34,20 +34,24 @@ export class DetailTransaction extends Component {
       <View style={styles.container}>
         <View style={styles.card}>
           <View style={styles.row}>
-            <View style={styles.cardContent}>
-              <Icon name="arrow-down" size={28} color="#1EC15F" />
-              <Text style={styles.textDesc}>Income</Text>
-              <Text style={styles.textTotal}>
-                Rp{this.onChangeRupiah(total.income)}
-              </Text>
-            </View>
-            <View style={styles.cardContent}>
-              <Icon name="arrow-up" size={28} color="#FF5B37" />
-              <Text style={styles.textDesc}>Expense</Text>
-              <Text style={styles.textTotal}>
-                Rp{this.onChangeRupiah(total.expense)}
-              </Text>
-            </View>
+            {total && (
+              <>
+                <View style={styles.cardContent}>
+                  <Icon name="arrow-down" size={28} color="#1EC15F" />
+                  <Text style={styles.textDesc}>Income</Text>
+                  <Text style={styles.textTotal}>
+                    Rp{this.onChangeRupiah(total.income)}
+                  </Text>
+                </View>
+                <View style={styles.cardContent}>
+                  <Icon name="arrow-up" size={28} color="#FF5B37" />
+                  <Text style={styles.textDesc}>Expense</Text>
+                  <Text style={styles.textTotal}>
+                    Rp{this.onChangeRupiah(total.expense)}
+                  </Text>
+                </View>
+              </>
+            )}
           </View>
         </View>
         <View style={styles.rowCard}>

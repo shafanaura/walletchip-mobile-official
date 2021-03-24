@@ -117,7 +117,9 @@ class PersonalInfo extends Component {
                   <View style={styles.row}>
                     <View>
                       <Text style={styles.label}>Phone Number</Text>
-                      <Text style={styles.value}>{phone ? phone : '-'}</Text>
+                      <Text style={styles.value}>
+                        {phone ? `+62 ${phone}` : '-'}
+                      </Text>
                     </View>
                     <TouchableOpacity
                       onPress={() =>

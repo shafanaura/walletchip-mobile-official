@@ -54,7 +54,9 @@ export class HomePage extends Component {
         <TouchableOpacity style={styles.cardBalance} onPress={this.gotoDetail}>
           <Text style={styles.desc}>Balance</Text>
           <Text style={styles.balance}>Rp{this.onChangeRupiah(balance)}</Text>
-          <Text style={styles.desc}>{phone ? phone : 'No phone number'}</Text>
+          <Text style={styles.desc}>
+            {phone ? `+62 ${phone}` : 'No phone number'}
+          </Text>
         </TouchableOpacity>
         <View style={styles.rowBtn}>
           <ButtonTrans

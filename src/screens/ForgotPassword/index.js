@@ -106,4 +106,4 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = {setEmailForgotPassword};
 
-export default connect(mapDispatchToProps)(ForgotPassword);
+export default connect(null, mapDispatchToProps)(ForgotPassword);

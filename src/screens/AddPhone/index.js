@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, StyleSheet, View, ScrollView, TextInput} from 'react-native';
+import {Text, StyleSheet, View, ActivityIndicator} from 'react-native';
 import {Formik} from 'formik';
 import {connect} from 'react-redux';
 import {updatePhone} from '../../redux/actions/user';
@@ -70,13 +70,17 @@ class AddPhone extends Component {
                 <View style={styles.gap} />
               </View>
             </View>
-            <Button
-              onPress={handleSubmit}
-              disabled={values.phone === ''}
-              color={values.phone === '' ? '#DADADA' : '#6379F4'}
-              textColor={values.phone === '' ? '#88888F' : 'white'}
-              text="Submit"
-            />
+            {this.state.loading ? (
+              <ActivityIndicator size="large" color="#000000" />
+            ) : (
+              <Button
+                onPress={handleSubmit}
+                disabled={values.phone === ''}
+                color={values.phone === '' ? '#DADADA' : '#6379F4'}
+                textColor={values.phone === '' ? '#88888F' : 'white'}
+                text="Submit"
+              />
+            )}
           </View>
         )}
       </Formik>
