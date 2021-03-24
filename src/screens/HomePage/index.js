@@ -4,7 +4,7 @@ import {FlatList} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
 import CardContact from '../../components/CardContact';
 import {connect} from 'react-redux';
-import {transactionHistory} from '../../redux/actions/transaction';
+import {getUser} from '../../redux/actions/user';
 import http from '../../helpers/http';
 
 const ButtonTrans = props => {
@@ -21,6 +21,7 @@ export class HomePage extends Component {
     showResults: undefined,
   };
   async componentDidMount() {
+    await this.props.getUser(this.props.auth.token);
     const response = await http(this.props.auth.token).get(
       'api/transaction-history?limit=6',
     );
@@ -193,6 +194,6 @@ const mapStateToProps = state => ({
   transaction: state.transaction,
 });
 
-const mapDispatchToProps = {transactionHistory};
+const mapDispatchToProps = {getUser};
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

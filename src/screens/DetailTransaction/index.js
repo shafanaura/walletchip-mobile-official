@@ -3,9 +3,8 @@ import {StyleSheet, Text, View, FlatList} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
 import CardContact from '../../components/CardContact';
-import listTransaction from '../../utils/listTransaction';
 import {connect} from 'react-redux';
-import {transactionHistory} from '../../redux/actions/transaction';
+import {totalTransaction} from '../../redux/actions/transaction';
 import http from '../../helpers/http';
 export class DetailTransaction extends Component {
   state = {
@@ -18,6 +17,7 @@ export class DetailTransaction extends Component {
     this.setState({
       showResults: response.data.results,
     });
+    await this.props.totalTransaction(this.props.auth.token);
   }
   gotoHistory() {
     this.props.navigation.navigate('TransactionHistory');
@@ -29,6 +29,7 @@ export class DetailTransaction extends Component {
     return ribuan;
   };
   render() {
+    const {total} = this.props.transaction;
     return (
       <View style={styles.container}>
         <View style={styles.card}>
@@ -37,14 +38,14 @@ export class DetailTransaction extends Component {
               <Icon name="arrow-down" size={28} color="#1EC15F" />
               <Text style={styles.textDesc}>Income</Text>
               <Text style={styles.textTotal}>
-                Rp{this.onChangeRupiah(28500000)}
+                Rp{this.onChangeRupiah(total.income)}
               </Text>
             </View>
             <View style={styles.cardContent}>
               <Icon name="arrow-up" size={28} color="#FF5B37" />
               <Text style={styles.textDesc}>Expense</Text>
               <Text style={styles.textTotal}>
-                Rp{this.onChangeRupiah(14500000)}
+                Rp{this.onChangeRupiah(total.expense)}
               </Text>
             </View>
           </View>
@@ -161,6 +162,6 @@ const mapStateToProps = state => ({
   transaction: state.transaction,
 });
 
-const mapDispatchToProps = {transactionHistory};
+const mapDispatchToProps = {totalTransaction};
 
 export default connect(mapStateToProps, mapDispatchToProps)(DetailTransaction);

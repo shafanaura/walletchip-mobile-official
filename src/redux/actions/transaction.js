@@ -1,27 +1,5 @@
 import http from '../../helpers/http';
 
-export const getUser = token => {
-  return async dispatch => {
-    try {
-      dispatch({
-        type: 'SET_TRANSACTION_MESSAGE',
-        payload: '',
-      });
-      const response = await http(token).get('api/dashboard/profile');
-      dispatch({
-        type: 'GET_USER',
-        payload: response.data.results,
-      });
-    } catch (err) {
-      const {message} = err.response.data;
-      dispatch({
-        type: 'SET_TRANSACTION_MESSAGE',
-        payload: message,
-      });
-    }
-  };
-};
-
 export const getReceiverData = (token, id) => {
   return async dispatch => {
     try {
@@ -282,6 +260,28 @@ export const pagingGetTransactionMonth = (token, page, limit) => {
         type: 'PAGING_GET_ALL_TRANSACTION_MONTH',
         payload: response.data.results,
         pageInfo: response.data.pageInfo,
+      });
+    } catch (err) {
+      const {message} = err.response.data;
+      dispatch({
+        type: 'SET_TRANSACTION_MESSAGE',
+        payload: message,
+      });
+    }
+  };
+};
+
+export const totalTransaction = token => {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: 'SET_TRANSACTION_MESSAGE',
+        payload: '',
+      });
+      const response = await http(token).get('api/transaction');
+      dispatch({
+        type: 'TOTAL_TRANSACTION',
+        payload: response.data.results,
       });
     } catch (err) {
       const {message} = err.response.data;
