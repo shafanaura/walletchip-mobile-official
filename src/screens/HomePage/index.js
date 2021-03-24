@@ -80,41 +80,37 @@ export class HomePage extends Component {
               <Text style={styles.textLink}>See all</Text>
             </TouchableOpacity>
           </View>
-          {this.state.showResults !== undefined
-            ? (
-                <FlatList
-                  showsVerticalScrollIndicator={false}
-                  style={{minHeight: 290, maxHeight: 290}}
-                  data={this.state.showResults}
-                  keyExtractor={item => item.id}
-                  renderItem={({item}) => {
-                    return (
-                      <CardContact
-                        picture={item.picture}
-                        firstName={item.another_user}
-                        detail="Transfer">
-                        <Text
-                          style={[
-                            styles.total,
-                            item.did_user_transfer === 1
-                              ? styles.textDanger
-                              : styles.textPrimary,
-                          ]}>
-                          {item.did_user_transfer === 1 ? '-' : '+'}Rp
-                          {this.onChangeRupiah(item.amount)}
-                        </Text>
-                      </CardContact>
-                    );
-                  }}
-                />
-              ) || (
-                <Text style={styles.textMessage}>
-                  You has no transaction history...
-                </Text>
-              )
-            : this.state.showResults === undefined && (
-                <ActivityIndicator size="large" color="#000000" />
-              )}
+          {this.state.showResults !== undefined ? (
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              style={{minHeight: 290, maxHeight: 290}}
+              data={this.state.showResults}
+              keyExtractor={item => item.id}
+              renderItem={({item}) => {
+                return (
+                  <CardContact
+                    picture={item.picture}
+                    firstName={item.another_user}
+                    detail="Transfer">
+                    <Text
+                      style={[
+                        styles.total,
+                        item.did_user_transfer === 1
+                          ? styles.textDanger
+                          : styles.textPrimary,
+                      ]}>
+                      {item.did_user_transfer === 1 ? '-' : '+'}Rp
+                      {this.onChangeRupiah(item.amount)}
+                    </Text>
+                  </CardContact>
+                );
+              }}
+            />
+          ) : (
+            <Text style={styles.textMessage}>
+              You has no transaction history...
+            </Text>
+          )}
         </View>
       </View>
     );
