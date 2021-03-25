@@ -287,7 +287,7 @@ export class TransactionHistory extends Component {
               <Text style={styles.textMessage}>No transaction...</Text>
             )}
             {/* Transaction Week */}
-            <Text style={styles.desc}>Week</Text>
+            <Text style={styles.desc}>This Week</Text>
             {this.state.loading ? (
               <ActivityIndicator size="large" color="#000000" />
             ) : weekTransaction !== undefined ? (
@@ -358,7 +358,7 @@ export class TransactionHistory extends Component {
               <Text style={styles.textMessage}>No transaction...</Text>
             )}
             {/* Transaction Month */}
-            <Text style={styles.desc}>Month</Text>
+            <Text style={styles.desc}>This Month</Text>
             {this.state.loading ? (
               <ActivityIndicator size="large" color="#000000" />
             ) : monthTransaction !== undefined ? (
@@ -550,10 +550,12 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   desc: {
-    fontFamily: 'NunitoSans-Regular',
-    fontSize: 16,
-    color: '#7A7886',
-    paddingBottom: 20,
+    fontFamily: 'NunitoSans-Bold',
+    backgroundColor: '#6379F4',
+    borderRadius: 8,
+    paddingLeft: 8,
+    color: 'white',
+    paddingVertical: 3,
   },
   btnFilter: {
     backgroundColor: 'white',

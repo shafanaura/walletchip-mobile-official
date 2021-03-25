@@ -27,7 +27,6 @@ export class DetailTransaction extends Component {
     return data === 20;
   };
   render() {
-    console.log(this.state.dataChart.find(item => item < 40));
     const {total} = this.props.transaction;
     return (
       <View style={styles.container}>
