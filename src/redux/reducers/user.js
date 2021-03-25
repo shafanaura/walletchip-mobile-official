@@ -103,6 +103,18 @@ const userReducer = (state = initialState, action) => {
         message: action.message,
       };
     }
+    case 'CLEAR_USER': {
+      return {
+        ...state,
+        results: {balance: 0, phone: ''},
+        message: '',
+        errorMsg: null,
+        allContact: [],
+        quickAccessContact: [],
+        pageInfoContact: null,
+        pageInfoQA: null,
+      };
+    }
     default: {
       return {
         ...state,

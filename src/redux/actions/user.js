@@ -317,3 +317,7 @@ export const updatePhoto = (token, photo) => {
     }
   };
 };
+
+export const clearUser = () => ({
+  type: 'CLEAR_USER',
+});

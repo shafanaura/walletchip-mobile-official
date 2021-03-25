@@ -1,16 +1,8 @@
 import React, {Component} from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  ActivityIndicator,
-  ScrollView,
-} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
 import CardContact from '../../components/CardContact';
-import Chart from '../../components/Chart';
 import {connect} from 'react-redux';
 import {getUser} from '../../redux/actions/user';
 import http from '../../helpers/http';
@@ -30,8 +22,10 @@ export class HomePage extends Component {
     loading: false,
   };
   async componentDidMount() {
-    await this.props.getUser();
-    const response = await http().get('api/transaction-history?limit=6');
+    await this.props.getUser(this.props.auth.token);
+    const response = await http(this.props.auth.token).get(
+      'api/transaction-history?limit=6',
+    );
     this.setState({
       showResults: response.data.results,
     });
@@ -57,68 +51,62 @@ export class HomePage extends Component {
   render() {
     const {balance, phone} = this.props.user.results;
     return (
-      <ScrollView>
-        <View style={styles.container}>
-          <TouchableOpacity
-            style={styles.cardBalance}
-            onPress={this.gotoDetail}>
-            <Text style={styles.desc}>Balance</Text>
-            <Text style={styles.balance}>Rp{this.onChangeRupiah(balance)}</Text>
-            <Text style={styles.desc}>
-              {phone ? `+62 ${phone}` : 'No phone number'}
-            </Text>
-          </TouchableOpacity>
-          <Text style={styles.textChart}>In This Week</Text>
-          <Chart />
-          <View style={styles.rowBtn}>
-            <ButtonTrans
-              icon="arrow-up"
-              title="Transfer"
-              onPress={this.gotoReceiver}
-            />
-            <ButtonTrans onPress={this.gotoTopUp} icon="plus" title="Top Up" />
-          </View>
-          <View style={styles.wrapCard}>
-            <View style={styles.row}>
-              <Text style={styles.textBold}>Transaction History</Text>
-              <TouchableOpacity onPress={this.gotoHistory}>
-                <Text style={styles.textLink}>See all</Text>
-              </TouchableOpacity>
-            </View>
-            {this.state.showResults !== undefined ? (
-              <FlatList
-                showsVerticalScrollIndicator={false}
-                style={{minHeight: 290, maxHeight: 290}}
-                data={this.state.showResults}
-                keyExtractor={item => item.id}
-                renderItem={({item}) => {
-                  return (
-                    <CardContact
-                      picture={item.picture}
-                      firstName={item.another_user}
-                      detail="Transfer">
-                      <Text
-                        style={[
-                          styles.total,
-                          item.did_user_transfer === 1
-                            ? styles.textDanger
-                            : styles.textPrimary,
-                        ]}>
-                        {item.did_user_transfer === 1 ? '-' : '+'}Rp
-                        {this.onChangeRupiah(item.amount)}
-                      </Text>
-                    </CardContact>
-                  );
-                }}
-              />
-            ) : (
-              <Text style={styles.textMessage}>
-                You has no transaction history...
-              </Text>
-            )}
-          </View>
+      <View style={styles.container}>
+        <TouchableOpacity style={styles.cardBalance} onPress={this.gotoDetail}>
+          <Text style={styles.desc}>Balance</Text>
+          <Text style={styles.balance}>Rp{this.onChangeRupiah(balance)}</Text>
+          <Text style={styles.desc}>
+            {phone ? `+62 ${phone}` : 'No phone number'}
+          </Text>
+        </TouchableOpacity>
+        <View style={styles.rowBtn}>
+          <ButtonTrans
+            icon="arrow-up"
+            title="Transfer"
+            onPress={this.gotoReceiver}
+          />
+          <ButtonTrans onPress={this.gotoTopUp} icon="plus" title="Top Up" />
         </View>
-      </ScrollView>
+        <View style={styles.wrapCard}>
+          <View style={styles.row}>
+            <Text style={styles.textBold}>Transaction History</Text>
+            <TouchableOpacity onPress={this.gotoHistory}>
+              <Text style={styles.textLink}>See all</Text>
+            </TouchableOpacity>
+          </View>
+          {this.state.showResults !== undefined ? (
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              style={{minHeight: 290, maxHeight: 290}}
+              data={this.state.showResults}
+              keyExtractor={item => item.id}
+              renderItem={({item}) => {
+                return (
+                  <CardContact
+                    picture={item.picture}
+                    firstName={item.another_user}
+                    detail="Transfer">
+                    <Text
+                      style={[
+                        styles.total,
+                        item.did_user_transfer === 1
+                          ? styles.textDanger
+                          : styles.textPrimary,
+                      ]}>
+                      {item.did_user_transfer === 1 ? '-' : '+'}Rp
+                      {this.onChangeRupiah(item.amount)}
+                    </Text>
+                  </CardContact>
+                );
+              }}
+            />
+          ) : (
+            <Text style={styles.textMessage}>
+              You has no transaction history...
+            </Text>
+          )}
+        </View>
+      </View>
     );
   }
 }
@@ -183,7 +171,6 @@ const styles = StyleSheet.create({
     color: '#514F5B',
     fontSize: 18,
     paddingHorizontal: 15,
-    // marginVertical: 30,
   },
   textLink: {
     fontFamily: 'NunitoSans-SemiBold',
