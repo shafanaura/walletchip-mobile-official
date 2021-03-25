@@ -23,6 +23,9 @@ export class DetailTransaction extends Component {
     ribuan = ribuan.join('.').split('').reverse().join('');
     return ribuan;
   };
+  found = data => {
+    return data === 20;
+  };
   render() {
     const {total} = this.props.transaction;
     return (
