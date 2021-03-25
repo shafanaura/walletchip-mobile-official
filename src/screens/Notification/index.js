@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, ActivityIndicator} from 'react-native';
+import {StyleSheet, Text, View, ActivityIndicator, Image} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
 import CardInfo from '../../components/CardInfo';
@@ -10,6 +10,7 @@ import {
   transactionToday,
   pagingGetTransactionToday,
 } from '../../redux/actions/transaction';
+import noData from '../../assets/image/no_data.jpg';
 
 export class Notification extends Component {
   state = {
@@ -43,9 +44,7 @@ export class Notification extends Component {
         <LayoutDetail desc="Today">
           {this.state.loading ? (
             <ActivityIndicator size="large" color="#000000" />
-          ) : this.props.transaction.errorMsg !== '' ? (
-            <Text>{this.props.transaction.errorMsg}</Text>
-          ) : (
+          ) : this.props.transaction.todayTransaction !== undefined ? (
             <FlatList
               style={{marginBottom: 40}}
               showsVerticalScrollIndicator={false}
@@ -67,6 +66,10 @@ export class Notification extends Component {
               onEndReached={this.nextDay}
               onEndReachedThreshold={0.5}
             />
+          ) : (
+            <View style={styles.wrapCenter}>
+              <Image source={noData} style={styles.img} />
+            </View>
           )}
         </LayoutDetail>
       </View>
@@ -79,6 +82,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flex: 1,
   },
+  img: {
+    width: 300,
+    height: 300,
+  },
+  wrapCenter: {alignItems: 'center', justifyContent: 'center'},
 });
 
 const mapStateToProps = state => ({
