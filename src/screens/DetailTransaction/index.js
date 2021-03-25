@@ -1,14 +1,16 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, FlatList} from 'react-native';
+import {StyleSheet, Text, View, FlatList, Dimensions} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
 import CardContact from '../../components/CardContact';
 import {connect} from 'react-redux';
 import {totalTransaction} from '../../redux/actions/transaction';
 import http from '../../helpers/http';
+import VerticalBarGraph from '@chartiful/react-native-vertical-bar-graph';
 export class DetailTransaction extends Component {
   state = {
     showResults: undefined,
+    dataChart: [20, 45, 28, 80, 99, 43, 50],
   };
   async componentDidMount() {
     const response = await http(this.props.auth.token).get(
@@ -28,7 +30,11 @@ export class DetailTransaction extends Component {
     ribuan = ribuan.join('.').split('').reverse().join('');
     return ribuan;
   };
+  found = data => {
+    return data === 20;
+  };
   render() {
+    console.log(this.state.dataChart.find(item => item < 40));
     const {total} = this.props.transaction;
     return (
       <View style={styles.container}>
@@ -53,6 +59,31 @@ export class DetailTransaction extends Component {
               </>
             )}
           </View>
+        </View>
+        <View style={{alignItems: 'center'}}>
+          <VerticalBarGraph
+            data={this.state.dataChart}
+            labels={['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri']}
+            width={Dimensions.get('window').width - 90}
+            height={200}
+            barRadius={5}
+            barWidthPercentage={0.4}
+            barColor={
+              this.state.dataChart.find(item => item === 20)
+                ? '#6379F4'
+                : '#9DA6B5'
+            }
+            baseConfig={{
+              hasXAxisBackgroundLines: false,
+              xAxisLabelStyle: {
+                position: 'right',
+              },
+            }}
+            style={{
+              marginVertical: 20,
+              width: Dimensions.get('window').width - 70,
+            }}
+          />
         </View>
         <View style={styles.rowCard}>
           <Text style={styles.textBold}>Transaction History</Text>
