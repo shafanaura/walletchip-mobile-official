@@ -2,16 +2,17 @@ import React from 'react';
 import {View} from 'react-native';
 import {BarChart} from 'react-native-svg-charts';
 import {Text} from 'react-native-svg';
+import {connect} from 'react-redux';
 
 class Chart extends React.Component {
   render() {
-    const data1 = [50000, -30000, -10000, 40000, 20000, 15000, 120000];
-    const label = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+    const data1 = this.props.transaction.values;
+    const label = this.props.transaction.days;
 
     const barData = data1.map(item => ({
       value: Math.abs(item),
       svg: {
-        fill: item < 0 ? '#6379F4' : '#9DA6B5',
+        fill: item < 0 ? '#9DA6B5' : '#6379F4',
       },
     }));
 
@@ -54,7 +55,7 @@ class Chart extends React.Component {
           style={{flex: 1}}
           data={barData}
           svg={{fill: 'rgba(134, 65, 244, 0.8)'}}
-          contentInset={{top: 10, bottom: 10}}
+          contentInset={{top: 30, bottom: 10}}
           spacing={0.2}
           gridMin={-5}
           yAccessor={({item}) => item.value}
@@ -66,5 +67,8 @@ class Chart extends React.Component {
     );
   }
 }
+const mapStateToProps = state => ({
+  transaction: state.transaction,
+});
 
-export default Chart;
+export default connect(mapStateToProps)(Chart);

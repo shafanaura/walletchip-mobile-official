@@ -314,3 +314,26 @@ export const transactionHistory = token => {
     }
   };
 };
+
+export const weeklyChart = token => {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: 'SET_CHART_MESSAGE',
+        payload: '',
+      });
+      const response = await http(token).get('api/user-weekly-chart');
+      dispatch({
+        type: 'CHART_DATA',
+        payload1: response.data.results.amount,
+        payload2: response.data.results.days,
+      });
+    } catch (err) {
+      const {message} = err.response.data;
+      dispatch({
+        type: 'SET_CHART_MESSAGE',
+        payload: message,
+      });
+    }
+  };
+};

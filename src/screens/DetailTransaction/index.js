@@ -8,11 +8,13 @@ import {connect} from 'react-redux';
 import {
   totalTransaction,
   transactionHistory,
+  weeklyChart,
 } from '../../redux/actions/transaction';
 export class DetailTransaction extends Component {
   async componentDidMount() {
     await this.props.transactionHistory(this.props.auth.token);
     await this.props.totalTransaction(this.props.auth.token);
+    await this.props.weeklyChart(this.props.auth.token);
   }
   gotoHistory() {
     this.props.navigation.navigate('TransactionHistory');
@@ -53,7 +55,13 @@ export class DetailTransaction extends Component {
           </View>
         </View>
         <Text style={styles.textBold}>In This Week</Text>
-        <Chart />
+        {this.props.transaction.errorMsgChart !== '' ? (
+          <Text style={styles.textMessage}>
+            {this.props.transaction.errorMsgChart}
+          </Text>
+        ) : (
+          <Chart />
+        )}
         <View style={styles.rowCard}>
           <Text style={styles.textBold}>Transaction History</Text>
           <TouchableOpacity onPress={() => this.gotoHistory()}>
@@ -167,6 +175,6 @@ const mapStateToProps = state => ({
   transaction: state.transaction,
 });
 
-const mapDispatchToProps = {totalTransaction, transactionHistory};
+const mapDispatchToProps = {totalTransaction, transactionHistory, weeklyChart};
 
 export default connect(mapStateToProps, mapDispatchToProps)(DetailTransaction);

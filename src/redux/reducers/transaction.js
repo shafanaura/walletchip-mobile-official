@@ -15,12 +15,15 @@ const initialState = {
   pageInfoTransactionMonth: null,
   monthTransaction: [],
   errorMsg: '',
+  errorMsgChart: '',
   message: '',
   receiverDetail: null,
   transferData: [],
   receiverData: {},
   data: null,
   total: null,
+  values: [],
+  days: [],
 };
 
 const transactionReducer = (state = initialState, action) => {
@@ -137,6 +140,19 @@ const transactionReducer = (state = initialState, action) => {
         receiverData: {},
         data: null,
         total: null,
+      };
+    }
+    case 'CHART_DATA': {
+      return {
+        ...state,
+        values: action.payload1,
+        days: action.payload2,
+      };
+    }
+    case 'SET_CHART_MESSAGE': {
+      return {
+        ...state,
+        errorMsgChart: action.payload,
       };
     }
     case 'SET_TRANSACTION_MESSAGE': {
