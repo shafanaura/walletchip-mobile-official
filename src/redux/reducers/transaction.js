@@ -50,6 +50,12 @@ const transactionReducer = (state = initialState, action) => {
         pageInfoTransactionToday: action.pageInfo,
       };
     }
+    case 'TRANSACTION_HISTORY': {
+      return {
+        ...state,
+        results: action.payload,
+      };
+    }
     case 'PAGING_GET_ALL_TRANSACTION_TODAY': {
       const oldData = state.todayTransaction;
       const newData = [...oldData, ...action.payload];

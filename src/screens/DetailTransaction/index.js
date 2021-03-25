@@ -1,23 +1,17 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, FlatList} from 'react-native';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
 import CardContact from '../../components/CardContact';
 import Chart from '../../components/Chart';
 import {connect} from 'react-redux';
-import {totalTransaction} from '../../redux/actions/transaction';
-import http from '../../helpers/http';
+import {
+  totalTransaction,
+  transactionHistory,
+} from '../../redux/actions/transaction';
 export class DetailTransaction extends Component {
-  state = {
-    showResults: undefined,
-  };
   async componentDidMount() {
-    const response = await http(this.props.auth.token).get(
-      'api/transaction-history?limit=8',
-    );
-    this.setState({
-      showResults: response.data.results,
-    });
+    await this.props.transactionHistory(this.props.auth.token);
     await this.props.totalTransaction(this.props.auth.token);
   }
   gotoHistory() {
@@ -63,10 +57,10 @@ export class DetailTransaction extends Component {
             <Text style={styles.textLink}>See all</Text>
           </TouchableOpacity>
         </View>
-        {this.state.showResults !== undefined ? (
+        {this.props.transaction.results !== undefined ? (
           <FlatList
             showsVerticalScrollIndicator={false}
-            data={this.state.showResults}
+            data={this.props.transaction.results}
             keyExtractor={item => item.id}
             renderItem={({item}) => {
               return (
@@ -170,6 +164,6 @@ const mapStateToProps = state => ({
   transaction: state.transaction,
 });
 
-const mapDispatchToProps = {totalTransaction};
+const mapDispatchToProps = {totalTransaction, transactionHistory};
 
 export default connect(mapStateToProps, mapDispatchToProps)(DetailTransaction);
