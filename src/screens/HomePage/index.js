@@ -68,7 +68,7 @@ export class HomePage extends Component {
               <Text style={styles.textLink}>See all</Text>
             </TouchableOpacity>
           </View>
-          {this.props.transaction.results !== null ? (
+          {this.props.transaction.results !== undefined ? (
             <FlatList
               showsVerticalScrollIndicator={false}
               style={{minHeight: 290, maxHeight: 290}}
