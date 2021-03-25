@@ -105,7 +105,7 @@ export class SearchReceiver extends Component {
                     <Text style={styles.textName}>
                       {item.first_name
                         ? item.first_name
-                        : `${item.another_user.slice(0, 5)}...`}
+                        : `${item.username.slice(0, 7)}...`}
                     </Text>
                     <Text style={styles.number}>
                       {item.phone

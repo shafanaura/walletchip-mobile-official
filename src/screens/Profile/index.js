@@ -18,8 +18,13 @@ import Button from '../../components/Button';
 import {ScrollView} from 'react-native-gesture-handler';
 
 import {connect} from 'react-redux';
-import {updatePhoto, updatePersonalInfo} from '../../redux/actions/user';
+import {
+  updatePhoto,
+  updatePersonalInfo,
+  clearUser,
+} from '../../redux/actions/user';
 import {logout} from '../../redux/actions/auth';
+import {clearTransaction} from '../../redux/actions/transaction';
 import {showMessage} from '../../helpers/showMessage';
 
 class Profile extends Component {
@@ -173,6 +178,9 @@ class Profile extends Component {
               textColor="#FF5B37"
               onPress={async () => {
                 await this.props.logout();
+                await this.props.clearTransaction();
+                await this.props.clearUser();
+                showMessage('Successfully Logout', 'success');
               }}
             />
           </View>
@@ -219,7 +227,13 @@ const mapStateToProps = state => ({
   user: state.user,
 });
 
-const mapDispatchToProps = {updatePhoto, updatePersonalInfo, logout};
+const mapDispatchToProps = {
+  updatePhoto,
+  updatePersonalInfo,
+  logout,
+  clearTransaction,
+  clearUser,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
 

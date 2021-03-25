@@ -2,6 +2,7 @@ const initialState = {
   token: null,
   errorMsg: null,
   email: '',
+  user: null,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -10,6 +11,7 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         token: action.payload,
+        user: action.user,
       };
     }
     case 'LOGOUT': {

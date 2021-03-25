@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, FlatList, Dimensions} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {StyleSheet, Text, View, FlatList} from 'react-native';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
 import CardContact from '../../components/CardContact';
+import Chart from '../../components/Chart';
 import {connect} from 'react-redux';
 import {totalTransaction} from '../../redux/actions/transaction';
 import http from '../../helpers/http';
@@ -60,31 +61,8 @@ export class DetailTransaction extends Component {
             )}
           </View>
         </View>
-        <View style={{alignItems: 'center'}}>
-          <VerticalBarGraph
-            data={this.state.dataChart}
-            labels={['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri']}
-            width={Dimensions.get('window').width - 90}
-            height={200}
-            barRadius={5}
-            barWidthPercentage={0.4}
-            barColor={
-              this.state.dataChart.find(item => item === 20)
-                ? '#6379F4'
-                : '#9DA6B5'
-            }
-            baseConfig={{
-              hasXAxisBackgroundLines: false,
-              xAxisLabelStyle: {
-                position: 'right',
-              },
-            }}
-            style={{
-              marginVertical: 20,
-              width: Dimensions.get('window').width - 70,
-            }}
-          />
-        </View>
+        <Text style={styles.textBold}>In This Week</Text>
+        <Chart />
         <View style={styles.rowCard}>
           <Text style={styles.textBold}>Transaction History</Text>
           <TouchableOpacity onPress={() => this.gotoHistory()}>
@@ -129,8 +107,8 @@ export class DetailTransaction extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    flex: 1,
     padding: 10,
+    flex: 1,
   },
   card: {
     padding: 20,
@@ -138,6 +116,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#6379F4',
     height: 130,
+    marginBottom: 5,
   },
   row: {
     flexDirection: 'row',
@@ -168,7 +147,7 @@ const styles = StyleSheet.create({
     color: '#6379F4',
   },
   rowCard: {
-    marginVertical: 20,
+    marginVertical: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

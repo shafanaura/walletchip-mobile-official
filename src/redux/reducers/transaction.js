@@ -118,7 +118,19 @@ const transactionReducer = (state = initialState, action) => {
         receiver: null,
         confirmation: null,
         pageInfo: null,
+        pageInfoTransactionToday: null,
+        todayTransaction: [],
+        pageInfoTransactionWeek: null,
+        weekTransaction: [],
+        pageInfoTransactionMonth: null,
+        monthTransaction: [],
         errorMsg: '',
+        message: '',
+        receiverDetail: null,
+        transferData: [],
+        receiverData: {},
+        data: null,
+        total: null,
       };
     }
     case 'SET_TRANSACTION_MESSAGE': {
