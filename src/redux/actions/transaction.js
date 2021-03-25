@@ -300,7 +300,7 @@ export const transactionHistory = token => {
         type: 'SET_TRANSACTION_MESSAGE',
         payload: '',
       });
-      const response = await http(token).get('api/transaction-history?limit=6');
+      const response = await http(token).get('api/transaction-history');
       dispatch({
         type: 'TRANSACTION_HISTORY',
         payload: response.data.results,

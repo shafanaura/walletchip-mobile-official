@@ -124,8 +124,7 @@ export class TransactionHistory extends Component {
     this.setState({dateTo: true, dateToPicker: currentDate});
   };
   filterByDate = async () => {
-    await this.setState({loading: true});
-    this.setState({showTransactionDate: true});
+    await this.setState({loading: true, showTransactionDate: true});
     try {
       const {data} = await http(this.props.auth.token).get(
         `/api/transaction-history?from=${moment(
@@ -159,68 +158,76 @@ export class TransactionHistory extends Component {
         {/* Transaction Today */}
         {this.state.showTransactionDate === true ? (
           this.state.transactionsByDate !== undefined ? (
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              data={todayTransaction}
-              keyExtractor={item => item.id}
-              renderItem={({item}) => {
-                return sortUp === 'red'
-                  ? item.did_user_transfer === 1 && (
-                      <CardContact
-                        picture={item.picture}
-                        firstName={item.another_user}
-                        detail="Transfer">
-                        <Text
-                          style={[
-                            styles.total,
-                            item.did_user_transfer === 1
-                              ? styles.textDanger
-                              : styles.textPrimary,
-                          ]}>
-                          {item.did_user_transfer === 1 ? '-' : '+'}Rp
-                          {this.onChangeRupiah(item.amount)}
-                        </Text>
-                      </CardContact>
-                    )
-                  : sortUp === 'green'
-                  ? item.did_user_transfer === 0 && (
-                      <CardContact
-                        picture={item.picture}
-                        firstName={item.another_user}
-                        detail="Transfer">
-                        <Text
-                          style={[
-                            styles.total,
-                            item.did_user_transfer === 1
-                              ? styles.textDanger
-                              : styles.textPrimary,
-                          ]}>
-                          {item.did_user_transfer === 1 ? '-' : '+'}Rp
-                          {this.onChangeRupiah(item.amount)}
-                        </Text>
-                      </CardContact>
-                    )
-                  : sortUp === false && (
-                      <CardContact
-                        picture={item.picture}
-                        firstName={item.another_user}
-                        detail="Transfer">
-                        <Text
-                          style={[
-                            styles.total,
-                            item.did_user_transfer === 1
-                              ? styles.textDanger
-                              : styles.textPrimary,
-                          ]}>
-                          {item.did_user_transfer === 1 ? '-' : '+'}Rp
-                          {this.onChangeRupiah(item.amount)}
-                        </Text>
-                      </CardContact>
-                    );
-              }}
-            />
+            this.state.loading ? (
+              <ActivityIndicator
+                style={styles.wrapCenter}
+                size="large"
+                color="#000000"
+              />
+            ) : (
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                data={todayTransaction}
+                keyExtractor={item => item.id}
+                renderItem={({item}) => {
+                  return sortUp === 'red'
+                    ? item.did_user_transfer === 1 && (
+                        <CardContact
+                          picture={item.picture}
+                          firstName={item.another_user}
+                          detail="Transfer">
+                          <Text
+                            style={[
+                              styles.total,
+                              item.did_user_transfer === 1
+                                ? styles.textDanger
+                                : styles.textPrimary,
+                            ]}>
+                            {item.did_user_transfer === 1 ? '-' : '+'}Rp
+                            {this.onChangeRupiah(item.amount)}
+                          </Text>
+                        </CardContact>
+                      )
+                    : sortUp === 'green'
+                    ? item.did_user_transfer === 0 && (
+                        <CardContact
+                          picture={item.picture}
+                          firstName={item.another_user}
+                          detail="Transfer">
+                          <Text
+                            style={[
+                              styles.total,
+                              item.did_user_transfer === 1
+                                ? styles.textDanger
+                                : styles.textPrimary,
+                            ]}>
+                            {item.did_user_transfer === 1 ? '-' : '+'}Rp
+                            {this.onChangeRupiah(item.amount)}
+                          </Text>
+                        </CardContact>
+                      )
+                    : sortUp === false && (
+                        <CardContact
+                          picture={item.picture}
+                          firstName={item.another_user}
+                          detail="Transfer">
+                          <Text
+                            style={[
+                              styles.total,
+                              item.did_user_transfer === 1
+                                ? styles.textDanger
+                                : styles.textPrimary,
+                            ]}>
+                            {item.did_user_transfer === 1 ? '-' : '+'}Rp
+                            {this.onChangeRupiah(item.amount)}
+                          </Text>
+                        </CardContact>
+                      );
+                }}
+              />
+            )
           ) : (
-            <View style={styles.wrapImg}>
+            <View style={styles.wrapCenter}>
               <Image source={noData} style={styles.img} />
             </View>
           )
@@ -490,7 +497,9 @@ export class TransactionHistory extends Component {
                     onPress={() => this.setState({showDateFromPicker: true})}>
                     <Text style={styles.descDate}>
                       {this.state.dateFrom
-                        ? moment(this.state.dateFromPicker).format('YYYY-MM-DD')
+                        ? moment(this.state.dateFromPicker).format(
+                            'DD MMM YYYY',
+                          )
                         : 'Select a date'}
                     </Text>
                   </TouchableOpacity>
@@ -501,7 +510,7 @@ export class TransactionHistory extends Component {
                     onPress={() => this.setState({showDateToPicker: true})}>
                     <Text style={styles.descDate}>
                       {this.state.dateTo
-                        ? moment(this.state.dateToPicker).format('YYYY-MM-DD')
+                        ? moment(this.state.dateToPicker).format('DD MMM YYYY')
                         : 'Select a date'}
                     </Text>
                   </TouchableOpacity>
@@ -645,7 +654,7 @@ const styles = StyleSheet.create({
     height: 300,
     resizeMode: 'cover',
   },
-  wrapImg: {flex: 1, alignItems: 'center', justifyContent: 'center'},
+  wrapCenter: {flex: 1, alignItems: 'center', justifyContent: 'center'},
 });
 
 const mapStateToProps = state => ({
