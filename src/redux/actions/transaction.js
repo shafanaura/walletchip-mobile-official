@@ -292,3 +292,25 @@ export const totalTransaction = token => {
     }
   };
 };
+
+export const transactionHistory = token => {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: 'SET_TRANSACTION_MESSAGE',
+        payload: '',
+      });
+      const response = await http(token).get('api/transaction-history?limit=6');
+      dispatch({
+        type: 'TRANSACTION_HISTORY',
+        payload: response.data.results,
+      });
+    } catch (err) {
+      const {message} = err.response.data;
+      dispatch({
+        type: 'SET_TRANSACTION_MESSAGE',
+        payload: message,
+      });
+    }
+  };
+};
