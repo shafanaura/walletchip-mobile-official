@@ -224,6 +224,8 @@ export class TransactionHistory extends Component {
                         </CardContact>
                       );
                 }}
+                onEndReached={this.nextDay || this.nextWeek || this.nextMonth}
+                onEndReachedThreshold={0.5}
               />
             )
           ) : (
