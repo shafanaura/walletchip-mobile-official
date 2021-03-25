@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import CardContact from '../../components/CardContact';
 import {connect} from 'react-redux';
 import {getUser} from '../../redux/actions/user';
-import http from '../../helpers/http';
+import {transactionHistory} from '../../redux/actions/transaction';
 
 const ButtonTrans = props => {
   return (
@@ -18,17 +18,11 @@ const ButtonTrans = props => {
 
 export class HomePage extends Component {
   state = {
-    showResults: undefined,
     loading: false,
   };
   async componentDidMount() {
     await this.props.getUser(this.props.auth.token);
-    const response = await http(this.props.auth.token).get(
-      'api/transaction-history?limit=6',
-    );
-    this.setState({
-      showResults: response.data.results,
-    });
+    await this.props.transactionHistory(this.props.auth.token);
   }
   gotoDetail = () => {
     this.props.navigation.navigate('DetailTransaction');
@@ -74,11 +68,11 @@ export class HomePage extends Component {
               <Text style={styles.textLink}>See all</Text>
             </TouchableOpacity>
           </View>
-          {this.state.showResults !== undefined ? (
+          {this.props.transaction.results !== null ? (
             <FlatList
               showsVerticalScrollIndicator={false}
               style={{minHeight: 290, maxHeight: 290}}
-              data={this.state.showResults}
+              data={this.props.transaction.results}
               keyExtractor={item => item.id}
               renderItem={({item}) => {
                 return (
@@ -203,6 +197,6 @@ const mapStateToProps = state => ({
   transaction: state.transaction,
 });
 
-const mapDispatchToProps = {getUser};
+const mapDispatchToProps = {getUser, transactionHistory};
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
