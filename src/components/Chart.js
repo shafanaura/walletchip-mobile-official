@@ -2,12 +2,8 @@ import React from 'react';
 import {View} from 'react-native';
 import {BarChart} from 'react-native-svg-charts';
 import {Text} from 'react-native-svg';
-import {connect} from 'react-redux';
-import {weeklyChart} from '../redux/actions/transaction';
 
 class Chart extends React.Component {
-  async componentDidMount() {}
-
   render() {
     const data1 = [50000, -30000, -10000, 40000, 20000, 15000, 120000];
     const label = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
@@ -19,7 +15,7 @@ class Chart extends React.Component {
       },
     }));
 
-    const CUT_OFF = 25;
+    const CUT_OFF = 120000;
     const Labels = ({x, y, bandwidth, data}) =>
       label.map((value, index) => (
         <Text
@@ -53,7 +49,7 @@ class Chart extends React.Component {
       ));
 
     return (
-      <View style={{flexDirection: 'row', height: 350, paddingVertical: 15}}>
+      <View style={{flexDirection: 'row', height: 230, paddingVertical: 15}}>
         <BarChart
           style={{flex: 1}}
           data={barData}
@@ -71,12 +67,4 @@ class Chart extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  auth: state.auth,
-  user: state.user,
-  transaction: state.transaction,
-});
-
-const mapDispatchToProps = {weeklyChart};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Chart);
+export default Chart;

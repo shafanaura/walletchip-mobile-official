@@ -1,5 +1,11 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  ActivityIndicator,
+} from 'react-native';
 import Button from '../../components/Button';
 import CardContact from '../../components/CardContact';
 import InputText from '../../components/Form/InputText';
@@ -15,9 +21,6 @@ import {
 const date = new Date();
 
 export class InputAmount extends Component {
-  state = {
-    amountBalance: null,
-  };
   amountValidation(values) {
     const errors = {};
     const {balance} = this.props.user.results;

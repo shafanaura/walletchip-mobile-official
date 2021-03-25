@@ -13,6 +13,7 @@ import * as RootNavigation from './src/helpers/rootNavigation';
 import linking from './src/router/linking';
 
 import persistedStore from './src/redux/store';
+import {Root} from './src/screens';
 
 PushNotification.configure({
   onNotification: function (notification) {
@@ -34,7 +35,9 @@ const App = () => {
     <Provider store={store}>
       <PersistGate persistor={persistor}>
         <NavigationContainer linking={linking} ref={navigationRef}>
-          <Router />
+          <Root>
+            <Router />
+          </Root>
           <FlashMessage position="top" duration={3000} />
         </NavigationContainer>
       </PersistGate>

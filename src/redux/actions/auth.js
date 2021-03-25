@@ -1,4 +1,5 @@
 import http from '../../helpers/http';
+import jwt from 'jwt-decode';
 
 export const login = (email, password) => {
   return async dispatch => {
@@ -11,9 +12,12 @@ export const login = (email, password) => {
         payload: '',
       });
       const response = await http().post('api/auth/login', params);
+      const token = response.data.results.token;
+      const user = jwt(token);
       dispatch({
         type: 'LOGIN',
-        payload: response.data.results.token,
+        payload: token,
+        user: user,
       });
     } catch (err) {
       const {message} = err.response.data;

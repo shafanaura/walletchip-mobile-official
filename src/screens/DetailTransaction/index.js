@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, FlatList} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
 import CardContact from '../../components/CardContact';
+import Chart from '../../components/Chart';
 import {connect} from 'react-redux';
 import {totalTransaction} from '../../redux/actions/transaction';
 import http from '../../helpers/http';
@@ -54,6 +55,8 @@ export class DetailTransaction extends Component {
             )}
           </View>
         </View>
+        <Text style={styles.textBold}>In This Week</Text>
+        <Chart />
         <View style={styles.rowCard}>
           <Text style={styles.textBold}>Transaction History</Text>
           <TouchableOpacity onPress={() => this.gotoHistory()}>
@@ -98,8 +101,8 @@ export class DetailTransaction extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    flex: 1,
     padding: 10,
+    flex: 1,
   },
   card: {
     padding: 20,
@@ -107,6 +110,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#6379F4',
     height: 130,
+    marginBottom: 5,
   },
   row: {
     flexDirection: 'row',
@@ -137,7 +141,7 @@ const styles = StyleSheet.create({
     color: '#6379F4',
   },
   rowCard: {
-    marginVertical: 20,
+    marginVertical: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
