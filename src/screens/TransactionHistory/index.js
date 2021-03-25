@@ -6,8 +6,10 @@ import {
   Modal,
   FlatList,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+// import {TouchableOpacity} from 'react-native-gesture-handler';
+import moment from 'moment';
 import Icon from 'react-native-vector-icons/Feather';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import CardContact from '../../components/CardContact';
@@ -21,17 +23,25 @@ import {
   pagingGetTransactionMonth,
 } from '../../redux/actions/transaction';
 import Button from '../../components/Button';
+import http from '../../helpers/http';
 
 export class TransactionHistory extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: new Date(),
+      loading: false,
       show: false,
       value: '',
       modalVisible: false,
       sortUp: false,
       loading: false,
+      showDateFromPicker: false,
+      showDateToPicker: false,
+      dateFromPicker: new Date(),
+      dateToPicker: new Date(),
+      dateFrom: false,
+      dateTo: false,
+      transactionsByDate: [],
     };
   }
   async componentDidMount() {
@@ -39,6 +49,25 @@ export class TransactionHistory extends Component {
     this.props.transactionWeek(this.props.auth.token);
     this.props.transactionMonth(this.props.auth.token);
   }
+  // async componentDidUpdate() {
+  //   if (this.state.dateFromPicker && this.state.dateToPicker) {
+  // try {
+  //   const {data} = await http(this.props.auth.token).get(
+  //     '/transaction-history',
+  //     {
+  //       from: moment(this.state.dateFromPicker).format('YYYY-MM-DD'),
+  //       to: moment(this.state.dateToPicker).format('YYYY-MM-DD'),
+  //     },
+  //   );
+  //   this.setState({
+  //     transactionsByDate: data.results,
+  //   });
+  //   console.log('BY_DATE', transactionsByDate);
+  // } catch (error) {
+  //   console.log(error.response.data.message);
+  // }
+  //   }
+  // }
   onChangeRupiah = angka => {
     var reverse = angka.toString().split('').reverse().join(''),
       ribuan = reverse.match(/\d{1,3}/g);
@@ -46,7 +75,7 @@ export class TransactionHistory extends Component {
     return ribuan;
   };
   setModalVisible = visible => {
-    this.setState({modalVisible: visible});
+    this.setState({modalVisible: visible, dateFrom: false, dateTo: false});
   };
   nextDay = async () => {
     if (
@@ -79,6 +108,37 @@ export class TransactionHistory extends Component {
         this.props.auth.token,
         this.props.transaction.pageInfoTransactionMonth.currentPage + 1,
       );
+    }
+  };
+  onChangeFrom = (event, selectedDate) => {
+    const currentDate = selectedDate || this.state.dateFromPicker;
+    this.setState({showDateFromPicker: Platform.OS === 'ios'});
+    this.setState({dateFrom: true, dateFromPicker: currentDate});
+  };
+  onChangeTo = (event, selectedDate) => {
+    const currentDate = selectedDate || this.state.dateToPicker;
+    this.setState({showDateToPicker: Platform.OS === 'ios'});
+    this.setState({dateTo: true, dateToPicker: currentDate});
+  };
+  filterByDate = async () => {
+    this.setState({loading: true});
+    try {
+      const {data} = await http(this.props.auth.token).get(
+        `/api/transaction-history?from=${moment(
+          this.state.dateFromPicker,
+        ).format('YYYY-MM-DD')}&to=${moment(this.state.dateToPicker).format(
+          'YYYY-MM-DD',
+        )}`,
+      );
+      this.setState({
+        loading: false,
+        transactionsByDate: data.results,
+      });
+      this.setModalVisible(false);
+      console.log('BY_DATE', this.state.transactionsByDate);
+    } catch (error) {
+      this.setState({loading: false});
+      console.log(error.response.data.message);
     }
   };
   render() {
@@ -353,13 +413,24 @@ export class TransactionHistory extends Component {
             onPress={() => this.setModalVisible(true)}>
             <Text style={styles.btnText}>Filter by Date</Text>
           </TouchableOpacity>
-          {show && (
+          {this.state.showDateFromPicker && (
             <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
+              testID="dateFromPicker"
+              value={this.state.dateFromPicker}
               mode="date"
               is24Hour={true}
               display="default"
+              onChange={this.onChangeFrom}
+            />
+          )}
+          {this.state.showDateToPicker && (
+            <DateTimePicker
+              testID="dateToPicker"
+              value={this.state.dateToPicker}
+              mode="date"
+              is24Hour={true}
+              display="default"
+              onChange={this.onChangeTo}
             />
           )}
         </View>
@@ -375,14 +446,24 @@ export class TransactionHistory extends Component {
               <View style={styles.row}>
                 <View style={styles.flex}>
                   <Text style={styles.descModal}>From</Text>
-                  <TouchableOpacity>
-                    <Text style={styles.descDate}>Select a date</Text>
+                  <TouchableOpacity
+                    onPress={() => this.setState({showDateFromPicker: true})}>
+                    <Text style={styles.descDate}>
+                      {this.state.dateFrom
+                        ? moment(this.state.dateFromPicker).format('YYYY-MM-DD')
+                        : 'Select a date'}
+                    </Text>
                   </TouchableOpacity>
                 </View>
                 <View style={styles.flex}>
                   <Text style={styles.descModal}>To</Text>
-                  <TouchableOpacity>
-                    <Text style={styles.descDate}>Select a date</Text>
+                  <TouchableOpacity
+                    onPress={() => this.setState({showDateToPicker: true})}>
+                    <Text style={styles.descDate}>
+                      {this.state.dateTo
+                        ? moment(this.state.dateToPicker).format('YYYY-MM-DD')
+                        : 'Select a date'}
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -398,13 +479,26 @@ export class TransactionHistory extends Component {
                 <View style={styles.gap}>
                   <Button
                     text="Apply"
-                    textColor="white"
-                    color="#6379F4"
-                    onPress={() =>
-                      this.setState({
-                        show: !show,
-                      })
+                    disabled={
+                      !this.state.dateFrom ||
+                      !this.state.dateTo ||
+                      this.state.loading
                     }
+                    textColor={
+                      !this.state.dateFrom ||
+                      !this.state.dateTo ||
+                      this.state.loading
+                        ? '#88888F'
+                        : 'white'
+                    }
+                    color={
+                      !this.state.dateFrom ||
+                      !this.state.dateTo ||
+                      this.state.loading
+                        ? '#DADADA'
+                        : '#6379F4'
+                    }
+                    onPress={this.filterByDate}
                   />
                 </View>
               </View>
