@@ -86,11 +86,7 @@ export class SearchReceiver extends Component {
         />
         <Text style={styles.textQuick}>Quick Access</Text>
         <View style={styles.wrapText}>
-          {quickAccessContact === undefined ? (
-            <Text style={styles.textMessage}>
-              You has never made a transaction with anyone
-            </Text>
-          ) : (
+          {quickAccessContact.length > 0 ? (
             <FlatList
               showsVerticalScrollIndicator={false}
               horizontal
@@ -105,7 +101,7 @@ export class SearchReceiver extends Component {
                     <Text style={styles.textName}>
                       {item.first_name
                         ? item.first_name
-                        : `${item.username.slice(0, 7)}...`}
+                        : `${item.username.slice(0, 5)}...`}
                     </Text>
                     <Text style={styles.number}>
                       {item.phone
@@ -118,6 +114,10 @@ export class SearchReceiver extends Component {
               onEndReached={this.nextQA}
               onEndReachedThreshold={0.5}
             />
+          ) : (
+            <Text style={styles.textMessage}>
+              You has never made a transaction with anyone
+            </Text>
           )}
         </View>
         <Text style={styles.textQuick}>All Contacts</Text>
