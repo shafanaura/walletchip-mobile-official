@@ -71,7 +71,6 @@ export class HomePage extends Component {
           {this.props.transaction.results !== undefined ? (
             <FlatList
               showsVerticalScrollIndicator={false}
-              style={{minHeight: 290, maxHeight: 290}}
               data={this.props.transaction.results}
               keyExtractor={item => item.id}
               renderItem={({item}) => {
