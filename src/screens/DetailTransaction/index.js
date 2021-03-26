@@ -55,12 +55,12 @@ export class DetailTransaction extends Component {
           </View>
         </View>
         <Text style={styles.textBold}>In This Week</Text>
-        {this.props.transaction.errorMsgChart !== '' ? (
+        {this.props.transaction.values.length > 0 ? (
+          <Chart />
+        ) : (
           <Text style={styles.textMessage}>
             {this.props.transaction.errorMsgChart}
           </Text>
-        ) : (
-          <Chart />
         )}
         <View style={styles.rowCard}>
           <Text style={styles.textBold}>Transaction History</Text>

@@ -134,12 +134,15 @@ const transactionReducer = (state = initialState, action) => {
         pageInfoTransactionMonth: null,
         monthTransaction: [],
         errorMsg: '',
+        errorMsgChart: '',
         message: '',
         receiverDetail: null,
         transferData: [],
         receiverData: {},
         data: null,
         total: null,
+        values: [],
+        days: [],
       };
     }
     case 'CHART_DATA': {

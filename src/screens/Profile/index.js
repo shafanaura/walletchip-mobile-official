@@ -54,7 +54,7 @@ class Profile extends Component {
         console.log('Image Error: ', response.errorMessage);
       } else if (response.fileSize >= 1 * 1024 * 1024) {
         this.setState({loading: false});
-        console.log('Image to large');
+        showMessage('Image to large');
       } else {
         this.setState({profile: response});
         await this.props.updatePhoto(token, this.state.profile);
@@ -84,7 +84,7 @@ class Profile extends Component {
           console.log('Image Error: ', response.errorMessage);
         } else if (response.fileSize >= 1 * 1024 * 1024) {
           this.setState({loading: false});
-          console.log('Image to large');
+          showMessage('Image to large');
         } else {
           this.setState({profile: response});
           await this.props.updatePhoto(token, this.state.profile);
