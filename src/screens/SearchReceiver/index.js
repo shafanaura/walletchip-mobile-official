@@ -145,7 +145,7 @@ export class SearchReceiver extends Component {
                     item.first_name === null ? item.username : item.first_name
                   }
                   lastName={item.last_name !== null && item.last_name}
-                  detail={item.phone ? item.phone : 'No phone number'}
+                  detail={item.phone ? `+62 ${item.phone}` : 'No phone number'}
                 />
               );
             }}
