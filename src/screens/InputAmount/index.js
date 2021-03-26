@@ -1,11 +1,5 @@
 import React, {Component} from 'react';
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  ActivityIndicator,
-} from 'react-native';
+import {StyleSheet, Text, TextInput, View} from 'react-native';
 import Button from '../../components/Button';
 import CardContact from '../../components/CardContact';
 import InputText from '../../components/Form/InputText';
@@ -77,7 +71,7 @@ export class InputAmount extends Component {
           picture={picture}
           firstName={first_name === null ? username : first_name}
           lastName={last_name !== null && last_name}
-          detail={phone ? phone : 'No phone number'}
+          detail={phone ? `+62 ${phone}` : 'No phone number'}
         />
         <Formik
           initialValues={{
